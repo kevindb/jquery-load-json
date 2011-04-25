@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>A Nice &amp; Simple Contact Form</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+
+
+<div id="page-wrap">
+
+
+<div id="contact-area">
+			
+		
+
+<a href="list.html">Back to  the list</a>
+
+<form name="form_simple" id="form-simple" action="details.html" method="get">
+
+            <input type="hidden" id="ID" name="ID" />
+
+					    <label for="Name">Name</label>
+
+					    <input name="Name" id="Name" type="text" />
+
+<br/>
+					    <label for="Address">Address</label>
+<br/>
+					    <textarea name="Address" id="Address" rows="5" cols="20"></textarea>
+<br/>
+					    <label for="Country">Country</label>
+					    <select name="Country" multiple="multiple">
+                            <option value="">-</option>
+						    <option value="UK">United Kingdom</option>
+                            <option value="SRB">Serbia</option>
+						    <option value="USA">United States of America</option>
+						    <option value="FRA">France</option>  
+					    </select>
+<br/>
+<br/>
+					    <label for="IsFeatured">Is Featured</label>
+					    <input name="IsFeatured" id="IsFeatured" type="checkbox" value="true"/>
+<br/>
+					    <label for="Town">Town</label>
+					    <select name="Town" id="Town">
+                            <option value="" selected="selected">-</option>
+						    <option value="London">London City</option>
+						    <option value="Liverpool">Liverpool City</option>
+						    <option value="Lothian">Lothian City</option>
+						    <option value="Newcastle">Newcastle City</option>
+                            <option value="Buckinghamshire">Buckinghamshire City</option>
+                            <option value="Essex">Essex City</option>  
+					    </select>
+<br style="clear:both"/>
+<br/>
+					    <label for="Contact">Contact</label>
+						    <input name="Contact" type="radio" value="Email"/> Email
+						    <input name="Contact" type="radio" value="Phone" /> Phone
+						    <input name="Contact" type="radio" value="Post" /> Post
+<br/>
+
+ <input type="submit" value="Details" class="submit-button" />
+
+	    </form>
+		
+		
+</div>
+	
+	
+</div>
+
+</body>
+
+</html>

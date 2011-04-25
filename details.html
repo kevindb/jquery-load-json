@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>A Nice &amp; Simple Contact Form</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+<script src="Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+
+    <script src="Scripts/jquery.loadJSON.js")" type="text/javascript"></script>
+
+    <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+		var id = window.location.href.match("(ID=|id=|/)[0-9]+")[0].match("[0-9]+");
+            	$('li').loadJSON('data'+id+'.js');
+        });
+    </script>
+
+
+</head>
+
+<body>
+
+
+<div id="page-wrap">
+
+
+<div id="contact-area">
+			
+		
+
+<a href="list.html">Back to  the list</a>
+
+<br style="clear:both"/>
+
+            <input type="hidden" id="ID" name="ID" />
+
+					    <label for="Name">Name</label>
+						<span id="Name">London</span>
+
+
+<br style="clear:both"/>
+					    <label for="Address">Address</label><span id="Address">London</span>
+<br style="clear:both"/>
+
+
+					    <label for="Country">Country</label><span id="Country">London</span>
+
+<br style="clear:both"/>
+
+					    <label for="Town">Town</label><span id="Town">London</span>
+
+<br style="clear:both"/>
+
+<br/>
+
+
+        <form action="edit.html" method="get">
+            <input type="hidden" id="ID" name="ID" />
+            <input type="submit" value="Edit" class="submit-button"/>
+        </form>
+		
+		
+</div>
+	
+	
+</div>
+
+</body>
+
+</html>
