@@ -64,3 +64,4 @@ label, span {
 	font-size: 1.4em;
 }
 #contact-area input[type="radio"], #contact-area input[type="checkbox"] { width:5px }
+li span {float:none; margin-right:0px}
