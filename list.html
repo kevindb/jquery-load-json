@@ -35,12 +35,14 @@
 			
 		
 	<h1>Loading JSON in the list</h1>
+	JQuery loadJSON plugin enables you to load JSON array of objects and generate list of HTML elements based on the template. For templating is not used any specific templating language - as a template is used basic HTML that will be linked to the JSON object using standard HTML attributes. This plugin binds JavaScript object properties with HTML elements in the template using id, class, name, or rel attributes. 
 	<h2>Live Example</h2>
 	HTML generated using loadJSON plugin is shown below:
         <ul>
             <li> 
             <a href="details.html" class="ID"><span id="Name" class="Name"></span></a> <span id="Address" class="Address"></span></li>
         </ul>
+	<br/>
 	<br/>
 	<h2>Implementation</h2>	
 	
@@ -61,7 +63,7 @@
 	Once HTML template item is prepared it is required to provide a JSON array that will be used to populate template item shown above. Example of JSON array used in this example is shown below:
 	<pre>
 [
-{
+    {
 	"ID": 17,
         "Name": "Emkay Entertainments",
         "Address": "Nobel House, Regent Centre"
