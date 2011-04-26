@@ -7,5 +7,6 @@
     "Date": "\/Date(-62135596800000)\/",
     "Contact": "Phone",
     "IsFeatured": false,
-    "Country": null
+    "Country": null,
+    "Logo":"images/logo18.jpg$Asadul ltd logo"
 }
