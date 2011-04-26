@@ -28,6 +28,7 @@
 			
     <a href="list.html">Back to  the list</a>
 	<h1>Filling the form with the single JSON object</h1>	
+    <p>JQuery loadJSON plugin can be used for filling the form elements.</p>
 	<h2>Live example</h2>	
     <p>JQuery loadJSON plugin enables you to bind a single object to the HTML form. Each element in the form is populated with an property of the object that matches the name attribute of the form element.
     In the example below is shown how a single JSON object is bound to the HTML code:
@@ -79,6 +80,7 @@
  <input type="submit" value="Details" class="submit-button" />
 
 	    </form>
+        <p>Properties of the JSON object are used to populate form elements in the HTML code shown above</p>
 		        <br /><br />
         <h2>Implementation</h2>
         <p>HTML form that will be populated with JSON object should be defined. HTML elements in this form should have name
@@ -98,9 +100,9 @@
 
 			&lt;label for=&quot;Country&quot;&gt;Country&lt;/label&gt;
 			&lt;select name=&quot;Country&quot; multiple=&quot;multiple&quot;&gt;
-                &lt;option value=&quot;&quot;&gt;-&lt;/option&gt;
+				&lt;option value=&quot;&quot;&gt;-&lt;/option&gt;
 				&lt;option value=&quot;UK&quot;&gt;United Kingdom&lt;/option&gt;
-                &lt;option value=&quot;SRB&quot;&gt;Serbia&lt;/option&gt;
+				&lt;option value=&quot;SRB&quot;&gt;Serbia&lt;/option&gt;
 				&lt;option value=&quot;USA&quot;&gt;United States of America&lt;/option&gt;
 				&lt;option value=&quot;FRA&quot;&gt;France&lt;/option&gt;  
 			&lt;/select&gt;
@@ -110,20 +112,19 @@
 
 			&lt;label for=&quot;Town&quot;&gt;Town&lt;/label&gt;
 			&lt;select name=&quot;Town&quot; id=&quot;Town&quot;&gt;
-                &lt;option value=&quot;&quot; selected=&quot;selected&quot;&gt;-&lt;/option&gt;
+				&lt;option value=&quot;&quot; selected=&quot;selected&quot;&gt;-&lt;/option&gt;
 				&lt;option value=&quot;London&quot;&gt;London City&lt;/option&gt;
 				&lt;option value=&quot;Liverpool&quot;&gt;Liverpool City&lt;/option&gt;
 				&lt;option value=&quot;Lothian&quot;&gt;Lothian City&lt;/option&gt;
 				&lt;option value=&quot;Newcastle&quot;&gt;Newcastle City&lt;/option&gt;
-                &lt;option value=&quot;Buckinghamshire&quot;&gt;Buckinghamshire City&lt;/option&gt;
-                &lt;option value=&quot;Essex&quot;&gt;Essex City&lt;/option&gt;  
+				&lt;option value=&quot;Buckinghamshire&quot;&gt;Buckinghamshire City&lt;/option&gt;
+				&lt;option value=&quot;Essex&quot;&gt;Essex City&lt;/option&gt;  
 			&lt;/select&gt;
 
 			&lt;label for=&quot;Contact&quot;&gt;Contact&lt;/label&gt;
-	            &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Email&quot;/&gt; Email
-	            &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Phone&quot; /&gt; Phone
-	            &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Post&quot; /&gt; Post
-
+			    &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Email&quot;/&gt; Email
+			    &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Phone&quot; /&gt; Phone
+			    &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Post&quot; /&gt; Post
 
             &lt;input type=&quot;submit&quot; value=&quot;Details&quot; class=&quot;submit-button&quot; /&gt;
         &lt;/form&gt;
