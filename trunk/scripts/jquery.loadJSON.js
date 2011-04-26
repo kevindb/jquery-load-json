@@ -1,4 +1,23 @@
-﻿(function ($) {
+﻿/*
+* File:        jquery.loadJSON.js
+* Version:     1.0.0.
+* Author:      Jovan Popovic 
+* 
+* Copyright 2011 Jovan Popovic, all rights reserved.
+*
+* This source file is free software, under either the GPL v2 license or a
+* BSD style license, as supplied with this software.
+* 
+* This source file is distributed in the hope that it will be useful, but 
+* WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
+* or FITNESS FOR A PARTICULAR PURPOSE. 
+*
+* This file contains implementation of the JQuery templating engine that load JSON
+* objects into the HTML code. It is based on Alexandre Caprais notemplate plugin 
+* with several enchancements that are added to this plugin.
+*/
+
+(function ($) {
     $.fn.loadJSON = function (obj, options) {
 
         function setElementValue(element, value, name) {
@@ -36,11 +55,28 @@
                 case 'a':
                     var href = $(element).attr("href");
                     var iPosition = href.indexOf('?');
-                    if (iPosition > 0)
-                        href = href.substring(0, iPosition) + '?' + name + '=' + value;
-                    else
+                    if (iPosition > 0) // if parameters in the URL exists add new pair using &
+                        href = href.substring(0, iPosition) + '&' + name + '=' + value;
+                    else//otherwise attach pair to URL
                         href = href + '?' + name + '=' + value;
                     $(element).attr("href", href);
+                    break;
+                case 'img': //Assumption is that value is in the HREF$ALT format
+                    var iPosition = value.indexOf('$');
+                    var src = "";
+                    var alt = "";
+                    if (iPosition > 0) {
+                        src = value.substring(0, iPosition);
+                        alt = value.substring(iPosition + 1);
+                    }
+                    else {
+                        src = value;
+                        var iPositionStart = value.lastIndexOf('/')+1;
+                        var iPositionEnd = value.indexOf('.');
+                        alt = value.substring(iPositionStart, iPositionEnd);
+                    }
+                    $(element).attr("src", src);
+                    $(element).attr("alt", alt);
                     break;
 
                 case 'textarea':
@@ -111,8 +147,6 @@
         } //function browseJSON end
 
         var defaults = {
-            sID: "id",
-            sAddURL: "AddData"
         };
 
         properties = $.extend(defaults, options);
