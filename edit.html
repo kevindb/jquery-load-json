@@ -1,12 +1,21 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-	<title>A Nice &amp; Simple Contact Form</title>
+	<title>Load Form with JSON data</title>
 	
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	
 	<link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script src="scripts/jquery.loadJSON.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+            var id = window.location.href.match("(ID=|id=|/)[0-9]+")[0].match("[0-9]+");
+            $('form').loadJSON('data' + id + '.js');
+        });
+    </script>
 </head>
 
 <body>
@@ -15,11 +24,14 @@
 <div id="page-wrap">
 
 
-<div id="contact-area">
+    <div id="contact-area">
 			
-		
-
-<a href="list.html">Back to  the list</a>
+    <a href="list.html">Back to  the list</a>
+	<h1>Filling the form with the single JSON object</h1>	
+	<h2>Live example</h2>	
+    <p>JQuery loadJSON plugin enables you to bind a single object to the HTML form. Each element in the form is populated with an property of the object that matches the name attribute of the form element.
+    In the example below is shown how a single JSON object is bound to the HTML code:
+    </p>
 
 <form name="form_simple" id="form-simple" action="details.html" method="get">
 
@@ -28,7 +40,6 @@
 					    <label for="Name">Name</label>
 
 					    <input name="Name" id="Name" type="text" />
-
 <br/>
 					    <label for="Address">Address</label>
 <br/>
@@ -68,8 +79,73 @@
  <input type="submit" value="Details" class="submit-button" />
 
 	    </form>
-		
-		
+		        <br /><br />
+        <h2>Implementation</h2>
+        <p>HTML form that will be populated with JSON object should be defined. HTML elements in this form should have name
+        attributes that matches properties of the JSON object that will be loaded into the HTML code. Example is shown below:</p>
+        <pre>
+        &lt;form name=&quot;form_simple&quot; id=&quot;form-simple&quot; action=&quot;details.html&quot; method=&quot;get&quot;&gt;
+
+            &lt;input type=&quot;hidden&quot; id=&quot;ID&quot; name=&quot;ID&quot; /&gt;
+
+			&lt;label for=&quot;Name&quot;&gt;Name&lt;/label&gt;
+
+			&lt;input name=&quot;Name&quot; id=&quot;Name&quot; type=&quot;text&quot; /&gt;
+
+			&lt;label for=&quot;Address&quot;&gt;Address&lt;/label&gt;
+
+			&lt;textarea name=&quot;Address&quot; id=&quot;Address&quot; rows=&quot;5&quot; cols=&quot;20&quot;&gt;&lt;/textarea&gt;
+
+			&lt;label for=&quot;Country&quot;&gt;Country&lt;/label&gt;
+			&lt;select name=&quot;Country&quot; multiple=&quot;multiple&quot;&gt;
+                &lt;option value=&quot;&quot;&gt;-&lt;/option&gt;
+				&lt;option value=&quot;UK&quot;&gt;United Kingdom&lt;/option&gt;
+                &lt;option value=&quot;SRB&quot;&gt;Serbia&lt;/option&gt;
+				&lt;option value=&quot;USA&quot;&gt;United States of America&lt;/option&gt;
+				&lt;option value=&quot;FRA&quot;&gt;France&lt;/option&gt;  
+			&lt;/select&gt;
+
+			&lt;label for=&quot;IsFeatured&quot;&gt;Is Featured&lt;/label&gt;
+			&lt;input name=&quot;IsFeatured&quot; id=&quot;IsFeatured&quot; type=&quot;checkbox&quot; value=&quot;true&quot;/&gt;
+
+			&lt;label for=&quot;Town&quot;&gt;Town&lt;/label&gt;
+			&lt;select name=&quot;Town&quot; id=&quot;Town&quot;&gt;
+                &lt;option value=&quot;&quot; selected=&quot;selected&quot;&gt;-&lt;/option&gt;
+				&lt;option value=&quot;London&quot;&gt;London City&lt;/option&gt;
+				&lt;option value=&quot;Liverpool&quot;&gt;Liverpool City&lt;/option&gt;
+				&lt;option value=&quot;Lothian&quot;&gt;Lothian City&lt;/option&gt;
+				&lt;option value=&quot;Newcastle&quot;&gt;Newcastle City&lt;/option&gt;
+                &lt;option value=&quot;Buckinghamshire&quot;&gt;Buckinghamshire City&lt;/option&gt;
+                &lt;option value=&quot;Essex&quot;&gt;Essex City&lt;/option&gt;  
+			&lt;/select&gt;
+
+			&lt;label for=&quot;Contact&quot;&gt;Contact&lt;/label&gt;
+	            &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Email&quot;/&gt; Email
+	            &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Phone&quot; /&gt; Phone
+	            &lt;input name=&quot;Contact&quot; type=&quot;radio&quot; value=&quot;Post&quot; /&gt; Post
+
+
+            &lt;input type=&quot;submit&quot; value=&quot;Details&quot; class=&quot;submit-button&quot; /&gt;
+        &lt;/form&gt;
+        </pre>
+		<p>JSON object that will be loaded into the HTML form shown above should have properties that matches name attributes
+        of the elements above. Example of such kind of JSON object is shown below:</p>
+        <pre>
+        data = {
+                    &quot;ID&quot;:17,
+                    &quot;Name&quot;:&quot;Emkay Entertainments&quot;,
+                    &quot;Address&quot;:&quot;Nobel House, Regent Centre&quot;,
+                    &quot;Town&quot;:&quot;Lothian&quot;,
+                    &quot;Contact&quot;:&quot;Phone&quot;
+        }        
+        </pre>
+        <p>JSON object 'data' is bound to the HTML form using the following line:</p>
+        <pre>
+        $('form').loadJSON(data);
+        </pre>
+        <p>JQuery loadJSON plugin will take JSON object (data) and put properties of the object as a content of the HTML elements
+        in the form where names of the elements matches names of the fields in the JSON object.</p>
+        <a href="list.html">Back to  the list</a>
 </div>
 	
 	
