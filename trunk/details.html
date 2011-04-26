@@ -10,7 +10,7 @@
 
         $(document).ready(function () {
 		var id = window.location.href.match("(ID=|id=|/)[0-9]+")[0].match("[0-9]+");
-            	$('li').loadJSON('data'+id+'.js');
+            	$('div#data').loadJSON('data'+id+'.js');
         });
     </script>
 
@@ -20,12 +20,13 @@
 <body>
 <div id="page-wrap">
     <div id="contact-area">
+    <a href="list.html">Back to  the list</a>
 	<h1>Displaying details about the single JSON object</h1>	
 	<h2>Live example</h2>	
     <p>JQuery loadJSON plugin enables you to bind a single object to the HTML template. This litterally represent loading JSON object into the HTML code.
-    In the example below is shown how a single JSON object is bound to the HTML code
+    In the example below is shown how a single JSON object is bound to the HTML code:
     </p>
-    <a href="list.html">Back to  the list</a>
+    <div id="data">
 
 <br style="clear:both" />
 					    <label for="Name">Name:</label>
@@ -34,8 +35,8 @@
 					    <label for="Address">Address:</label>
                         <span id="Address"></span>
 <br style="clear:both"/>
-					    <label for="Country">Country:</label>
-                        <span id="Country"></span>
+					    <label for="Contact">Contact by:</label>
+                        <span id="Contact"></span>
 <br style="clear:both"/>
 					    <label for="Town">Town</label>
                         <span id="Town"></span>
@@ -45,26 +46,32 @@
             <input type="hidden" id="ID" />
             <input type="submit" value="Edit" class="submit-button"/>
         </form>
+        </div>
+        <br /><br />
         <h2>Implementation</h2>
-        <p>HTML template that will be populated with JSON object should be defined. Elements in this template should have id
-        attributes that matches properties of the object. Example is shown below:</p>
+        <p>HTML template that will be populated with JSON object should be defined. HTML elements in this template should have id
+        attributes that matches properties of the JSON object that will be loaded into the HTML code. Example is shown below:</p>
         <pre>
-        &lt;label for=&quot;Name&quot;&gt;Name:&lt;/label&gt;
-&lt;span id=&quot;Name&quot;&gt;&lt;/span&gt;
-					    &lt;label for=&quot;Address&quot;&gt;Address:&lt;/label&gt;
-&lt;span id=&quot;Address&quot;&gt;&lt;/span&gt;
-					    &lt;label for=&quot;Country&quot;&gt;Country:&lt;/label&gt;
-&lt;span id=&quot;Country&quot;&gt;&lt;/span&gt;
+        &lt;div id=&quot;data&quot;&gt;
+            &lt;label for=&quot;Name&quot;&gt;Name:&lt;/label&gt;
+            &lt;span id=&quot;Name&quot;&gt;&lt;/span&gt;
+		
+            &lt;label for=&quot;Address&quot;&gt;Address:&lt;/label&gt;
+            &lt;span id=&quot;Address&quot;&gt;&lt;/span&gt;
+		
+            &lt;label for=&quot;Contact&quot;&gt;Contact by:&lt;/label&gt;
+            &lt;span id=&quot;Contact&quot;&gt;&lt;/span&gt;
 
-&lt;label for=&quot;Town&quot;&gt;Town&lt;/label&gt;
-&lt;span id=&quot;Town&quot;&gt;&lt;/span&gt;
+            &lt;label for=&quot;Town&quot;&gt;Town&lt;/label&gt;
+            &lt;span id=&quot;Town&quot;&gt;&lt;/span&gt;
 
-&lt;form action=&quot;edit.html&quot; method=&quot;get&quot;&gt;
-   &lt;input type=&quot;hidden&quot; id=&quot;ID&quot; /&gt;
-   &lt;input type=&quot;submit&quot; value=&quot;Edit&quot; class=&quot;submit-button&quot;/&gt;
-&lt;/form&gt;
+            &lt;form action=&quot;edit.html&quot; method=&quot;get&quot;&gt;
+               &lt;input type=&quot;hidden&quot; id=&quot;ID&quot; /&gt;
+               &lt;input type=&quot;submit&quot; value=&quot;Edit&quot; class=&quot;submit-button&quot;/&gt;
+            &lt;/form&gt;
+        &lt;/div&gt;
         </pre>
-        <p>JSON object that will be loaded into the HTML code shown above shoudl have properties that matches id attributes
+        <p>JSON object that will be loaded into the HTML code shown above should have properties that matches id attributes
         of the elements above. Example of such kind of JSON object is shown below:</p>
         <pre>
         data = {
@@ -75,9 +82,13 @@
                     &quot;Contact&quot;:&quot;Phone&quot;
         }        
         </pre>
-        <p>JSON object is bound to the HTML code using the following line:</p>
+        <p>JSON object 'data' is bound to the HTML code within the DIV tag with an id "data" using the following line:</p>
         <pre>
+        $('div#data').loadJSON(data);
         </pre>
+        <p>JQuery loadJSON plugin will take JSON object (data) and put properties of the object as a content of the HTML elements
+        where ids of the elements matches names of the fields in the JSON object.</p>
+        <a href="list.html">Back to  the list</a>
     </div>
 </div>
 
