@@ -1,17 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
-	<title>A Nice &amp; Simple Contact Form</title>
-	
+	<title>Displaying details of the single JSON object</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	
 	<link rel="stylesheet" type="text/css" href="style.css" />
-
-<script src="Scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
-
-    <script src="Scripts/jquery.loadJSON.js")" type="text/javascript"></script>
-
+    <script src="scripts/jquery-1.4.4.min.js")" type="text/javascript"></script>
+    <script src="scripts/jquery.loadJSON.js")" type="text/javascript"></script>
     <script language="javascript" type="text/javascript">
 
         $(document).ready(function () {
@@ -24,50 +18,67 @@
 </head>
 
 <body>
-
-
 <div id="page-wrap">
+    <div id="contact-area">
+	<h1>Displaying details about the single JSON object</h1>	
+	<h2>Live example</h2>	
+    <p>JQuery loadJSON plugin enables you to bind a single object to the HTML template. This litterally represent loading JSON object into the HTML code.
+    In the example below is shown how a single JSON object is bound to the HTML code
+    </p>
+    <a href="list.html">Back to  the list</a>
 
-
-<div id="contact-area">
-			
-		
-
-<a href="list.html">Back to  the list</a>
-
+<br style="clear:both" />
+					    <label for="Name">Name:</label>
+						<span id="Name"></span>
 <br style="clear:both"/>
-
-            <input type="hidden" id="ID" name="ID" />
-
-					    <label for="Name">Name</label>
-						<span id="Name">London</span>
-
-
+					    <label for="Address">Address:</label>
+                        <span id="Address"></span>
 <br style="clear:both"/>
-					    <label for="Address">Address</label><span id="Address">London</span>
+					    <label for="Country">Country:</label>
+                        <span id="Country"></span>
 <br style="clear:both"/>
-
-
-					    <label for="Country">Country</label><span id="Country">London</span>
-
+					    <label for="Town">Town</label>
+                        <span id="Town"></span>
 <br style="clear:both"/>
-
-					    <label for="Town">Town</label><span id="Town">London</span>
-
-<br style="clear:both"/>
-
 <br/>
-
-
         <form action="edit.html" method="get">
-            <input type="hidden" id="ID" name="ID" />
+            <input type="hidden" id="ID" />
             <input type="submit" value="Edit" class="submit-button"/>
         </form>
-		
-		
-</div>
-	
-	
+        <h2>Implementation</h2>
+        <p>HTML template that will be populated with JSON object should be defined. Elements in this template should have id
+        attributes that matches properties of the object. Example is shown below:</p>
+        <pre>
+        &lt;label for=&quot;Name&quot;&gt;Name:&lt;/label&gt;
+&lt;span id=&quot;Name&quot;&gt;&lt;/span&gt;
+					    &lt;label for=&quot;Address&quot;&gt;Address:&lt;/label&gt;
+&lt;span id=&quot;Address&quot;&gt;&lt;/span&gt;
+					    &lt;label for=&quot;Country&quot;&gt;Country:&lt;/label&gt;
+&lt;span id=&quot;Country&quot;&gt;&lt;/span&gt;
+
+&lt;label for=&quot;Town&quot;&gt;Town&lt;/label&gt;
+&lt;span id=&quot;Town&quot;&gt;&lt;/span&gt;
+
+&lt;form action=&quot;edit.html&quot; method=&quot;get&quot;&gt;
+   &lt;input type=&quot;hidden&quot; id=&quot;ID&quot; /&gt;
+   &lt;input type=&quot;submit&quot; value=&quot;Edit&quot; class=&quot;submit-button&quot;/&gt;
+&lt;/form&gt;
+        </pre>
+        <p>JSON object that will be loaded into the HTML code shown above shoudl have properties that matches id attributes
+        of the elements above. Example of such kind of JSON object is shown below:</p>
+        <pre>
+        data = {
+                    &quot;ID&quot;:17,
+                    &quot;Name&quot;:&quot;Emkay Entertainments&quot;,
+                    &quot;Address&quot;:&quot;Nobel House, Regent Centre&quot;,
+                    &quot;Town&quot;:&quot;Lothian&quot;,
+                    &quot;Contact&quot;:&quot;Phone&quot;
+        }        
+        </pre>
+        <p>JSON object is bound to the HTML code using the following line:</p>
+        <pre>
+        </pre>
+    </div>
 </div>
 
 </body>
