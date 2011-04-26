@@ -13,12 +13,22 @@ The simplest case of template is plain HTML elements such as SPAN, P, DIV, LI, H
     <span id="Address"></span>
     <p id="Description"></p>
 }}}
+And if following JSON object is loaded to the template:
+
+{{{
+   data = { "Title": "This is a title",
+            "Address": Regent Street",
+            "Description": "Lorem ipsum dolor sit amet" }
+}}}
 
 Values of the properties of the JSON object called Title, Address, and Description will be placed as a content of these elements.
 
 == Loading JSON object properties into the image tag ==
 
-HTML image tag do not uses content - only important attributes of IMG tag are src that defines where image is placed, and alt attribute that is shown when image cannot be loaded from the loaction placed in the src attribute.
+HTML image tag do not uses content - only important attributes of IMG tag are src that defines where image is placed, and alt attribute that is shown when image cannot be loaded from the loaction placed in the src attribute. Exampe of the image tag that can be used as a template is shown below:
+{{{
+    <img id="Logo" src="" atl="" />
+}}}
 Values of the properties that can be placed into the IMG tag are shown below:
 {{{
     data1 = { "Logo": "/images/logo.jpeg$This is an alt tag text"}
@@ -33,7 +43,13 @@ Link tag has href property that represents URL when user wil be redirected when 
 {{{
     data = { "Link": "http://www.google.com"}
 }}}
-If link with id Link is placed in the HTML code '<a href="" id="Link">Google</a>' value of the Link property will be placed into the href attribute. Note that text that will be shown in the link ("Google" in the example) will not be modified. If test of the link should be dinamically loaded, HTML element with id shoudl be placed instead of the hardcoded text as shown in the example below:
+If link with id Link is placed in the HTML code '<a href="" id="Link">Google</a>' value of the Link property will be placed into the href attribute. Resulting HTML is shown below:
+
+{{{
+    <a href="http://www.google.com" id="Link">Google</a>
+}}}
+
+Note that text that will be shown in the link ("Google" in the example) will not be modified. If text of the link should be dinamically loaded, HTML element with id should be placed instead of the hardcoded text as shown in the example below:
 
 {{{
     <a href="" id="Link"><span id="LinkText"></span></a>
@@ -43,4 +59,8 @@ If this HTML is bound to the following JSON object:
     data = { "Link": "http://www.google.com",
              "LinkText": "Google site" }
 }}}
-Link property will be set as a href attribute of A tag, and LinkText property will be placed as a content of the SPAN tag and shown to the user.
+Link property will be set as a href attribute of A tag, and LinkText property will be placed as a content of the SPAN tag and shown to the user. Resulting HTML code that will be generated in this case is shown below:
+{{{
+    <a href="http://www.google.com" id="Link">
+       <span id="LinkText">Google site</span></a>
+}}}
