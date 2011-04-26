@@ -56,7 +56,7 @@
                     var href = $(element).attr("href");
                     var iPosition = href.indexOf('?');
                     if (iPosition > 0) // if parameters in the URL exists add new pair using &
-                        href = href.substring(0, iPosition) + '&' + name + '=' + value;
+                        href = href.substring(0, iPosition) + '?' + name + '=' + value;
                     else//otherwise attach pair to URL
                         href = href + '?' + name + '=' + value;
                     $(element).attr("href", href);
