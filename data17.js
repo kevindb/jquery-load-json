@@ -10,5 +10,6 @@
     "Country": [
         "UK",
         "USA" 
-    ]
+    ],
+    "Logo":"images/logo17.jpg"
 }

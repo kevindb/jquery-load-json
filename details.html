@@ -24,13 +24,13 @@
 	<h1>Displaying details about the single JSON object</h1>	
 	<h2>Live example</h2>	
     <p>JQuery loadJSON plugin enables you to bind a single object to the HTML template. This litterally represent loading JSON object into the HTML code.
-    In the example below is shown how a single JSON object is bound to the HTML code:
+    In the example below is shown how a single JSON object is bound to the static HTML code:
     </p>
     <div id="data">
 
 <br style="clear:both" />
-					    <label for="Name">Name:</label>
-						<span id="Name"></span>
+					    <h1 id="Name" style="float:left;margin-right:40px"></h1>
+                        <img id="Logo" style="float:left" alt="" src=""/>
 <br style="clear:both"/>
 					    <label for="Address">Address:</label>
                         <span id="Address"></span>
@@ -49,12 +49,11 @@
         </div>
         <br /><br />
         <h2>Implementation</h2>
-        <p>HTML template that will be populated with JSON object should be defined. HTML elements in this template should have id
-        attributes that matches properties of the JSON object that will be loaded into the HTML code. Example is shown below:</p>
+        <p>HTML template that will be populated with JSON object should be defined first. HTML elements in this template should have id
+        attributes that match properties of the JSON object that will be loaded into the HTML code. Example of the plain HTML code that can be used as a template is shown below:</p>
         <pre>
         &lt;div id=&quot;data&quot;&gt;
-            &lt;label for=&quot;Name&quot;&gt;Name:&lt;/label&gt;
-            &lt;span id=&quot;Name&quot;&gt;&lt;/span&gt;
+            &lt;h1 id=&quot;Name&quot;&gt;&lt;/h1&gt;
 		
             &lt;label for=&quot;Address&quot;&gt;Address:&lt;/label&gt;
             &lt;span id=&quot;Address&quot;&gt;&lt;/span&gt;
@@ -87,7 +86,7 @@
         $('div#data').loadJSON(data);
         </pre>
         <p>JQuery loadJSON plugin will take JSON object (data) and put properties of the object as a content of the HTML elements
-        where ids of the elements matches names of the fields in the JSON object.</p>
+        where ids of the elements match the names of the fields in the JSON object.</p>
         <a href="list.html">Back to  the list</a>
     </div>
 </div>

@@ -9,5 +9,6 @@
     "IsFeatured": false,
     "Country": [
         "UK" 
-    ]
+    ],
+    "Logo":"/images/logo18.jpg$The Empire Logo"
 }
