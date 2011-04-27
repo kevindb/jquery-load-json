@@ -4,10 +4,9 @@
 
 Jquery loadJSON plugin can be used to define template that will be used to generate list of elements. In this plugin is placed a simple template engine that uses plain HTML as a template source and generate HTML output based on the template item and array of objects that are used as data source.
 
-
 == Definition of template ==
 
-Template item that will be used for generatin output doesnot require any specific syntax ot language. Only thing that is required is to define HTML template with elements that have id, class or rel attributes that will be used as a placeholders for actual values taken from the !JavaScript objects. Example of such kind template is shown below:
+Template item that will be used for generatin output doesnot require any specific syntax or language. Only thing that is required is to define HTML template with elements that have id, class or rel attributes that will be used as a placeholders for actual values taken from the !JavaScript objects. Example of such kind template is shown below:
 {{{
 <ul>
     <li> 
@@ -21,6 +20,7 @@ Template item that will be used for generatin output doesnot require any specifi
 In this template is defined one list where ID, Name, and Address properties of the !JavaScript objects will be placed.
 
 == !JavaScript !DataSource ==
+
 Data source for this template is !JavaScript object array represented in JSON notation. This array should have objects that have properties that match HTML element in template. Example of array that can be bound to the bound to the template shown in the example above is shown in the following listing:
 {{{
 data =
@@ -45,11 +45,12 @@ data =
 Each of the objects in the array have ID, Name, and Address fields that will be bound to the elements in the template.
 
 == Generating output ==
+
 Binding JSON array 'data' with template is done on the client-side using the following !JavaScript code:
 {{{
     $('li').loadJSON(data);
 }}}
-In this code is defined that the template placed in the LI tag should be loaded with !JavaScript array in 'data' variable. As result of this call, LI element will be populated with each of the object in the array and replicated three times (because there are a three elements in the array). Resulting HTML is shown below:
+In this code is defined that the template placed in the LI tag should be loaded with !JavaScript array in 'data' variable. As a result of this call, LI element will be populated with each of the object in the array and replicated three times (because there are a three elements in the array). Resulting HTML is shown below:
 
 {{{
 <ul>
