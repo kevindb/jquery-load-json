@@ -2,7 +2,7 @@
 
 = Introduction =
 
-JQuery loadJSON plugin enables you to load !JavaScript objectinto the HTML form. Depending on the type of the form element, plugin will populate value of the form.
+JQuery loadJSON plugin enables you to load !JavaScript objectinto the HTML form. Depending on the type of the form element, plugin will populate value of the form. You can see how the form is populated int the [http://jquery-load-json.googlecode.com/svn/trunk/edit.html?ID=17 Live example] page.
 
 == Form template ==
 Blank form that will be used for editing data should be defined. Form elements must have name attributes that will be used for matching with !JAvaScript objects. Example of the form template that can be used is shown in the example below:
@@ -62,7 +62,7 @@ data = {
             "IsFeatured": true
         } 
 }}}
-Once this object is bound with the form, the form elements will be populated with values from the !JavaScript object.
+Once this object is bound with the form, the form elements will be populated with values from the !JavaScript object. You can see how the form is populated int the [http://jquery-load-json.googlecode.com/svn/trunk/edit.html?ID=17 Live example] page.
 
 == Populating form element ==
 
