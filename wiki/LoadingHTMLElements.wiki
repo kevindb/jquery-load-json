@@ -51,7 +51,11 @@ When the second object is loaded into the image tag, "/images/logo.jpeg" is plac
 
 == Loading JSON object properties into the link tag ==
 
-Link tag has href property that represents URL when user wil be redirected when he click on the link. Property that matches link tag will be placed as a href attribute of the tag. Example of object that has property 'Link' that can be loaded into the link is shown below:
+Link tag has a href property that represents URL where user will be redirected when he clicks on the link. Example of the blank link that can be used for populating with JSON object is shown below:
+{{{
+    <a href="" id="Link">Google</a>
+}}}
+Property that matches link tag by id will be placed as a href attribute of the tag. Example of object that has property 'Link' that can be loaded into the link is shown below:
 {{{
     data = { "Link": "http://www.google.com"}
 }}}
