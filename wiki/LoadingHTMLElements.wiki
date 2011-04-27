@@ -1,4 +1,4 @@
-#summary In this page is shown how
+#summary In this page is shown how JSON object can be loaded into the HTML code
 
 = Introduction =
 
@@ -40,8 +40,14 @@ Values of the properties that can be placed into the IMG tag are shown below:
     data1 = { "Logo": "/images/logo.jpeg$This is an alt tag text"}
     data2 = { "Logo": "/images/logo.jpeg"}
 }}}
-When the first object is loaded into the image tag, "/images/logo.jpeg" is placed as a src attribute, and "This is an alt tag text" is placed as an alt attribute of the image. Dollar ($) is used as a separator for src and alt values.
-When the second object is loaded into the image tag, "/images/logo.jpeg" is placed as a src attribute, and "logo" is placed as an alt attribute of the image. If alt tag is not placed in the JSON object name of the image is used as an alt tag.
+When the first object is loaded into the image tag, "/images/logo.jpeg" is placed as a src attribute, and "This is an alt tag text" is placed as an alt attribute of the image. Dollar ($) is used as a separator for src and alt values. Resulting HTML is shown in the following listing:
+{{{
+    <img id="Logo" src="/images/logo.jpeg" alt="This is an alt tag text" />
+}}}
+When the second object is loaded into the image tag, "/images/logo.jpeg" is placed as a src attribute, and "logo" is placed as an alt attribute of the image. If an alt tag is not placed in the JSON object name of the image is used as an alt tag. HTML that wil be generated is shown below:
+{{{
+    <img id="Logo" src="/images/logo.jpeg" alt="logo" />
+}}}
 
 == Loading JSON object properties into the link tag ==
 
@@ -55,7 +61,7 @@ If link with id Link is placed in the HTML code '<a href="" id="Link">Google</a>
     <a href="http://www.google.com" id="Link">Google</a>
 }}}
 
-Note that text that will be shown in the link ("Google" in the example) will not be modified. If text of the link should be dinamically loaded, HTML element with id should be placed instead of the hardcoded text as shown in the example below:
+Note that text that will be shown in the link ("Google" in the example) will not be modified, because property from the JSON object is placed into the href attribute and not in the element content. If text of the link should be dinamically loaded, HTML element with id should be placed instead of the hardcoded text as shown in the example below:
 
 {{{
     <a href="" id="Link"><span id="LinkText"></span></a>
