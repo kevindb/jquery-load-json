@@ -65,3 +65,5 @@ label, span {
 }
 #contact-area input[type="radio"], #contact-area input[type="checkbox"] { width:5px }
 li span {float:none; margin-right:0px}
+dt {margin-left: 10px}
+dt, dd {display:inline-table; border-bottom-style:solid; border-bottom-width:thin; width:80px}
