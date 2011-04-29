@@ -1,6 +1,6 @@
 ﻿/*
 * File:        jquery.loadJSON.js
-* Version:     1.0.0.
+* Version:     1.1.0.
 * Author:      Jovan Popovic 
 * 
 * Copyright 2011 Jovan Popovic, all rights reserved.
@@ -117,17 +117,21 @@
                     //how many duplicate
                     var nbToCreate = obj.length - arr.length;
                     var i = 0;
+                    var iExist = 0;
                     for (iExist = 0; iExist < arr.length; iExist++) {
                         if (i < obj.length) {
-                            $(element).eq(iExist).loadJSON(obj[i]);
+                            var elem = $(element).eq(iExist);
+                            browseJSON(obj[i], elem, name);
                         }
                         i++;
                     }
                     //fill started by last
                     i = obj.length - 1;
+                    var iCreate = 0;
                     for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
                         //duplicate the last
-                        $(arr[arr.length - 1]).clone(true).insertAfter(arr[arr.length - 1]).loadJSON(obj[i]);
+                        var last = $(arr[arr.length - 1]).clone(true).insertAfter(arr[arr.length - 1]);
+                        browseJSON(obj[i], last, name);
                         i--;
                     }
                 }
@@ -137,6 +141,7 @@
                 var value = obj;
                 var type;
                 if (element.length > 0) {
+                    var i = 0;
                     for (i = 0; i < element.length; i++)
                         setElementValue(element[i], obj, name);
                 }
