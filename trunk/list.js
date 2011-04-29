@@ -1,63 +1,27 @@
 [
 {
-	"ID": 17,
+        "ID": 17,
         "Name": "Emkay Entertainments",
-        "Address": "Nobel House, Regent Centre",
-        "Town": "Lothian",
-        "Description": null,
-        "Contact": "Phone",
-        "IsFeatured": true,
-        "Country": [
-            "UK",
-            "USA" 
-        ] 
+        "Address": "Nobel House, Regent Centre"
     },
     {
         "ID": 18,
         "Name": "The Empire",
-        "Address": "Milton Keynes Leisure Plaza",
-        "Town": "Buckinghamshire",
-        "Description": null,
-        "Date": "\/Date(-62135596800000)\/",
-        "Contact": "Post",
-        "IsFeatured": false,
-        "Country": null 
+        "Address": "Milton Keynes Leisure Plaza"
     },
     {
         "ID": 19,
         "Name": "Asadul Ltd",
-        "Address": "Hophouse",
-        "Town": "Essex",
-        "Description": null,
-        "Date": "\/Date(-62135596800000)\/",
-        "Contact": "Email",
-        "IsFeatured": false,
-        "Country": [
-            "UK" 
-        ] 
+        "Address": "Hophouse"
     },
     {
         "ID": 20,
         "Name": "Star Records",
-        "Address": null,
-        "Town": null,
-        "Description": null,
-        "Date": "\/Date(-62135596800000)\/",
-        "Contact": "Email",
-        "IsFeatured": false,
-        "Country": [
-            "SRB" 
-        ] 
+        "Address": null
     },
     {
         "ID": 21,
         "Name": "Ashley Mark Publishing Company",
-        "Address": "1-2 Vance Court",
-        "Town": "Tyne & Wear",
-        "Description": null,
-        "Date": "\/Date(-62135596800000)\/",
-        "Contact": null,
-        "IsFeatured": true,
-        "Country": null 
+        "Address": "1-2 Vance Court"
     }
 ]
