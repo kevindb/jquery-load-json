@@ -131,7 +131,7 @@
                     var iCreate = 0;
                     for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
                         //duplicate the last
-                        var last = tempate.clone(true).insertAfter(arr[arr.length - 1]);
+                        var last = template.clone(true).insertAfter(arr[arr.length - 1]);
                         browseJSON(obj[i], last, name);
                         i--;
                     }
