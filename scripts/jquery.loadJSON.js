@@ -56,7 +56,7 @@
                     var href = $(element).attr("href");
                     var iPosition = href.indexOf('?');
                     if (iPosition > 0) // if parameters in the URL exists add new pair using &
-                        href = href.substring(0, iPosition) + '?' + name + '=' + value;
+                        href += '&' + name + '=' + value;
                     else//otherwise attach pair to URL
                         href = href + '?' + name + '=' + value;
                     $(element).attr("href", href);
@@ -114,6 +114,7 @@
                     setElementValue(element[0], obj, name);
                 } else {
                     var arr = jQuery.makeArray(element);
+                    var template = $(arr[arr.length - 1]).clone(true);
                     //how many duplicate
                     var nbToCreate = obj.length - arr.length;
                     var i = 0;
@@ -130,7 +131,7 @@
                     var iCreate = 0;
                     for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
                         //duplicate the last
-                        var last = $(arr[arr.length - 1]).clone(true).insertAfter(arr[arr.length - 1]);
+                        var last = tempate.clone(true).insertAfter(arr[arr.length - 1]);
                         browseJSON(obj[i], last, name);
                         i--;
                     }
