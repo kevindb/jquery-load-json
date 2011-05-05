@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>External calls to the sites</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('#container').load('http://google.com'); // SERIOUSLY!
+
+            $.ajax({
+                url: 'http://news.bbc.co.uk',
+                type: 'GET',
+                success: function (res) {
+                    var headline = $(res.responseText).find('a.tsh').text();
+                    alert(headline);
+                }
+            });
+ 
+
+        });
+    </script>
+
+
+</head>
+
+<body>
+<div id="page-wrap">
+    <div id="contact-area">
+    <a href="list.html">Back to  the list</a>
+	<h1>Loading HTML from the external files</h1>	
+	<h2>Live example</h2>	
+    <p>
+    </p>
+    <div id="container"></div>
+   </div>
+</div>
+
+</body>
+
+</html>
