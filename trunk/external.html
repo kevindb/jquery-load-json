@@ -8,17 +8,18 @@
     <script language="javascript" type="text/javascript">
 
         $(document).ready(function () {
-          $.ajax({ url: 'http://jquery-load-json.googlecode.com/svn/trunk/list.js',
-  //url: "http://www.datatables.net/examples/examples_support/server_processing.php",
-    data: { x: JSON.stringify("Now i am getting jsop string"), y: JSON.stringify("2nd param") },
-        dataType: "jsonp",
-        success: function(json) {
-            alert(json.d);
-        },
-        error: function() {
-            alert("Hit error fn!");
-        }
-    });
+          $.ajax({ url: 'http://jquery-load-json.googlecode.com/svn/trunk/data17.js',
+
+                  data: { x: JSON.stringify("Now i am getting jsop string"),
+                          y: JSON.stringify("2nd param") },
+                      dataType: "jsonp",
+                      success: function(json) {
+                          alert(json);
+                      },
+                      error: function() {
+                          alert("Hit error fn!");
+                      }
+                  });
           /*
             $('#container').load('http://google.com'); // SERIOUSLY!
 
