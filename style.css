@@ -55,13 +55,15 @@ p {
 	float: right;
 }
 
+
+label {font-size: 1.4em;}
 label, span {
 	float: left;
 	text-align: right;
 	margin-right: 15px;
 	width: 100px;
 	padding-top: 5px;
-	font-size: 1.4em;
+
 }
 #contact-area input[type="radio"], #contact-area input[type="checkbox"] { width:5px }
 li span {float:none; margin-right:0px}
