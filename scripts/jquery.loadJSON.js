@@ -1,6 +1,6 @@
 ﻿/*
 * File:        jquery.loadJSON.js
-* Version:     1.1.0.
+* Version:     1.2.0.
 * Author:      Jovan Popovic 
 * 
 * Copyright 2011 Jovan Popovic, all rights reserved.
@@ -71,7 +71,7 @@
                     }
                     else {
                         src = value;
-                        var iPositionStart = value.lastIndexOf('/')+1;
+                        var iPositionStart = value.lastIndexOf('/') + 1;
                         var iPositionEnd = value.indexOf('.');
                         alt = value.substring(iPositionStart, iPositionEnd);
                     }
@@ -113,27 +113,35 @@
                 if (element.length > 0 && element[0].tagName == "SELECT") {
                     setElementValue(element[0], obj, name);
                 } else {
-                    var arr = jQuery.makeArray(element);
-                    var template = $(arr[arr.length - 1]).clone(true);
-                    //how many duplicate
-                    var nbToCreate = obj.length - arr.length;
-                    var i = 0;
-                    var iExist = 0;
-                    for (iExist = 0; iExist < arr.length; iExist++) {
-                        if (i < obj.length) {
-                            var elem = $(element).eq(iExist);
-                            browseJSON(obj[i], elem, name);
+                    var arrayElements = $(element).children("[rel]");
+                    if (arrayElements.length > 0) {//if there are rel=[index] elements populate them instead of iteration
+                        arrayElements.each(function () {
+                            var rel = $(this).attr("rel");
+                            setElementValue(this, obj[rel], name);
+                        });
+                    } else {//recursive iteration
+                        var arr = jQuery.makeArray(element);
+                        var template = $(arr[arr.length - 1]).clone(true);
+                        //how many duplicate
+                        var nbToCreate = obj.length - arr.length;
+                        var i = 0;
+                        var iExist = 0;
+                        for (iExist = 0; iExist < arr.length; iExist++) {
+                            if (i < obj.length) {
+                                var elem = $(element).eq(iExist);
+                                browseJSON(obj[i], elem, name);
+                            }
+                            i++;
                         }
-                        i++;
-                    }
-                    //fill started by last
-                    i = obj.length - 1;
-                    var iCreate = 0;
-                    for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
-                        //duplicate the last
-                        var last = template.clone(true).insertAfter(arr[arr.length - 1]);
-                        browseJSON(obj[i], last, name);
-                        i--;
+                        //fill started by last
+                        i = obj.length - 1;
+                        var iCreate = 0;
+                        for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
+                            //duplicate the last
+                            var last = template.clone(true).insertAfter(arr[arr.length - 1]);
+                            browseJSON(obj[i], last, name);
+                            i--;
+                        }
                     }
                 }
             }
@@ -153,22 +161,28 @@
         } //function browseJSON end
 
         var defaults = {
-        };
+    };
 
-        properties = $.extend(defaults, options);
+    properties = $.extend(defaults, options);
 
-        return this.each(function () {
+    return this.each(function () {
 
-            if (obj.constructor == String) {
+        if (obj.constructor == String) {
+            try {
+                var data = $.parseJSON(obj);
+                browseJSON(data, this);
+            }
+            catch (ex) {
                 var element = $(this);
                 $.get(obj, function (data) {
                     element.loadJSON(data);
                 });
             }
+        }
 
-            else {
-                browseJSON(obj, this);
-            }
-        });
-    };
+        else {
+            browseJSON(obj, this);
+        }
+    });
+};
 })(jQuery);
