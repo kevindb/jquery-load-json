@@ -117,7 +117,8 @@
                     if (arrayElements.length > 0) {//if there are rel=[index] elements populate them instead of iteration
                         arrayElements.each(function () {
                             var rel = $(this).attr("rel");
-                            setElementValue(this, obj[rel], name);
+                            //setElementValue(this, obj[rel], name);
+                            browseJSON(obj[rel], $(this), name);
                         });
                     } else {//recursive iteration
                         var arr = jQuery.makeArray(element);

@@ -1,0 +1,224 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Use Bing Maps REST Services with jQuery to build an autocomplete box and find a location dynamically</title>
+    <script src="scripts/jquery-1.5.1.js" type="text/javascript"></script>
+    <script src="scripts/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="scripts/jquery.loadJSON.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="scripts/jquery-ui.css" />
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+	var zoom = 12;
+	var center = "";
+	var key = "AptcCMfZk-6wkwkXX2ho4h6YOwRJGXYCYYu9OeH1nZ1UD4fTMFEF6x-gZ8pHQu91";
+	    $("#search").click( function () {
+		$.ajax({
+                        url: "http://dev.virtualearth.net/REST/v1/Locations",
+                        dataType: "jsonp",
+                        data: {
+                            key: key,
+                            q: $("#searchBox").val()
+                        },
+                        jsonp: "jsonp",
+                        success: function (data) {
+				$("#searchDiv").hide();
+				$("#data").loadJSON(data).fadeIn("slow");
+				center = $($(".point .coordinates")[0]).text();
+				showMap();
+                        }
+                    });
+
+		});
+		$(".point a").live("click", function(event){
+			center = $(this).text();
+			showMap();		
+		});
+
+		$( "#slider" ).slider({
+			value:12,
+			min: 1,
+			max: 19,
+			step: 1,
+			slide: function( event, ui ) {
+				zoom = ui.value;
+				showMap();
+			}
+		});
+
+
+	function showMap(){
+		var pushpins = "";
+		var i = 1;
+		$(".point .coordinates").each(function(){ pushpins+= "&pp="+$(this).text()+";;"+(i++); } );
+		$("#searchmap").attr("src", 
+			"http://dev.virtualearth.net/REST/V1/Imagery/Map/road/"+center+"/"+zoom+"?mapSize=600,400&ml=TrafficFlow&mapVersion=v1&key="+key+pushpins);
+
+	}
+
+
+        });
+
+    </script>
+</head>
+<body>
+<div id="page-wrap">
+    <a href="http://code.google.com/p/jquery-load-json/" alt="Home">Home</a>
+
+	<div id="contact-area">
+			
+		
+	<h1>Loading JSON from the BingMaps</h1>
+	<p>JQuery loadJSON plugin enables you to load JSON object taken from the external sites (if this is allowed on the external site).</p>
+	<h2>Live Example</h2>
+	<p>The following form enables you to search for address and show all addresses on the map using the BingMaps JSON service.</p>
+        <div id="searchDiv">
+	    <p>Type in the search box any address (e.g. 'Regent street, london') and press search button. You will see addresses
+		that matches your search condition in the list. Also, in the map will be shown some of the objects from the list.
+		</p>
+            <label for="searchBox">
+                Search:
+            </label>
+            <input id="searchBox" /><button id="search">Search</button>
+        </div>
+	<div id="data" style="display:none">
+		<img src="#" id="brandLogoUri" />
+		<div id="copyright"></div>
+		<div id="slider"></div>
+		<img src="#" id="searchmap" />
+		<ol class="resourceSets">
+			<li class="resources">
+				<span class="name"></span>
+				
+				<span class="point">
+					(<a href="#"><span class="coordinates"><span rel="0"></span>,<span rel="1"></span></span></a>)
+				</span>
+			</li>
+		</ol>
+		<a href="BingMapsSearch.html">New search</a>
+	</div>
+	<p>When you press search button, instead of the search form you will see list of addresses returned by the BingMaps and you will be able to 
+	change the zoom level using a slider or place any of the objects in the center of the map by clicking on the coordinates. 
+	</p>
+	<p>
+	<h1>Implementation</h1>
+	<p>First thing you need to do is to load JSON from the BingMaps when search button is pressed. In the following listing is shown how you can
+	attach click handler to the search button that performs AJAX request to the BingMaps, sends key and query, and load returned JSON result into
+	the element with id 'div'.</p>
+	<pre>
+	  $("#search").click( function () {
+		$.ajax({
+                        url: "http://dev.virtualearth.net/REST/v1/Locations",
+                        dataType: "jsonp",
+                        data: {
+                            key: key,
+                            q: $("#searchBox").val()
+                        },
+                        jsonp: "jsonp",
+                        success: function (data) {
+				$("#searchDiv").hide();
+				$("#data").loadJSON(data);
+                        }
+                    });
+
+		});
+	</pre>
+	<p>Note that "jsonp" is used as a data type - in most cases standard "json" request is not allowed by the browser if you are using cross-site calls. Therefore "jsonp" is only available option. Example of JSON response that is returned by the BingMaps is shown in the following listing:</p>
+	<pre>
+{ 
+  "brandLogoUri" : "http://dev.virtualearth.net/Branding/logo_powered_by.png",
+  "resourceSets" : [ { 
+        "resources" : [ { 
+              "name" : "Regent Street, London NW10 5",
+              "point" : { "coordinates" : [ 51.528781000000002,-0.216583]
+                }
+            },
+            { 
+              "name" : "Regent Street, London W1S 2",
+              "point" : { "coordinates" : [ 51.511755000000001,-0.139491]
+                }
+            },
+            { 
+              "name" : "Regent Street, London W4 3",
+              "point" : { "coordinates" : [ 51.488630999999998,-0.28262900000000002]
+                }
+            }
+         ]
+      } ]
+}
+	</pre>
+	<p>This is just a short example where just some properties important for this example are shown. You can find more details on the Microsoft site.</p>
+	<p>HTML template where the JSON object is loaded should match JSON structure - example is shown in the following listing:</p>
+	<pre>
+	&lt;div id=&quot;data&quot;&gt;
+		&lt;img src=&quot;#&quot; id=&quot;brandLogoUri&quot; /&gt;
+		&lt;ol class=&quot;resourceSets&quot;&gt;
+			&lt;li class=&quot;resources&quot;&gt;
+				&lt;span class=&quot;name&quot;&gt;&lt;/span&gt;
+				&lt;span class=&quot;point&quot;&gt;
+					(&lt;a href=&quot;#&quot;&gt;
+						&lt;span class=&quot;coordinates&quot;&gt;
+							&lt;span rel=&quot;0&quot;&gt;&lt;/span&gt;,
+							&lt;span rel=&quot;1&quot;&gt;&lt;/span&gt;
+						&lt;/span&gt;
+					&lt;/a&gt;)
+				&lt;/span&gt;
+			&lt;/li&gt;
+		&lt;/ol&gt;
+
+	&lt;/div&gt;
+	</pre>
+	<p>Structure of the HTML template matches the structure of the JSON object (classes matches the names and structure of the properties of JSON object
+	that is returned). You can see more details about the generating lists in the <a href="list.html">generating list example</a>. Attributes rel="0" and rel="1"  of the span elements are used to load first and second element of the array in theese HTML elements. You can see more details about the generating lists in the <a href="array.html">generating array elements example</a>. Therefore, JSON can be loaded into the template usign the following line of code:</p>
+<pre>
+	$("#data").loadJSON(data);
+</pre>
+	<p>That is everything that is required to load results from the BingMaps site and load them in your page using client-side script only. In the following section are shortly described additional features implemented in this example (showing results on the map, zooming, placing one of the results in the middle of the map).
+	<h2>Showing addresses on the map</h2>
+	<p>You can see in this example that when results are loaded in the HTML, they are shown in the map. This part is not related to the loadJSON plugin, 
+	but here is a short description how it is done. In the HTML is placed one image where the map is loaded. Custom JavaScript set the src attribute
+	of the image based on the results. Code for setting the image is shown in the following listing:</p>
+	<pre>
+	var zoom = 12;
+	var center = "";
+	function showMap(){
+		var pushpins = "";
+		var i = 1;
+		$(".point .coordinates").each(function(){ pushpins+= "&pp="+$(this).text()+";;"+(i++); } );
+		$("#searchmap").attr("src", 
+			"http://dev.virtualearth.net/REST/V1/Imagery/Map/road/"+
+			center+"/"+zoom+"?mapSize=600,400&ml=TrafficFlow&mapVersion=v1&key="+
+			key+pushpins);
+
+	}
+	</pre>
+	<p>Variable zoom and center defines where is a center of the image and what zoom level is used. When you click on the search button or links 
+	contianing coordinates center variable is set. Value of this variable is in the format 51.528781,-0.216583 so this is read directly from the 
+	text of the link. The following code example set the center variable and redraws the map when link containing coordinates is pressed:</p>
+
+	<pre>
+		$(".point a").live("click", function(event){
+			center = $(this).text();
+			showMap();		
+		});
+	</pre>
+	<p>Similar code is executed when the search results are loaded into the list.</p>
+	<p>Variable zoom has values between 1 and 19 and it is changed when ui slided is moved. UI slider code is shown in the following listing:</p>
+	<pre>
+		$( "#slider" ).slider({
+			value:12,
+			min: 1,
+			max: 19,
+			step: 1,
+			slide: function( event, ui ) {
+				zoom = ui.value;
+				showMap();
+			}
+		});
+	</pre>
+	<p>As you can see, loadJSON plugin enables you to quick and easy load results into your HTML code and focus on the concrete features of the site.</p>
+    </div>
+</div>
+</body>
+</html>

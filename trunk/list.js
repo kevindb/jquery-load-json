@@ -1,8 +1,10 @@
 [
-{
+    {
         "ID": 17,
         "Name": "Emkay Entertainments",
-        "Address": "Nobel House, Regent Centre"
+        "Address": "Nobel House, Regent Centre",
+    	"Town": "Lothian",
+    	"Logo":"images/logo17.jpg"
     },
     {
         "ID": 18,
