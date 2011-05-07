@@ -6,9 +6,9 @@
     	        $('li').loadJSON('hierarchy.js');
     	    });
     	</script>
-</head>
-<body>
+</head><body>
     <div id="page-wrap">
+	<a href="http://code.google.com/p/jquery-load-json/" alt="Home">Home</a>
         <div id="contact-area">
             <h1>
                 Loading Hiearachical JSON objects</h1>
@@ -75,15 +75,7 @@
             this example is shown below:
             </p>
             <pre>        
-[
-    {        "ID": 17,
-        "Name": "Emkay Entertainments",
-        "Address": "Nobel House, Regent Centre",        "Manager": { "FirstName": "John", "LastName": "Doe"},        "Employees": [ { "FirstName": "Brian", "LastName": "Hunt"},                       { "FirstName": "Mick", "LastName": "Henning"}                    ]
-    },
-    {        "ID": 18,
-        "Name": "The Empire",
-        "Address": "Milton Keynes Leisure Plaza",                 "Manager": { "FirstName": "Ana", "LastName": "Johnsnon"},        "Employees": [ { "FirstName": "Erick", "LastName": "O'Neil"},                       { "FirstName": "George", "LastName": "Halloway"}                    ]
-    }
+[    {        "ID": 17,        "Name": "Emkay Entertainments",        "Address": "Nobel House, Regent Centre",        "Manager": { "FirstName": "John", "LastName": "Doe"},        "Employees": [ { "FirstName": "Brian", "LastName": "Hunt"},                       { "FirstName": "Mick", "LastName": "Henning"}                    ]    },    {        "ID": 18,        "Name": "The Empire",        "Address": "Milton Keynes Leisure Plaza",                 "Manager": { "FirstName": "Ana", "LastName": "Johnsnon"},        "Employees": [ { "FirstName": "Erick", "LastName": "O'Neil"},                       { "FirstName": "George", "LastName": "Halloway"}                    ]    }
 ]
 	</pre>
             <p>This array contains elements with properties ID, Name, and Address that will be
