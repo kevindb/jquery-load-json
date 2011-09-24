@@ -36,7 +36,12 @@
                     if (value)
                         $(element).attr("checked", "checked");
                     break;
-
+                case 'option':
+                    $(element).attr("value", value.value);
+                    $(element).text(value.text);
+                    if (value.selected)
+                        $(element).attr("selected", true);
+                    break;
                 case 'select-multiple':
                     var values = value.constructor == Array ? value : [value];
                     for (var i = 0; i < element.options.length; i++) {
@@ -61,22 +66,30 @@
                         href = href + '?' + name + '=' + value;
                     $(element).attr("href", href);
                     break;
-                case 'img': //Assumption is that value is in the HREF$ALT format
-                    var iPosition = value.indexOf('$');
-                    var src = "";
-                    var alt = "";
-                    if (iPosition > 0) {
-                        src = value.substring(0, iPosition);
-                        alt = value.substring(iPosition + 1);
+                case 'img':
+
+                    if (obj.constructor == "String") {
+                        //Assumption is that value is in the HREF$ALT format
+                        var iPosition = value.indexOf('$');
+                        var src = "";
+                        var alt = "";
+                        if (iPosition > 0) {
+                            src = value.substring(0, iPosition);
+                            alt = value.substring(iPosition + 1);
+                        }
+                        else {
+                            src = value;
+                            var iPositionStart = value.lastIndexOf('/') + 1;
+                            var iPositionEnd = value.indexOf('.');
+                            alt = value.substring(iPositionStart, iPositionEnd);
+                        }
+                        $(element).attr("src", src);
+                        $(element).attr("alt", alt);
+                    } else {
+                        $(element).attr("src", obj.src);
+                        $(element).attr("alt", obj.alt);
+                        $(element).attr("title", obj.title);
                     }
-                    else {
-                        src = value;
-                        var iPositionStart = value.lastIndexOf('/') + 1;
-                        var iPositionEnd = value.indexOf('.');
-                        alt = value.substring(iPositionStart, iPositionEnd);
-                    }
-                    $(element).attr("src", src);
-                    $(element).attr("alt", alt);
                     break;
 
                 case 'textarea':
@@ -97,6 +110,10 @@
             }
             // branch
             else if (obj.constructor == Object) {
+                if (element.length >= 1 && element[0].tagName == "OPTION") {
+                    setElementValue(element[0], obj, name);
+                    //return;
+                }
                 for (var prop in obj) {
                     if (prop == null)
                         continue;
@@ -104,13 +121,14 @@
                     var child = jQuery.makeArray(jQuery("." + prop, element)).length > 0 ? jQuery("." + prop, element) :
                                                     jQuery("#" + prop, element).length > 0 ? jQuery("#" + prop, element) :
                                                     jQuery('[name="' + prop + '"]', element).length > 0 ? jQuery('[name="' + prop + '"]', element) : jQuery('[rel="' + prop + '"]');
-                    if (child.length != 0)
+                    if (child.length != 0) {
                         browseJSON(obj[prop], jQuery(child, element), prop);
+                    }
                 }
             }
             // array
-            else if (obj.constructor == Array) {
-                if (element.length > 0 && element[0].tagName == "SELECT") {
+            /*ELSE*/else if (obj.constructor == Array) {
+                if (element.length > 0 && element[0].tagName == "SELECT" && element[0].type == "select-multiple") {
                     setElementValue(element[0], obj, name);
                 } else {
                     var arrayElements = $(element).children("[rel]");
@@ -161,6 +179,16 @@
             }
         } //function browseJSON end
 
+        function init(placeholder) {
+            if (placeholder.data("loadJSON-template") != null && placeholder.data("loadJSON-template")!= "") {
+                var template = placeholder.data("loadJSON-template");
+                placeholder.html(template);
+            } else {
+                var template = placeholder.html()
+                placeholder.data("loadJSON-template", template);
+            }
+        }
+
         var defaults = {
     };
 
@@ -176,12 +204,15 @@
             catch (ex) {
                 var element = $(this);
                 $.get(obj, function (data) {
+                    init(element);
                     element.loadJSON(data);
-                });
+                },
+                "json");
             }
         }
 
         else {
+            init($(this));
             browseJSON(obj, this);
         }
     });
