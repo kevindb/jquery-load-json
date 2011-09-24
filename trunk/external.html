@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<head>
+
+	<title>Listing JSON aray using the HTML template</title>
+	
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<script src="scripts/jquery-1.6.4.min.js" type="text/javascript"></script>
+
+	<script src="scripts/jquery.loadJSON.js")" type="text/javascript"></script>
+
+    	<script language="javascript" type="text/javascript">
+        	$(document).ready(function () {
+        	    $('ul').loadJSON('list.js');
+        	});
+    	</script>
+</head>
+
+
+<body>
+
+
+<div id="page-wrap">
+    <a href="http://code.google.com/p/jquery-load-json/" alt="Home">Home</a>
+
+	<div id="contact-area">
+			
+		
+	<h1>Loading JSON in the list</h1>
+	JQuery loadJSON plugin enables you to load JSON array of objects and generate list of HTML elements based on the template. 
+    	You can either define template item that will be replicated for each of the elements in the array (see <a href="list.html">list as example</a>)
+	or you can define template for each element in the array. This can be done if you know how many elements you will have in the array
+	that is returned (e.g. if you show five latest comments, ten elements per page etc.).
+	
+	<h2>Live Example</h2>
+	HTML generated using loadJSON plugin is shown below:
+	<br/>
+        <br/>
+        <ul>
+            <li rel="0"> 
+            <a href="details.html" class="ID"><img class="Logo" alt="" src=""/> <span class="Name"></span></a>
+		<br /><span class="Address"></span>, <span class="Town"></span>
+	    </li>
+            <li rel="1"> 
+            <a href="details.html" class="ID"><span class="Name"></span></a>
+	    </li>
+            <li rel="2"> 
+            <a href="details.html" class="ID"><span class="Name"></span></a>
+	    </li>
+            <li rel="3"> 
+            <a href="details.html" class="ID"><span class="Name"></span></a>
+	    </li>
+        </ul>
+	<br/>
+    <p>In this example array of JavaScript objects is used as a data source for the list of elements. As you can see template for the first element is differnet than a template for the other ones. Details about implementation is described in the sections below.</p>
+	<br/>
+	<h2>Implementation</h2>	
+	
+	<p>JQuery loadJSON plugin enables you to load array of JavaScript objects into the list.
+	</p>
+	<p>
+	In the HTML should be placed one item  for each element that should be generated and marked with rel="0", rel="1" etc so plugin can match
+	array elements with HTML elements by indexes and rel attributes. Note that you migh skip indexes in the code and these array elements will
+	be ignored.
+	</p>
+    <p><pre>
+	&lt;ul&gt;
+            &lt;li rel=&quot;1&quot;&gt; 
+            	&lt;a href=&quot;details.html&quot; class=&quot;ID&quot;&gt;
+			&lt;img class=&quot;Logo&quot; alt=&quot;&quot; src=&quot;&quot;/&gt;
+			&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;
+		&lt;/a&gt;
+		&lt;span class=&quot;Address&quot;&gt;&lt;/span&gt;, &lt;span class=&quot;Town&quot;&gt;&lt;/span&gt;
+	    &lt;/li&gt;
+            &lt;li rel=&quot;1&quot;&gt; 
+            	&lt;a href=&quot;details.html&quot; class=&quot;ID&quot;&gt;&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;&lt;/a&gt;
+	    &lt;/li&gt;
+            &lt;li rel=&quot;2&quot;&gt; 
+            	&lt;a href=&quot;details.html&quot; class=&quot;ID&quot;&gt;&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;&lt;/a&gt;
+	    &lt;/li&gt;
+            &lt;li rel=&quot;3&quot;&gt; 
+            	&lt;a href=&quot;details.html&quot; class=&quot;ID&quot;&gt;&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;&lt;/a&gt;
+	    &lt;/li&gt;
+        &lt;/ul&gt;
+	</pre></p>
+<br/>
+<p>	Once HTML template item is prepared it is required to provide a JSON array that will be used to populate template item shown above. Example of JSON array used in this example is shown below:
+</p>
+	<pre>
+[
+    {
+	"ID": 17,
+        "Name": "Emkay Entertainments",
+        "Address": "Nobel House, Regent Centre",
+    	"Town": "Lothian",
+    	"Logo":"images/logo17.jpg"
+    },
+    {
+        "ID": 18,
+        "Name": "The Empire",
+        "Address": "Milton Keynes Leisure Plaza"
+    },
+    {
+        "ID": 19,
+        "Name": "Asadul Ltd",
+        "Address": "Hophouse"
+    },
+    {
+        "ID": 20,
+        "Name": "Star Records",
+        "Address": "St Danny Street"
+    },
+    {
+        "ID": 21,
+        "Name": "Ashley Mark Publishing Company",
+        "Address": "1-2 Vance Court"
+    }
+]
+	</pre>
+<p>
+	This array contains elements with properties ID, Name, and Address that will be bound to the elements in the HTML template.
+<br/>
+	When template and JSON are prepared they should be bound toghether in order to generate output. Template is defined in the UL HTML element, and under assumption that JSON array is placed into the "list.js" file, the following code generates output HTML using template and JSON array:
+</p>
+	<pre>
+
+            $(&#39;ul&#39;).loadJSON(&#39;list.js&#39;);
+
+	</pre>
+	</p>	
+		
+	</div>
+	
+	
+</div>
+
+
+</body>
+
+
+</html>
