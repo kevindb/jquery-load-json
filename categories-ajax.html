@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<title>Connected dropdowns</title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="scripts/jquery-1.6.4.min.js" type="text/javascript"></script>
+    <script src="scripts/jquery.loadJSON.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+		$('#Region').loadJSON('regions.js');
+		$('#Region').change(function() {
+							var id = $(this).val();
+							$('#Town').loadJSON('towns' + id + '.js');
+						});
+
+            
+        });
+    </script>
+</head>
+
+<body>
+
+
+<div id="page-wrap">
+	<a href="http://code.google.com/p/jquery-load-json/" alt="Home">Home</a>
+
+    <div id="contact-area">
+			
+    <a href="linq.html">Go to the LINQ example</a>
+	<h1>Filling the subcategory dropdown via Ajax calls</h1>	
+    <p>JQuery loadJSON plugin can be used to dinamically fill dropdown based on the selected item in primary dropdown. This is common usage in the applications
+		where you have primary list (e.g.categories or countries) and you need to dinamically populate secondary dropdown.</p>
+	<h2>Live example</h2>	
+    <p>JQuery loadJSON plugin enables you to bind a list based on the Ajax responses taken from the server side. In the following example, each time the user
+		select a region, Ajax call loads the related towns from the server and loadJSON plugin loads them into the dropdown list.
+    </p>
+
+<form name="form_simple" id="form-simple" action="#">
+
+					    <label for="Region">Region</label>
+					    <select name="Region" id="Region">
+                            			<option value="" class="regions"></option>
+					    </select>
+<br/>
+<br/>
+					    <label for="Town">Town</label>
+					    <select name="Town" id="Town">
+                            			   <option class="towns"/>
+					    </select>
+<br style="clear:both"/>
+<br/>
+
+	    </form>
+        <br /><br /><br /><br />
+        <h2>Implementation</h2>
+        <p>HTML code is shown in the following listing:</p>
+        <pre>
+			&lt;label for=&quot;Region&quot;&gt;Region&lt;/label&gt;
+			&lt;select name=&quot;Region&quot; &gt;
+				&lt;option value=&quot;&quot; class=&quot;regions&quot;&gt;&lt;/option&gt;
+			&lt;/select&gt;
+
+			&lt;label for=&quot;Town&quot;&gt;Town&lt;/label&gt;
+			&lt;select name=&quot;Town&quot; id=&quot;Town&quot;&gt;
+				&lt;option class=&quot;towns&quot; &gt;-&lt;/option&gt;
+			&lt;/select&gt;
+
+        </pre>
+		<p>Classes "regions" and "towns in the option tags are used to map option elements that wil be populated with the JSON object that will be loaded into the HTML form shown above should have properties that matches name attributes
+        of the elements above. Example of JSON object that can be used to fill region list is shown below:</p>
+        <pre>
+			{
+				&quot;regions&quot;:[
+					{
+						&quot;value&quot;: 1,
+						&quot;text&quot;: &quot;East Europe&quot;
+					},
+					{
+						&quot;value&quot;: 2,
+						&quot;text&quot;: &quot;West Europe&quot;
+					},
+					{
+						&quot;value&quot;: 3,
+						&quot;text&quot;: &quot;Middle Europe&quot;
+					}
+				]
+			}       
+        </pre>
+		<p>The only important thing is that name of the array should match the name of the class in the options tags</p>
+		<p>Example of JSON object that can be used to fill town list is shown below:</p>
+        <pre>
+			{
+				&quot;towns&quot;:[
+					{
+						&quot;value&quot;: 17,
+						&quot;text&quot;: &quot;Belgrade&quot;
+					},
+					{
+						&quot;value&quot;: 18,
+						&quot;text&quot;: &quot;Buchurest&quot;
+					},
+					{
+						&quot;value&quot;: 19,
+						&quot;text&quot;: &quot;Moscov&quot;
+					},
+					{
+						&quot;value&quot;: 20,
+						&quot;text&quot;: &quot;Kiev&quot;
+					}
+				]
+			}      
+        </pre>
+		<p>The only important thing is that name of the array should match the name of the class in the options tags</p>
+        <p>If the region array is placed in the regions.js file, the following line of code will load the dropdown list:</p>
+        <pre>
+        $('#Region').loadJSON('regions.js');
+        </pre>
+		<p>If the town array is placed in the towns1.js, towns2.js, towns3.js files, the following code will load the towns dropdown list:</p>
+        <pre>
+        	$('#Region').change(function() {
+						var id = $(this).val();
+						$('#Town').loadJSON('towns' + id + '.js');
+					});
+        </pre>
+		<p>When region in the dropdown list is changed, this code taks id of the region and loads town(ID).js array into the towns dropdown.</p>
+        <p>As you might see, connecting dropdowns is easy with loadJSON plugin.</p>
+        <a href="linq.html">Go to LINQ example</a>
+</div>
+	
+	
+</div>
+
+</body>
+
+</html>
