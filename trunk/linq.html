@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -167,7 +167,7 @@
         <br /><br /><br /><br />
          <h2>Implementation</h2>
         <p>HTML code is shown in the following listing:</p>
-        <pre>
+        <pre class="brush: html;">
 	&lt;label for=&quot;Region&quot;&gt;Region&lt;/label&gt;
 	&lt;select name=&quot;Region&quot; &gt;
 		&lt;option value=&quot;&quot; class=&quot;regions&quot;&gt;&lt;/option&gt;
@@ -181,7 +181,7 @@
         </pre>
 		<p>Classes "regions" and "towns in the option tags are used to map option elements that wil be populated with the JSON object that will be loaded into the HTML form shown above should have properties that matches name attributes
         of the elements above. Example of JSON object that can be used to fill region list is shown below:</p>
-        <pre>
+        <pre class="brush: js;">
 	aoRegions = [
 					{
 						&quot;value&quot;: -1,
@@ -202,7 +202,7 @@
 				];     
         </pre>
 		<p>Example of JSON object that can be used to fill town list is shown below:</p>
-        <pre>
+        <pre class="brush: js;">
 	aoRegions = [
 			{
 				&quot;value&quot;: 17,
@@ -229,14 +229,13 @@
         </pre>
 		<p>Each town has regionid property that will be used for filtering.</p>
         <p>The following line of code will load the dropdown list:</p>
-        <pre>
+        <pre class="brush: js;">
 	$('#Region').loadJSON({ "regions":aoRegions });
         </pre>
 		<p>Note that original array is wraped into the object with "regions" property in order to match this property with the "regions" class
 			in the option template.</p>
 		<p>The following code will load the towns dropdown list when region is changed:</p>
-        <pre>
-	$('#Region').change(function() {
+        <pre class="brush: js;">$('#Region').change(function() {
 					var id = $(this).val();
 					var queryResult = $.Enumerable.From(aoTowns)
 									.Where(function (town) { return town.regionid == id })
@@ -252,7 +251,10 @@
 	
 	
 </div>
-
+			<style type="text/css">
+				@import "scripts/shCore.css";
+			</style>
+			<script type="text/javascript" language="javascript" src="scripts/shCore.js"></script>
 </body>
 
 </html>
