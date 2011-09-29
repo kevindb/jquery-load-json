@@ -14,6 +14,17 @@
         });
     </script>
 
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushJScript.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushXml.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shCoreDefault.css"/>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shThemeDefault.css"/>
+
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
 
 </head>
 
@@ -52,7 +63,7 @@
         <h2>Implementation</h2>
         <p>HTML template that will be populated with JSON object should be defined first. HTML elements in this template should have id
         attributes that match properties of the JSON object that will be loaded into the HTML code. Example of the plain HTML code that can be used as a template is shown below:</p>
-        <pre>
+        <pre class="brush: xml;">
         &lt;div id=&quot;data&quot;&gt;
             &lt;h1 id=&quot;Name&quot;&gt;&lt;/h1&gt;
 		
@@ -73,7 +84,7 @@
         </pre>
         <p>JSON object that will be loaded into the HTML code shown above should have properties that matches id attributes
         of the elements above. Example of such kind of JSON object is shown below:</p>
-        <pre>
+        <pre class="brush: js;">
         data = {
                     &quot;ID&quot;:17,
                     &quot;Name&quot;:&quot;Emkay Entertainments&quot;,
@@ -83,7 +94,7 @@
         }        
         </pre>
         <p>JSON object 'data' is bound to the HTML code within the DIV tag with an id "data" using the following line:</p>
-        <pre>
+        <pre class="brush: js;">
         $('div#data').loadJSON(data);
         </pre>
         <p>JQuery loadJSON plugin will take JSON object (data) and put properties of the object as a content of the HTML elements

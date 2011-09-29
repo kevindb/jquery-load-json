@@ -55,9 +55,18 @@ p {
 	float: right;
 }
 
+/*
+span {
+	float: left;
+	text-align: right;
+	margin-right: 15px;
+	width: 100px;
+	padding-top: 5px;
 
-label {font-size: 1.4em;}
-label, span {
+}*/
+
+label {
+	font-size: 1.4em;
 	float: left;
 	text-align: right;
 	margin-right: 15px;
