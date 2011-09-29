@@ -22,6 +22,18 @@
         	    $('ul').loadJSON('list.js');
         	});
     	</script>
+
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushJScript.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushXml.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shCoreDefault.css"/>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shThemeDefault.css"/>
+
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
 </head>
 
 
@@ -71,16 +83,16 @@
 	array elements with HTML elements by indexes and rel attributes. Note that you migh skip indexes in the code and these array elements will
 	be ignored.
 	</p>
-    <p><pre>
+    <p><pre class="brush: xml;">
 	&lt;ul&gt;
-            &lt;li rel=&quot;1&quot;&gt; 
+	    &lt;li rel=&quot;0&quot;&gt; 
             	&lt;a href=&quot;details.html&quot; class=&quot;ID&quot;&gt;
-			&lt;img class=&quot;Logo&quot; alt=&quot;&quot; src=&quot;&quot;/&gt;
-			&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;
-		&lt;/a&gt;
-		&lt;span class=&quot;Address&quot;&gt;&lt;/span&gt;, &lt;span class=&quot;Town&quot;&gt;&lt;/span&gt;
+            		&lt;img class=&quot;Logo&quot; alt=&quot;&quot; src=&quot;&quot;/&gt;
+            		&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;
+            	&lt;/a&gt;
+            	&lt;span class=&quot;Address&quot;&gt;&lt;/span&gt;, &lt;span class=&quot;Town&quot;&gt;&lt;/span&gt;
 	    &lt;/li&gt;
-            &lt;li rel=&quot;1&quot;&gt; 
+	    &lt;li rel=&quot;1&quot;&gt; 
             	&lt;a href=&quot;details.html&quot; class=&quot;ID&quot;&gt;&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;&lt;/a&gt;
 	    &lt;/li&gt;
             &lt;li rel=&quot;2&quot;&gt; 
@@ -89,12 +101,12 @@
             &lt;li rel=&quot;3&quot;&gt; 
             	&lt;a href=&quot;details.html&quot; class=&quot;ID&quot;&gt;&lt;span class=&quot;Name&quot;&gt;&lt;/span&gt;&lt;/a&gt;
 	    &lt;/li&gt;
-        &lt;/ul&gt;
+	&lt;/ul&gt;
 	</pre></p>
 <br/>
 <p>	Once HTML template item is prepared it is required to provide a JSON array that will be used to populate template item shown above. Example of JSON array used in this example is shown below:
 </p>
-	<pre>
+	<pre class="brush: js;">
 [
     {
 	"ID": 17,
@@ -130,7 +142,7 @@
 <br/>
 	When template and JSON are prepared they should be bound toghether in order to generate output. Template is defined in the UL HTML element, and under assumption that JSON array is placed into the "list.js" file, the following code generates output HTML using template and JSON array:
 </p>
-	<pre>
+	<pre class="brush: js;">
 
             $(&#39;ul&#39;).loadJSON(&#39;list.js&#39;);
 

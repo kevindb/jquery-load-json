@@ -60,7 +60,20 @@
 
         });
 
-    </script>
+    </script>	
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushJScript.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushXml.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shCoreDefault.css"/>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shThemeDefault.css"/>
+
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+
 </head>
 <body>
 <div id="page-wrap">
@@ -106,7 +119,7 @@
 	<p>First thing you need to do is to load JSON from the BingMaps when search button is pressed. In the following listing is shown how you can
 	attach click handler to the search button that performs AJAX request to the BingMaps, sends key and query, and load returned JSON result into
 	the element with id 'div'.</p>
-	<pre>
+	<pre class="brush: js;">
 	  $("#search").click( function () {
 		$.ajax({
                         url: "http://dev.virtualearth.net/REST/v1/Locations",
@@ -125,7 +138,7 @@
 		});
 	</pre>
 	<p>Note that "jsonp" is used as a data type - in most cases standard "json" request is not allowed by the browser if you are using cross-site calls. Therefore "jsonp" is only available option. Example of JSON response that is returned by the BingMaps is shown in the following listing:</p>
-	<pre>
+	<pre class="brush: js;">
 { 
   "brandLogoUri" : "http://dev.virtualearth.net/Branding/logo_powered_by.png",
   "resourceSets" : [ { 
@@ -150,7 +163,7 @@
 	</pre>
 	<p>This is just a short example where just some properties important for this example are shown. You can find more details on the Microsoft site.</p>
 	<p>HTML template where the JSON object is loaded should match JSON structure - example is shown in the following listing:</p>
-	<pre>
+	<pre class="brush: xml;">
 	&lt;div id=&quot;data&quot;&gt;
 		&lt;img src=&quot;#&quot; id=&quot;brandLogoUri&quot; /&gt;
 		&lt;ol class=&quot;resourceSets&quot;&gt;
@@ -171,7 +184,7 @@
 	</pre>
 	<p>Structure of the HTML template matches the structure of the JSON object (classes matches the names and structure of the properties of JSON object
 	that is returned). You can see more details about the generating lists in the <a href="list.html">generating list example</a>. Attributes rel="0" and rel="1"  of the span elements are used to load first and second element of the array in theese HTML elements. You can see more details about the generating lists in the <a href="array.html">generating array elements example</a>. Therefore, JSON can be loaded into the template usign the following line of code:</p>
-<pre>
+<pre class="brush: js;">
 	$("#data").loadJSON(data);
 </pre>
 	<p>That is everything that is required to load results from the BingMaps site and load them in your page using client-side script only. In the following section are shortly described additional features implemented in this example (showing results on the map, zooming, placing one of the results in the middle of the map).
@@ -179,7 +192,7 @@
 	<p>You can see in this example that when results are loaded in the HTML, they are shown in the map. This part is not related to the loadJSON plugin, 
 	but here is a short description how it is done. In the HTML is placed one image where the map is loaded. Custom JavaScript set the src attribute
 	of the image based on the results. Code for setting the image is shown in the following listing:</p>
-	<pre>
+	<pre class="brush: js;">
 	var zoom = 12;
 	var center = "";
 	function showMap(){
@@ -197,7 +210,7 @@
 	contianing coordinates center variable is set. Value of this variable is in the format 51.528781,-0.216583 so this is read directly from the 
 	text of the link. The following code example set the center variable and redraws the map when link containing coordinates is pressed:</p>
 
-	<pre>
+	<pre class="brush: js;">
 		$(".point a").live("click", function(event){
 			center = $(this).text();
 			showMap();		
@@ -205,7 +218,7 @@
 	</pre>
 	<p>Similar code is executed when the search results are loaded into the list.</p>
 	<p>Variable zoom has values between 1 and 19 and it is changed when ui slided is moved. UI slider code is shown in the following listing:</p>
-	<pre>
+	<pre class="brush: js;">
 		$( "#slider" ).slider({
 			value:12,
 			min: 1,
