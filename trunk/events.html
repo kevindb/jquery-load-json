@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<head>
+
+	<title>Using events</title>
+	
+
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+	
+	<link rel="stylesheet" type="text/css" href="style.css" />
+
+	<script src="scripts/jquery-1.6.4.min.js" type="text/javascript"></script>
+
+	<script src="scripts/jquery.loadJSON.js" type="text/javascript"></script>
+
+    <script src="scripts/jquery.dataTables.js" type="text/javascript"></script>
+
+	<script type="text/javascript" src="scripts/shCore.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushJScript.js"></script>
+	
+	<script type="text/javascript" src="scripts/shBrushXml.js"></script>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shCoreDefault.css"/>
+
+	<link type="text/css" rel="stylesheet" href="scripts/shThemeDefault.css"/>
+
+    <link type="text/css" rel="stylesheet" href="scripts/demo_table.css"/>
+
+    <link type="text/css" rel="stylesheet" href="scripts/demo_table.css"/>
+    <link type="text/css" rel="stylesheet" href="scripts/demo_page.css"/>
+
+    <style type="text/css">label{ float:none; width:auto }</style>
+
+	<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+    	<script language="javascript" type="text/javascript">
+    	    $(document).ready(function () {
+    	        $('tbody tr').loadJSON('list.js', {
+                    onLoading: function () {
+    	                $("table#myTable").hide();
+    	            },
+    	            onLoaded: function () {
+    	                $("table#myTable").dataTable({sPaginationType: "full_numbers"}).fadeIn("slow");;
+    	            }
+    	        });
+    	    });
+    	</script>
+</head>
+
+
+<body>
+
+
+<div id="page-wrap">
+    <a href="http://code.google.com/p/jquery-load-json/" alt="Home">Home</a>
+
+	<div id="demo">
+			
+		
+	<h1>Adding event handlers</h1>
+	<p>JQuery loadJSON plugin enables you to attach event handlers that will be called before or after the JSON content is loaded into the 
+    template. In the initialization call you can define onLoading and onLoaded functions that will be called before and after  json is
+    loaded.</p>
+	<h2>Live Example</h2>
+	<p>In this example, JSON array will be loaded into the table template. Before we load the JSON, we will hide the table so user will not
+    see initial blank template. When table is loaded, table will be shown using the fadding effect. 
+    </p>
+    <p>Additionally, you cna put any other code in these functions. In this example, after the table is loaded I have applied 
+    DataTables plugin that adds client side sorting and filtering.</p>
+	<br/>
+        <br/>
+        <table id="myTable" class="display">
+            <thead>
+                <tr>
+                    <th>Name</th><th>Address</th><th>Town</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr> 
+                    <td><a href="details.html" class="ID"><span class="Name"></span></a></td>
+                    <td><span class="Address"></span></td>
+                    <td><span class="Town"></span></td>
+	            </tr>
+            </tbody>
+        </table>
+	<br/>
+    <br />
+    <br />
+	<h2>Implementation</h2>	
+	
+	<p>In this example is placed template that can be used to load array into the table. The table template is shown below:
+	</p>
+    <pre class="brush: xml;">
+        &lt;table id="myTable" class="display"&gt;
+            &lt;thead&gt;
+                &lt;tr&gt;
+                    &lt;th&gt;Name&lt;/th&gt;&lt;th&gt;Address&lt;/th&gt;&lt;th&gt;Town&lt;/th&gt;
+                &lt;/tr&gt;
+            &lt;/thead&gt;
+            &lt;tbody&gt;
+                &lt;tr&gt; 
+                    &lt;td&gt;&lt;a href="details.html" class="ID"&gt;&lt;span class="Name"&gt;&lt;/span&gt;&lt;/a&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;span class="Address"&gt;&lt;/span&gt;&lt;/td&gt;
+                    &lt;td&gt;&lt;span class="Town"&gt;&lt;/span&gt;&lt;/td&gt;
+	            &lt;/tr&gt;
+            &lt;/tbody&gt;
+        &lt;/table&gt;
+    </pre>
+	
+    <p>JSON array is same as in the <a href="list.html">list example</a>:</p>
+    
+    <pre class="brush: js;">
+[
+    {
+	    "ID": 17,
+        "Name": "Emkay Entertainments",
+        "Address": "Nobel House, Regent Centre"
+    },
+    {
+        "ID": 18,
+        "Name": "The Empire",
+        "Address": "Milton Keynes Leisure Plaza"
+    },
+    {
+        "ID": 19,
+        "Name": "Asadul Ltd",
+        "Address": "Hophouse"
+    },
+    {
+        "ID": 20,
+        "Name": "Star Records",
+        "Address": "St Danny Street"
+    },
+    {
+        "ID": 21,
+        "Name": "Ashley Mark Publishing Company",
+        "Address": "1-2 Vance Court"
+    }
+]
+	</pre>
+	<p>This array contains elements with properties ID, Name, and Address that will be bound to the elements in the HTML template.</p>
+	<p>When JSON is loaded into the template, we have two functionas that will be called before JSON is loaded (onLoading), and after
+    JSON is loaded (onLoaded). Example of the code is shown below:</p>
+	<pre class="brush: js;">
+    	    $(document).ready(function () {
+    	        $('tbody tr').loadJSON('list.js', {
+                    onLoading: function () {
+    	                $("table#myTable").hide();
+    	            },
+    	            onLoaded: function () {
+    	                $("table#myTable").dataTable({sPaginationType: "full_numbers"}).fadeIn("slow");;
+    	            }
+    	        });
+    	    });
+	</pre>
+
+		
+	</div>
+	
+	
+</div>
+
+
+</body>
+
+
+</html>
