@@ -1,6 +1,6 @@
 ﻿/*
 * File:        jquery.loadJSON.js
-* Version:     1.2.1.
+* Version:     1.2.2.
 * Author:      Jovan Popovic 
 * 
 * Copyright 2011 Jovan Popovic, all rights reserved.
@@ -142,15 +142,18 @@
                         var arr = jQuery.makeArray(element);
                         var template = $(arr[arr.length - 1]).clone(true);
                         //how many duplicate
-                        var nbToCreate = obj.length - arr.length;
+                        var nbToCreate = obj.length;
                         var i = 0;
-                        var iExist = 0;
-                        for (iExist = 0; iExist < arr.length; iExist++) {
-                            if (i < obj.length) {
+                        if (element[0]==null || (element[0]!=null && element[0].tagName != "OPTION") ) {
+                                var iExist = 0;
+                                for (iExist = 0; iExist < arr.length; iExist++) {
+                                if (i < obj.length) {
                                 var elem = $(element).eq(iExist);
                                 browseJSON(obj[i], elem, name);
+                                }
+                                i++;
                             }
-                            i++;
+                            var nbToCreate = obj.length - arr.length; ;
                         }
                         //fill started by last
                         i = obj.length - 1;
