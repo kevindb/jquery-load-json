@@ -1,6 +1,6 @@
 ﻿/*
 * File:        jquery.loadJSON.js
-* Version:     1.2.0.
+* Version:     1.2.1.
 * Author:      Jovan Popovic 
 * 
 * Copyright 2011 Jovan Popovic, all rights reserved.
@@ -180,7 +180,7 @@
         } //function browseJSON end
 
         function init(placeholder) {
-            if (placeholder.data("loadJSON-template") != null && placeholder.data("loadJSON-template")!= "") {
+            if (placeholder.data("loadJSON-template") != null && placeholder.data("loadJSON-template") != "") {
                 var template = placeholder.data("loadJSON-template");
                 placeholder.html(template);
             } else {
@@ -190,31 +190,37 @@
         }
 
         var defaults = {
-    };
+            onLoading: function () { },
+            onLoaded: function () { }
+        };
 
-    properties = $.extend(defaults, options);
+        properties = $.extend(defaults, options);
 
-    return this.each(function () {
+        return this.each(function () {
 
-        if (obj.constructor == String) {
-            try {
-                var data = $.parseJSON(obj);
-                browseJSON(data, this);
-            }
-            catch (ex) {
-                var element = $(this);
-                $.get(obj, function (data) {
-                    init(element);
-                    element.loadJSON(data);
-                },
+            if (obj.constructor == String) {
+                try {
+                    var data = $.parseJSON(obj);
+                    properties.onLoading();
+                    browseJSON(data, this);
+                    properties.onLoaded();
+                }
+                catch (ex) {
+                    var element = $(this);
+                    $.get(obj, function (data) {
+                        init(element);
+                        element.loadJSON(data, properties);
+                    },
                 "json");
+                }
             }
-        }
 
-        else {
-            init($(this));
-            browseJSON(obj, this);
-        }
-    });
-};
+            else {
+                init($(this));
+                properties.onLoading();
+                browseJSON(obj, this);
+                properties.onLoaded();
+            }
+        });
+    };
 })(jQuery);
