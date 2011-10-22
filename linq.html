@@ -1,4 +1,4 @@
- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿ <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
@@ -39,10 +39,6 @@
 		*/
 		
 		aoRegions = [
-						{
-							"value": -1,
-							"text": "Please select"
-						},
 						{
 							"value": 1,
 							"text": "East Europe"
@@ -160,7 +156,7 @@
 
 					    <label for="Region">Region</label>
 					    <select name="Region" id="Region">
-                            			<option value="" class="regions"></option>
+                            			<option value="-2" class="regions">Please select</option>
 					    </select>
 <br/>
 <br/>
@@ -177,7 +173,7 @@
         <p>HTML code is shown in the following listing:</p>
         <pre class="brush: xml;">&lt;label for=&quot;Region&quot;&gt;Region&lt;/label&gt;
 &lt;select name=&quot;Region&quot; &gt;
-	&lt;option value=&quot;&quot; class=&quot;regions&quot;&gt;&lt;/option&gt;
+	&lt;option value=&quot;-1&quot; class=&quot;regions&quot;&gt;Pleaase select&lt;/option&gt;
 &lt;/select&gt;
 &lt;label for=&quot;Town&quot;&gt;Town&lt;/label&gt;
 &lt;select name=&quot;Town&quot; id=&quot;Town&quot;&gt;
@@ -187,10 +183,6 @@
         of the elements above. Example of JSON object that can be used to fill region list is shown below:</p>
         <pre class="brush: js;">
 	aoRegions = [
-					{
-						&quot;value&quot;: -1,
-						&quot;text&quot;: &quot;Please Select&quot;
-					},
 					{
 						&quot;value&quot;: 1,
 						&quot;text&quot;: &quot;East Europe&quot;

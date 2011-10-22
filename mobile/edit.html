@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>jQuery Mobile List</title> 
+	<link rel="stylesheet"  href="../jquery.mobile-1.0rc2.min.css" />  
+	<script src="../scripts/jquery-1.6.4.min.js"></script>
+	<script src="../scripts/jquery.mobile-1.0rc2.min.js"></script>
+	<script src="../scripts/jquery.loadJSON.js"></script>
+	    <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+            var id = window.location.href.match("(ID=|id=|/)[0-9]+")[0].match("[0-9]+");
+            $('form').loadJSON('data' + id + '.js');
+        });
+    </script>
+	
+</head> 
+<body> 
+
+<div data-role="page">
+
+	<div data-role="header">
+		<h1>Company Details Page</h1>
+	</div><!-- /header -->
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div data-role="content">	
+	
+<form action="#" method="get">
+
+			<h2>Loading form elements</h2>
+
+			 <p>JQuery loadJSON plugin enables you to bind a single object to the HTML form. Each element in the form is populated with an property of the object that matches the name attribute of the form element.
+    In the example below is shown how a single JSON object is bound to the HTML code:
+    </p>
+
+			<div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
+	         <label for="Name" class="ui-input-text">Name:</label>
+	         <input type="text" name="Name" id="Name" value="" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset">
+			</div>
+
+			<div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
+				<label for="Address" class="ui-input-text">Address:</label>
+				<textarea cols="40" rows="8" name="Address" id="Address" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset"></textarea>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="Town" class="select">Town:</label>
+				<select name="Town" id="Town" data-native-menu="false">
+					<option value="" data-placeholder="true">Choose one...</option>
+					<option value="London">London City</option>
+					<option value="Liverpool">Liverpool City</option>
+					<option value="Lothian">Lothian City</option>
+					<option value="Newcastle">Newcastle City</option>
+					<option value="Buckinghamshire">Buckinghamshire City</option>
+					<option value="Essex">Essex City</option> 
+				</select>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="Country" class="select">Country:</label>
+				<select name="Country" id="Country" multiple="multiple" data-native-menu="false">
+					<option value="" data-placeholder="true">Select some..</option>
+					<option value="London">London City</option>
+					<option value="Liverpool">Liverpool City</option>
+					<option value="Lothian">Lothian City</option>
+					<option value="Newcastle">Newcastle City</option>
+					<option value="Buckinghamshire">Buckinghamshire City</option>
+					<option value="Essex">Essex City</option> 
+				</select>
+			</div>
+	
+			<div data-role="fieldcontain">
+				<fieldset data-role="controlgroup">
+				   <legend>Is Featured:</legend>
+				   <input type="checkbox" name="IsFeatured" id="IsFeatured" class="custom" />
+				   <label for="IsFeatured">Is Featured</label>
+				</fieldset>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<fieldset data-role="controlgroup">
+					<legend>Contact:</legend>
+						<input type="radio" name="Email" id="Email" value="Email" />
+						<label for="Email">Email</label>
+
+						<input type="radio" name="Phone" id="Phone" value="Phone"  />
+						<label for="Phone">Phone</label>
+
+						<input type="radio" name="Post" id="Post" value="Post"  />
+						<label for="Post">Post</label>
+				</fieldset>
+			</div>
+
+
+	</form>
+	
+
+<a href="details.html" class="ID" data-ajax="false" >Back to details</a>
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>
