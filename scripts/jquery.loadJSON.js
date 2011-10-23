@@ -1,6 +1,6 @@
 ﻿/*
 * File:        jquery.loadJSON.js
-* Version:     1.2.2.
+* Version:     1.2.3.
 * Author:      Jovan Popovic 
 * 
 * Copyright 2011 Jovan Popovic, all rights reserved.
@@ -29,12 +29,19 @@
 
                 case 'radio':
                     if (value.toString().toLowerCase() == element.value.toLowerCase())
-                        $(element).attr("checked", "checked");
+                    {    $(element).attr("checked", "checked");
+                         if ($.isFunction($(element).checkboxradio))
+                              $(element).checkboxradio('refresh'); //used in the JQuery mobile
+		            }
                     break;
 
                 case 'checkbox':
-                    if (value)
-                        $(element).attr("checked", "checked");
+                    if (value) {
+                        //$(element).attr("checked", "checked");
+                        $(element).attr("checked", true)
+                        if ($.isFunction($(element).checkboxradio))
+                            $(element).checkboxradio('refresh'); //used in the JQuery mobile
+                    }
                     break;
                 case 'option':
                     $(element).attr("value", value.value);
@@ -49,10 +56,16 @@
                             element.options[i].selected |= element.options[i].value == values[j];
                         }
                     }
+                    if($.isFunction( $(element).selectmenu ) )
+		                $(element).selectmenu('refresh');//used in the JQuery mobile
                     break;
 
                 case 'select':
                 case 'select-one':
+                    $(element).attr("value", value);
+                    if ($.isFunction($(element).selectmenu))
+                        $(element).selectmenu('refresh'); //used in the JQuery mobile
+                    break;
                 case 'text':
                 case 'hidden':
                     $(element).attr("value", value);
@@ -144,12 +157,12 @@
                         //how many duplicate
                         var nbToCreate = obj.length;
                         var i = 0;
-                        if (element[0]==null || (element[0]!=null && element[0].tagName != "OPTION") ) {
-                                var iExist = 0;
-                                for (iExist = 0; iExist < arr.length; iExist++) {
+                        if (element[0] == null || (element[0] != null && element[0].tagName != "OPTION")) {
+                            var iExist = 0;
+                            for (iExist = 0; iExist < arr.length; iExist++) {
                                 if (i < obj.length) {
-                                var elem = $(element).eq(iExist);
-                                browseJSON(obj[i], elem, name);
+                                    var elem = $(element).eq(iExist);
+                                    browseJSON(obj[i], elem, name);
                                 }
                                 i++;
                             }
@@ -194,7 +207,8 @@
 
         var defaults = {
             onLoading: function () { },
-            onLoaded: function () { }
+            onLoaded: function () { },
+	    mobile: false
         };
 
         properties = $.extend(defaults, options);
@@ -202,16 +216,17 @@
         return this.each(function () {
 
             if (obj.constructor == String) {
-                try {
+                if (obj.charAt(0) == '{' || obj.charAt(0) == '[')
+                {
                     var data = $.parseJSON(obj);
+		    init($(this));
                     properties.onLoading();
                     browseJSON(data, this);
                     properties.onLoaded();
                 }
-                catch (ex) {
+                else {
                     var element = $(this);
                     $.get(obj, function (data) {
-                        init(element);
                         element.loadJSON(data, properties);
                     },
                 "json");
