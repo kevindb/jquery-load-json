@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Bing Maps Integration | jQuery Mobile</title> 
+	<link rel="stylesheet"  href="../jquery.mobile-1.0rc2.min.css" />  
+	<script src="../scripts/jquery-1.6.4.min.js"></script>
+    <script src="../scripts/jquery.loadJSON.js" type="text/javascript"></script>
+	<script src="../scripts/jquery.mobile-1.0rc2.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+
+                var zoom = 12;
+                var center = "";
+                var key = "AptcCMfZk-6wkwkXX2ho4h6YOwRJGXYCYYu9OeH1nZ1UD4fTMFEF6x-gZ8pHQu91";
+
+
+                $("#searchBox").blur(function () {
+                    $.ajax({
+                        url: "http://dev.virtualearth.net/REST/v1/Locations",
+                        dataType: "jsonp",
+                        data: {
+                            key: key,
+                            q: $("#searchBox").val()
+                        },
+                        jsonp: "jsonp",
+                        success: function (data) {
+                            $("#searchDiv").hide();
+                            $("#data").loadJSON(data)
+                            $(".mapresult").fadeIn("slow");
+                            center = $($(".point .coordinates")[0]).text();
+                            showMap();
+                        }
+                    });
+
+                });
+
+
+                $(".point a").live("click", function (event) {
+                    center = $(this).text();
+                    showMap();
+                });
+
+
+                $("#slider").bind("change", function (event, ui) {
+                    zoom = $(this).val();
+                    showMap();
+                });
+
+                function showMap() {
+                    var pushpins = "";
+                    var i = 1;
+                    $(".point .coordinates").each(function () { pushpins += "&pp=" + $(this).text() + ";;" + (i++); });
+                    $("#searchmap").attr("src",
+			"http://dev.virtualearth.net/REST/V1/Imagery/Map/road/" + center + "/" + zoom + "?mapSize=600,400&ml=TrafficFlow&mapVersion=v1&key=" + key + pushpins);
+
+                }
+
+
+            });
+
+    </script>	
+</head> 
+<body> 
+
+	<div data-role="page" class="type-index">
+
+		<div data-role="header">
+		<h1>Bin Maps Integration</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+
+	</div><!-- /header -->
+
+	<div data-role="content">
+
+				<p>Enter any address and press <strong>TAB</strong> key to show a map</p>
+    
+    
+
+
+
+	
+
+
+
+   
+    <ul data-role="listview">
+                <li data-role="list-divider">Address Search</li>
+				<li>
+                    <label for="searchBox">Address:</label>
+                    <input type="search" name="searchBox" id="searchBox" value="regent street london uk" />
+                    
+                </li>
+                <li class="mapresult" data-role="list-divider" style="display:none">Search Results</li>
+                <li class="mapresult" style="display:none">
+                    <label for="slider">Input slider:</label>
+                    <input type="range" name="slider" id="slider" value="12" min="1" max="19"  />
+                </li>
+                </ul>
+                <div class="mapresult" id="data" style="display:none">
+                
+                    <div id="copyright1"></div>
+		            <div data-role="fieldcontain">
+                        <img src="#" id="searchmap" style="float:left"/>
+		                <ol class="resourceSets" style="float:left"><h3>Position the center of the map on the following places:</h3>
+			                <li class="resources">
+				                <span class="name"></span>
+				
+				                <span class="point">
+					                (<a href="#"><span class="coordinates"><span rel="0"></span>,<span rel="1"></span></span></a>)
+				                </span>
+			                </li>
+		                </ol>
+                    </div>
+                
+                
+                </div>
+
+    
+    
+    
+    
+    
+    
+<!--    <div data-role="fieldcontain">
+        <label for="searchBox">Address:</label>
+        <input type="search" name="searchBox" id="searchBox" value="regent street london uk" />
+    </div>
+		<button type="button" id="search">Search</button>	
+	<div id="data" style="display:none" data-role="fieldcontain">
+
+		<img src="#" id="brandLogoUri" />
+		<div id="copyright"></div>
+		
+           <label for="slider">Input slider:</label>
+           <input type="range" name="slider" id="slider" value="12" min="1" max="19"  />
+        
+		<img src="#" id="searchmap" />
+		<ol class="resourceSets">
+			<li class="resources">
+				<span class="name"></span>
+				
+				<span class="point">
+					(<a href="#"><span class="coordinates"><span rel="0"></span>,<span rel="1"></span></span></a>)
+				</span>
+			</li>
+		</ol>
+		<a href="BingMapsSearch.html">New search</a>
+	</div>-->
+
+		</div><!-- /ui-body wrapper -->	
+</div><!-- /page -->
+
+</body>
+</html>

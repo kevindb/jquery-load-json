@@ -1,6 +1,6 @@
 ﻿/*
 * File:        jquery.loadJSON.js
-* Version:     1.2.3.
+* Version:     1.2.4.
 * Author:      Jovan Popovic 
 * 
 * Copyright 2011 Jovan Popovic, all rights reserved.
@@ -20,19 +20,55 @@
 (function ($) {
     $.fn.loadJSON = function (obj, options) {
 
+        function loadSelect(element, aoValues, name) {
+            ///<summary>
+            ///
+            ///</summary>
+            ///<param name="element" type="JQuery:select">Select lst</param>
+
+            var arr = jQuery.makeArray(element);
+            var template = $(arr[arr.length - 1]).clone(true);
+            //how many duplicate
+            var nbToCreate = obj.length;
+            var i = 0;
+            //fill started by last
+            i = obj.length - 1;
+            var iCreate = 0;
+            for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
+                //duplicate the last
+                var last = template.clone(true).insertAfter(arr[arr.length - 1]);
+                //setElementValue(last, obj[i], name);
+                $(last).attr("value", obj[i].value);
+                $(last).text(obj[i].text);
+                if (obj[i].selected)
+                    $(last).attr("selected", true);
+                i--;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            if ($.isFunction($(element).selectmenu))
+                $(element).selectmenu('refresh', true); //used in the JQuery mobile
+            //////////////////////////////////////////////////////////////////////////////////////////
+
+        }
+
         function setElementValue(element, value, name) {
             var type = element.type || element.tagName;
-            if (type == null)
-                return;
+            if (type == null) {
+                type = element[0].type || element[0].tagName; //select returns undefined if called directly
+                if (type == null) {
+                    return;
+                }
+            }
             type = type.toLowerCase();
             switch (type) {
 
                 case 'radio':
-                    if (value.toString().toLowerCase() == element.value.toLowerCase())
-                    {    $(element).attr("checked", "checked");
-                         if ($.isFunction($(element).checkboxradio))
-                              $(element).checkboxradio('refresh'); //used in the JQuery mobile
-		            }
+                    if (value.toString().toLowerCase() == element.value.toLowerCase()) {
+                        $(element).attr("checked", "checked");
+                        if ($.isFunction($(element).checkboxradio))
+                            $(element).checkboxradio('refresh'); //used in the JQuery mobile
+                    }
                     break;
 
                 case 'checkbox':
@@ -50,21 +86,39 @@
                         $(element).attr("selected", true);
                     break;
                 case 'select-multiple':
-                    var values = value.constructor == Array ? value : [value];
-                    for (var i = 0; i < element.options.length; i++) {
-                        for (var j = 0; j < values.length; j++) {
-                            element.options[i].selected |= element.options[i].value == values[j];
-                        }
+                    //This is "interesting". In mobile use element.options while in the desktop use element[0].options
+                    var select = element[0];
+                    if (element[0].options == null || typeof (element[0].options) == "undefined") {
+                        select = element;
                     }
-                    if($.isFunction( $(element).selectmenu ) )
-		                $(element).selectmenu('refresh');//used in the JQuery mobile
+                    if (select.options.length > 1) {
+                        //If select list is not empty use values array to select optionses
+                        var values = value.constructor == Array ? value : [value];
+                        //replaced element with element[0] ???? because now it reports that element.optons does not exists
+                        for (var i = 0; i < select.options.length; i++) {
+                            for (var j = 0; j < values.length; j++) {
+                                select.options[i].selected |= select.options[i].value == values[j];
+                            }
+                        }
+                        if ($.isFunction($(element).selectmenu))
+                            $(element).selectmenu('refresh'); //used in the JQuery mobile
+
+                    } else {
+                        //ELSE: Instead of selecting values use values array to populate select list
+                        loadSelect(element, value, name);
+                    }
                     break;
 
                 case 'select':
                 case 'select-one':
-                    $(element).attr("value", value);
-                    if ($.isFunction($(element).selectmenu))
-                        $(element).selectmenu('refresh'); //used in the JQuery mobile
+                    if (typeof value == "string") {
+                        $(element).attr("value", value);
+                        if ($.isFunction($(element).selectmenu))
+                            $(element).selectmenu('refresh'); //used in the JQuery mobile
+
+                    } else {
+                        loadSelect(element, value, name);
+                    }
                     break;
                 case 'text':
                 case 'hidden':
@@ -128,21 +182,37 @@
                     //return;
                 }
                 for (var prop in obj) {
-                    if (prop == null)
+                    if (prop == null || typeof prop == "undefined")
                         continue;
-                    //Find an element with class, id, name, or rel attribute that matches the propertu name
-                    var child = jQuery.makeArray(jQuery("." + prop, element)).length > 0 ? jQuery("." + prop, element) :
+                    else {
+                        //Find an element with class, id, name, or rel attribute that matches the propertu name
+                        var child = jQuery.makeArray(jQuery("." + prop, element)).length > 0 ? jQuery("." + prop, element) :
                                                     jQuery("#" + prop, element).length > 0 ? jQuery("#" + prop, element) :
-                                                    jQuery('[name="' + prop + '"]', element).length > 0 ? jQuery('[name="' + prop + '"]', element) : jQuery('[rel="' + prop + '"]');
-                    if (child.length != 0) {
-                        browseJSON(obj[prop], jQuery(child, element), prop);
+                                                    jQuery('[name="' + prop + '"]', element).length > 0 ? jQuery('[name="' + prop + '"]', element) :
+													jQuery('[rel="' + prop + '"]');
+                        if (child.length != 0) {
+                            browseJSON(obj[prop], jQuery(child, element), prop);
+                        }
                     }
                 }
             }
             // array
             /*ELSE*/else if (obj.constructor == Array) {
-                if (element.length > 0 && element[0].tagName == "SELECT" && element[0].type == "select-multiple") {
-                    setElementValue(element[0], obj, name);
+                if (element.length == 1 &&
+                        (element.type == "select" || element.type == "select-one" || element.type == "select-multiple" ||
+                        element[0].type == "select" || element[0].type == "select-one" || element[0].type == "select-multiple"
+                    )) {
+
+                    //setElementValue(element[0], obj, name);
+
+                    ///nova dva reda
+                    setElementValue(element, obj, name);
+                    return;
+
+                    ///////////////////////////////////////////////////////////////////////////////////////////
+                    //if ($.isFunction($(element[0]).selectmenu))
+                    //    $(element[0]).selectmenu('refresh', true); //used in the JQuery mobile
+                    ///////////////////////////////////////////////////////////////////////////////////////////
                 } else {
                     var arrayElements = $(element).children("[rel]");
                     if (arrayElements.length > 0) {//if there are rel=[index] elements populate them instead of iteration
@@ -177,6 +247,11 @@
                             browseJSON(obj[i], last, name);
                             i--;
                         }
+
+                        ///////////////////////////////////////////////////////////////////////////////////////////
+                        //if ($.isFunction($(element).selectmenu))
+                        //    $(element).selectmenu('refresh', true); //used in the JQuery mobile
+                        //////////////////////////////////////////////////////////////////////////////////////////
                     }
                 }
             }
@@ -208,7 +283,7 @@
         var defaults = {
             onLoading: function () { },
             onLoaded: function () { },
-	    mobile: false
+            mobile: false
         };
 
         properties = $.extend(defaults, options);
@@ -216,20 +291,22 @@
         return this.each(function () {
 
             if (obj.constructor == String) {
-                if (obj.charAt(0) == '{' || obj.charAt(0) == '[')
-                {
+                if (obj.charAt(0) == '{' || obj.charAt(0) == '[') {
                     var data = $.parseJSON(obj);
-		    init($(this));
+                    init($(this));
                     properties.onLoading();
                     browseJSON(data, this);
                     properties.onLoaded();
                 }
                 else {
                     var element = $(this);
-                    $.get(obj, function (data) {
-                        element.loadJSON(data, properties);
-                    },
-                "json");
+                    $.ajax({ url: obj,
+                        success: function (data) {
+                            element.loadJSON(data, properties);
+                        },
+                        cache: false,
+                        dataType: "json"
+                    });
                 }
             }
 
