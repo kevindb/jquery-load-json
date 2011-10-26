@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Connected dropdowns | jQuery Mobile</title> 
+	<link rel="stylesheet"  href="../jquery.mobile-1.0rc2.min.css" />  
+	<script src="../scripts/jquery-1.6.4.min.js"></script>
+	<script src="../scripts/jquery.mobile-1.0rc2.min.js"></script>
+	<script src="../scripts/jquery.loadJSON.js"></script>
+	<script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+			$('#Region').loadJSON('regions.js');
+			
+			$('#Region').change(function() {
+								var id = $(this).val();
+								$('#Town').loadJSON('towns' + id + '.js');
+							});
+        });
+    </script>
+	
+</head> 
+<body> 
+
+<div data-role="page">
+
+	<div data-role="header">
+		<h1>Connected dropdowns</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div><!-- /header -->
+
+	
+	<div data-role="content">	
+	
+<form action="#" method="get">
+
+			<h2>Loading conected dropdowns</h2>
+
+			 <p>JQuery loadJSON plugin enables you to reload list in one category based on the selection in another
+    </p>
+
+<form>
+			
+
+			
+			<div data-role="fieldcontain">
+				<label for="Region" class="select">Region:</label>
+				<select name="Region" id="Region" data-native-menu="false">
+					<option value="">Choose one region...</option>
+				</select>
+			</div>
+	
+			<div data-role="fieldcontain">
+				<label for="Town" class="select">Town:</label>
+				<select name="Town" id="Town" multiple="multiple" data-native-menu="false">
+					<option value="">Choose few towns...</option>
+				</select>
+			</div>
+
+	</form>
+	
+
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>

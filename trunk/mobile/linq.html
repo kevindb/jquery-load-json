@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Connected dropdowns | jQuery Mobile</title> 
+	<link rel="stylesheet"  href="../jquery.mobile-1.0rc2.min.css" />  
+	<script src="../scripts/jquery-1.6.4.min.js"></script>
+	<script src="../scripts/jquery.mobile-1.0rc2.min.js"></script>
+	<script src="../scripts/jquery.loadJSON.js"></script>
+	<script src="../scripts/jquery.linq.js" type="text/javascript"></script>
+	<script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+		aoRegions = [
+						{
+							"value": 1,
+							"text": "East Europe"
+						},
+						{
+							"value": 2,
+							"text": "West Europe"
+						},
+						{
+							"value": 3,
+							"text": "Middle Europe"
+						}
+					];
+					
+		aoTowns = 	[
+						{
+							"value": 17,
+							"text": "Belgrade",
+							"regionid": 1		
+						},
+						{
+							"value": 19,
+							"text": "Moscov",
+							"regionid": 1
+						},
+						{
+							"value": 20,
+							"text": "Kiev",
+							"regionid": 1
+						},
+						{
+							"value": 21,
+							"text": "London",
+							"regionid": 2
+						},
+						{
+							"value": 22,
+							"text": "Paris",
+							"regionid": 2
+						},
+						{
+							"value": 23,
+							"text": "Madrid",
+							"regionid": 2
+						},
+						{
+							"value": 24,
+							"text": "Lisabon",
+							"regionid": 2
+						},
+						{
+							"value": 31,
+							"text": "Berlin",
+							"regionid": 3
+						},
+						{
+							"value": 32,
+							"text": "Viena",
+							"regionid": 3
+						},
+						{
+							"value": 33,
+							"text": "Budapest",
+							"regionid": 3
+						},
+						{
+							"value": 33,
+							"text": "Prague",
+							"regionid": 3
+						}
+						,
+						{
+							"value": 33,
+							"text": "Warsaw",
+							"regionid": 3
+						}
+					];
+
+
+		
+		
+		$('#Region').loadJSON( aoRegions );
+
+		
+$('#Region').change(function() {
+
+							var id = $(this).val();
+													var queryResult = $.Enumerable.From(aoTowns)
+    																			.Where(function (town) { return town.regionid == id })
+						    									.OrderByDescending(function (town) { return town.text })
+													.ToArray();
+							
+							$('#Town').loadJSON(queryResult);
+
+						});
+
+
+        });
+    </script>
+	
+</head> 
+<body> 
+
+<div data-role="page">
+
+	<div data-role="header">
+		<h1>Connected dropdowns</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div><!-- /header -->
+
+	
+	<div data-role="content">	
+	
+<form action="#" method="get">
+
+			<h2>Loading conected dropdowns</h2>
+
+			 <p>JQuery loadJSON plugin enables you to reload list in one category based on the selection in another
+    </p>
+
+<form>
+			
+
+			
+			<div data-role="fieldcontain">
+				<label for="Region" class="select">Region:</label>
+				<select name="Region" id="Region" data-native-menu="false">
+					<option value="">Choose one region...</option>
+				</select>
+			</div>
+	
+			<div data-role="fieldcontain">
+				<label for="Town" class="select">Town:</label>
+				<select name="Town" id="Town" data-native-menu="false">
+					<option value="">Choose town...</option>
+				</select>
+			</div>
+
+	</form>
+	
+
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>

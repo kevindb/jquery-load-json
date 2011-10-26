@@ -13,13 +13,7 @@
         $(document).ready(function () {
 
             var id = window.location.href.match("[0-9]+")[0];
-
-            $('form').loadJSON('data' + id + '.js', 
-								{ onLoaded: function(){  
-												//$("input[type='checkbox']").checkboxradio();
-												//$("input[type='checkbox']").attr("checked",true).checkboxradio("refresh"); 
-											}
-								});
+            $('form').loadJSON('data' + id + '.js');
         });
     </script>
 	
@@ -30,6 +24,7 @@
 
 	<div data-role="header">
 		<h1>Company Edit Page</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
 	</div><!-- /header -->
 
 	
@@ -109,7 +104,7 @@
 				</fieldset>
 			</div>
 
-<a href="details.html" class="ID" id="ID" data-ajax="false" >Back to details</a>
+<a href="details.html" class="ID" id="ID" data-ajax="false" data-role="button" data-inline="true" data-icon="arrow-l">Back to details</a>
 
 	</form>
 	

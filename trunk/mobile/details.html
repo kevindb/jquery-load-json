@@ -22,25 +22,29 @@
 
 	<div data-role="header">
 		<h1>Company Details Page</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
 	</div><!-- /header -->
 
 	<div data-role="content">	
 	
-		<a href="list.html" data-ajax="false" >Back to list</a>
+		
 	   <h1 id="Name"></h1>
                         <img id="Logo" alt="" src=""/>
-		<br style="clear:both"/>
+		<div data-role="fieldcontain">
 					    <label for="Address">Address:</label>
                         <span id="Address"></span>
-		<br style="clear:both"/>
+		</div>
+		<div data-role="fieldcontain">
 					    <label for="Contact">Contact by:</label>
                         <span id="Contact"></span>
-<br style="clear:both"/>
+		</div>
+		<div data-role="fieldcontain">
 					    <label for="Town">Town</label>
                         <span id="Town"></span>
-<br style="clear:both"/>
-<br/>
-<a href="edit.html" class="ID" data-ajax="false" >Edit</a>
+		</div>
+
+<a href="list.html" data-ajax="false" data-role="button" data-inline="true" data-icon="arrow-l">Back to list</a>
+<a href="edit.html" class="ID" data-ajax="false" data-role="button" data-inline="true" data-theme="b" data-icon="arrow-r" data-iconpos="right">Edit</a>
 	
 	</div><!-- /content -->
 	
