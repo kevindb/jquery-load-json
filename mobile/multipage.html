@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>jQuery Mobile List</title> 
+	<link rel="stylesheet"  href="../jquery.mobile-1.0rc2.min.css" />  
+	<script src="../scripts/jquery-1.6.4.min.js"></script>
+	<script src="../scripts/jquery.mobile-1.0rc2.min.js"></script>
+	<script src="../scripts/jquery.loadJSON.js"></script>
+	<script language="javascript" type="text/javascript">
+		$( '#listpage' ).live( 'pageinit',function(event){
+ 			$('li', this).loadJSON('list.js');
+		});
+		$( '#detailspage' ).live( 'pageinit',function(event){
+ 			var id = window.location.href.match("[0-9]+")[0];
+        	    	$('div[data-role="content"]', this).loadJSON('data'+id+'.js');
+		});
+		$( '#editpage' ).live( 'pageinit',function(event){
+            		var id = window.location.href.match("[0-9]+")[0];
+            		$('form', this).loadJSON('data' + id + '.js');
+		});
+	</script>
+</head> 
+<body> 
+
+<div id="listpage" data-role="page">
+
+		<div data-role="header">
+		<h1>Loading array of companies into the list</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+
+	</div><!-- /header -->
+
+	<div data-role="content">
+
+			
+		<ul data-role="listview" data-inset="true">
+
+								
+            <li> 
+            	<a href="#detailspage" class="ID"><span id="Name" class="Name"></span></a>
+			</li>
+		</ul>
+
+		</div><!-- /ui-body wrapper -->	
+</div><!-- /page -->
+
+
+<div id="detailspage" data-role="page">
+
+
+	<div data-role="header">
+		<h1>Company Details Page</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div><!-- /header -->
+
+	<div data-role="content">	
+	
+		
+	   <h1 id="Name"></h1>
+                        <img id="Logo" alt="" src=""/>
+		<div data-role="fieldcontain">
+					    <label for="Address">Address:</label>
+                        <span id="Address"></span>
+		</div>
+		<div data-role="fieldcontain">
+					    <label for="Contact">Contact by:</label>
+                        <span id="Contact"></span>
+		</div>
+		<div data-role="fieldcontain">
+					    <label for="Town">Town</label>
+                        <span id="Town"></span>
+		</div>
+
+	<a href="#listpage" data-role="button" data-inline="true" data-icon="arrow-l">Back to list</a>
+	<a href="#editpage" class="ID" data-ajax="false" data-role="button" data-inline="true" data-theme="b" data-icon="arrow-r" data-iconpos="right">Edit</a>
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div><!-- /footer -->
+	
+</div><!-- /page -->
+
+
+<div id="editpage" data-role="page">
+
+	<div data-role="header">
+		<h1>Company Edit Page</h1>
+		<a href="index.html" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a>
+	</div><!-- /header -->
+	
+	<div data-role="content">	
+	
+	<form action="#" method="get">
+
+			<h2>Loading form elements</h2>
+
+			<div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
+	         		<label for="Name" class="ui-input-text">Name:</label>
+	         		<input type="text" name="Name" id="Name" value="" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset">
+			</div>
+
+			<div data-role="fieldcontain" class="ui-field-contain ui-body ui-br">
+				<label for="Address" class="ui-input-text">Address:</label>
+				<textarea cols="40" rows="8" name="Address" id="Address" class="ui-input-text ui-body-c ui-corner-all ui-shadow-inset"></textarea>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="Town" class="select">Town:</label>
+				<select name="Town" id="Town" data-native-menu="false">
+					<option value="" data-placeholder="true">Choose one...</option>
+					<option value="London">London City</option>
+					<option value="Liverpool">Liverpool City</option>
+					<option value="Lothian">Lothian City</option>
+					<option value="Newcastle">Newcastle City</option>
+					<option value="Buckinghamshire">Buckinghamshire City</option>
+					<option value="Essex">Essex City</option> 
+				</select>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="Country" class="select">Country:</label>
+				<select name="Country" id="Country" multiple="multiple" data-native-menu="false">
+					<option value="" data-placeholder="true">Select some..</option>
+					<option value="UK">United Kingdom</option>
+                            		<option value="SRB">Serbia</option>
+					<option value="USA">United States of America</option>
+					<option value="FRA">France</option> 
+				</select>
+			</div>
+	
+			<div data-role="fieldcontain">
+				<fieldset data-role="controlgroup">
+				   <legend>Is Featured:</legend>
+				   <input type="checkbox" name="IsFeatured" id="IsFeatured" class="custom" />
+				   <label for="IsFeatured">Is Featured</label>
+				</fieldset>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<fieldset data-role="controlgroup">
+					<legend>Contact:</legend>
+						<input type="radio" name="Contact" id="Email" value="Email" />
+						<label for="Email">Email</label>
+
+						<input type="radio" name="Contact" id="Phone" value="Phone"  />
+						<label for="Phone">Phone</label>
+
+						<input type="radio" name="Contact" id="Post" value="Post"  />
+						<label for="Post">Post</label>
+				</fieldset>
+			</div>
+
+	<a href="#detailspage" class="ID" id="ID" data-ajax="false" data-role="button" data-inline="true" data-icon="arrow-l">Back to details</a>
+
+	</form>
+	
+
+	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		<h4>Footer content</h4>
+	</div><!-- /footer -->
+	
+</div><!-- /page -->
+
+
+
+</body>
+</html>
