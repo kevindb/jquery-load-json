@@ -13,11 +13,11 @@
  			$('li', this).loadJSON('list.js');
 		});
 		$( '#detailspage' ).live( 'pageinit',function(event){
-        var id = event;//.data;//.url.match("[0-9]+")[0];
-        // $('div[data-role="content"]', this).loadJSON('data'+id+'.js');
+        var id = event.dataset.url.match("[0-9]+")[0];
+        $('div[data-role="content"]', this).loadJSON('data'+id+'.js');
 		});
 		$( '#editpage' ).live( 'pageinit',function(event){
-        var id = event;//.data.url.match("[0-9]+")[0];
+        var id = event.dataset.url.match("[0-9]+")[0];
         //$('form', this).loadJSON('data' + id + '.js');
 		});
 	</script>
