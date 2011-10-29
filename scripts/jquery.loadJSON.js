@@ -1,6 +1,6 @@
 ﻿/*
 * File:        jquery.loadJSON.js
-* Version:     1.2.4.
+* Version:     1.2.5.
 * Author:      Jovan Popovic 
 * 
 * Copyright 2011 Jovan Popovic, all rights reserved.
@@ -20,11 +20,34 @@
 (function ($) {
     $.fn.loadJSON = function (obj, options) {
 
+
+        function refreshMobileSelect(element) {
+            try {
+                if ($.isFunction($(element).selectmenu))
+                    $(element).selectmenu('refresh'); //used in the JQuery mobile
+            } catch (ex) {
+                try {
+                    //$(element).selectmenu();//This will create duplicate select menu!!!!!
+                    //$(element).selectmenu('refresh');
+                } catch (ex) { }
+
+            }
+        }
+
+        function refreshMobileCheckBox(element) {
+            try {
+                if ($.isFunction($(element).checkboxradio))
+                    $(element).checkboxradio('refresh'); //used in the JQuery mobile
+            } catch (ex) { }
+        }
+
         function loadSelect(element, aoValues, name) {
             ///<summary>
-            ///
+            ///Load options into the select list
             ///</summary>
-            ///<param name="element" type="JQuery:select">Select lst</param>
+            ///<param name="element" type="JQuery:select">Select list</param>
+            ///<param name="aoValues" type="Array{value,text,selected}">Array of object containin the options</param>
+            ///<param name="name" type="String">Name of the select list</param>
 
             var arr = jQuery.makeArray(element);
             var template = $(arr[arr.length - 1]).clone(true);
@@ -46,8 +69,7 @@
             }
 
             ///////////////////////////////////////////////////////////////////////////////////////////
-            if ($.isFunction($(element).selectmenu))
-                $(element).selectmenu('refresh', true); //used in the JQuery mobile
+            refreshMobileSelect(element)
             //////////////////////////////////////////////////////////////////////////////////////////
 
         }
@@ -66,17 +88,15 @@
                 case 'radio':
                     if (value.toString().toLowerCase() == element.value.toLowerCase()) {
                         $(element).attr("checked", "checked");
-                        if ($.isFunction($(element).checkboxradio))
-                            $(element).checkboxradio('refresh'); //used in the JQuery mobile
+                        refreshMobileCheckBox(element);
                     }
                     break;
 
                 case 'checkbox':
                     if (value) {
                         //$(element).attr("checked", "checked");
-                        $(element).attr("checked", true)
-                        if ($.isFunction($(element).checkboxradio))
-                            $(element).checkboxradio('refresh'); //used in the JQuery mobile
+                        $(element).attr("checked", true);
+                        refreshMobileCheckBox(element);
                     }
                     break;
                 case 'option':
@@ -100,9 +120,7 @@
                                 select.options[i].selected |= select.options[i].value == values[j];
                             }
                         }
-                        if ($.isFunction($(element).selectmenu))
-                            $(element).selectmenu('refresh'); //used in the JQuery mobile
-
+                        refreshMobileSelect(element);
                     } else {
                         //ELSE: Instead of selecting values use values array to populate select list
                         loadSelect(element, value, name);
@@ -113,8 +131,7 @@
                 case 'select-one':
                     if (typeof value == "string") {
                         $(element).attr("value", value);
-                        if ($.isFunction($(element).selectmenu))
-                            $(element).selectmenu('refresh'); //used in the JQuery mobile
+                        refreshMobileSelect(element);
 
                     } else {
                         loadSelect(element, value, name);
@@ -126,11 +143,20 @@
                     break;
                 case 'a':
                     var href = $(element).attr("href");
-                    var iPosition = href.indexOf('?');
-                    if (iPosition > 0) // if parameters in the URL exists add new pair using &
-                        href += '&' + name + '=' + value;
-                    else//otherwise attach pair to URL
-                        href = href + '?' + name + '=' + value;
+
+
+
+                    var iPosition = href.indexOf('#');
+                    if (iPosition > 1000000) {
+                        href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition)
+
+                    } else {
+                        iPosition = href.indexOf('?');
+                        if (iPosition > 0) // if parameters in the URL exists add new pair using &
+                            href += '&' + name + '=' + value;
+                        else//otherwise attach pair to URL
+                            href = href + '?' + name + '=' + value;
+                    }
                     $(element).attr("href", href);
                     break;
                 case 'img':
@@ -164,7 +190,7 @@
                 case 'button':
                 default:
                     try {
-                        $(element).html(value);
+                        $(element).html(value.toString());
                     } catch (exc) { }
             }
 
