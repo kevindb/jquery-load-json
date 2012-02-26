@@ -27,7 +27,7 @@ ul.csv li:last-child:after { content: ""; }
 <script language="javascript" type="text/javascript">
 		$( '#detailspage' ).live( 'pageinit',function(event){
  			var id = window.location.href.match("[0-9]+")[0];
-        	$('div[data-role="page"]').loadJSON('data'+id+'.js');
+        	$('div[data-role="page"]').loadJSON('data'+id+'.js', {cache: true});
 		});
 </script>
 </head> 
