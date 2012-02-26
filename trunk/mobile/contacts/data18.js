@@ -4,7 +4,7 @@
     "Address": "Milton Keynes Leisure Plaza",
     "Town": "London",
     "Description": "Lorem ipsum dolor sit amet",
-    "DoB": "\/Date(-62135596800000)\/",
+    "DoB": "19/04/1982",
 	"Mail": "tjohnson@insurance.com",
 	"Website": "http://www.thomas.com",
 	"Phone": "+461 555 583 39382",
@@ -13,5 +13,5 @@
     "Country": [
         "UK" 
     ],
-    "Logo":{ src: "images/logo18.jpg", alt: "Thomas Johnson"}
+    "Logo":{ "src": "images/logo18.jpg", "alt": "Thomas Johnson"}
 }
