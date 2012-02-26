@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Company Details - jQuery Mobile</title> 
+	<link rel="stylesheet"  href="media/jquery.mobile-1.0.1.min.css" />  
+	<link rel="stylesheet"  href="media/jqm-docs.cssxx" />  
+	<script src="media/jquery-1.6.4.min.js"></script>
+	<script src="media/jquery.mobile-1.0.1.min.js"></script>
+	<script src="media/jquery.loadJSON.js"></script>
+<style>
+#Name{ float:left}
+#Logo{ float:left; margin-left: 20px; }
+h2{ clear:both}
+dt { display: inline-block; font-weight: bold;}
+.label:after
+{
+content: ":"
+} 
+
+ul.csv  { display: inline-block; list-style: none; margin: 0; padding: 0; }
+ul.csv  li { display: inline; }
+ul.csv  li:after { content: ","; } 
+ul.csv li:last-child:after { content: ""; }
+</style>
+<script language="javascript" type="text/javascript">
+		$( '#detailspage' ).live( 'pageinit',function(event){
+ 			var id = window.location.href.match("[0-9]+")[0];
+        	$('div[data-role="page"]').loadJSON('data'+id+'.js');
+		});
+</script>
+</head> 
+<body> 
+
+<div id="detailspage" data-role="page" class="type-interior">
+
+	<div data-role="header">
+		<a href="list.html" data-icon="home" data-ajax="false">List</a>
+		<h1>Contact Details</h1>
+		<a href="edit.html" class="ID" data-icon="gear" data-ajax="false">Edit</a>
+	</div>
+
+	<div data-role="content">	
+			<h1 id="Name"></h1> <img id="Logo" alt="" src=""/>
+			<div data-role="collapsible-set">
+				<div data-role="collapsible" data-collapsed="false">
+					<h2>Contact Info</h2>
+
+					<dl>
+						<dt class="label">Address</dt>
+						<dd id="Address"></dd>
+					</dl>
+					<dl>
+						<dt class="label">Town</dt>
+						<dd id="Town"></dd>
+					</dl>
+					<dl>
+						<dt class="label">Date of birth</dt>
+						<dd id="DoB"></dd>
+					</dl>
+				</div>
+
+				<div data-role="collapsible" data-collapsed="true">
+				
+						<h2>Contact Details</h2>
+						<dl>
+							<dt class="label">Phone</dt><dd><a href="tel:" id="Phone"></a></dd>
+						</dl>
+						<dl>
+							<dt class="label">Mail</dt><dd><a href="mailto:" id="Mail"></a></dd>
+						</dl>
+						<dl>
+							<dt class="label">Web</dt><dd><a href="" id="Website"></a></dd>
+						</dl>
+				</div>
+				<div data-role="collapsible" data-collapsed="true">
+						<h2>Other Details</h2>	
+						<dl>
+							<dt class="label">Is Family</dt><dd id="Family"> </dd>
+						</dl>
+						<dl>
+							<dt class="label">Contact by</dt><dd id="Contact"> </dd>
+						</dl>
+						<dl>
+							<dt class="label">Countries</dt>
+								<dd><ul class="csv"><li class="Country"> </li></ul></dd>
+						</dl>
+		
+				</div>	
+			</div>	
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		<h4>Footer</h4>
+	</div><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>
+

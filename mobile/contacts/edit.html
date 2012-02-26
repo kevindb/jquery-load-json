@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html> 
+<html> 
+	<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Edit Contact | JQuery UI Mobile</title> 
+	<<link rel="stylesheet"  href="media/jquery.mobile-1.0.1.min.css" />  
+	<script src="media/jquery-1.6.4.min.js"></script>
+	<script src="media/jquery.mobile-1.0.1.min.js"></script>
+	<script src="media/jquery.loadJSON.js"></script>
+	    <script language="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+
+            var id = window.location.href.match("[0-9]+")[0];
+            $('div[data-role="page"]').loadJSON('data' + id + '.js');
+        });
+    </script>
+	
+</head> 
+<body> 
+
+<div data-role="page">
+
+	<div data-role="header">
+		<a href="details.html" class="ID" data-icon="arrow-l" data-ajax="false">Details</a>
+		<h1>Edit Contact</h1>
+		<a href="list.html" data-icon="home" data-ajax="false">List</a>
+	</div><!-- /header -->
+	
+	<div data-role="content">	
+	
+		<form action="#" method="post">
+
+			<div data-role="fieldcontain" class="">
+				<label for="Name">Name</label>
+				<input type="text" name="Name" id="Name" value="" placeholder="Name">
+			</div>
+
+			<div data-role="fieldcontain">
+				<label for="Address">Address</label>
+				<textarea cols="40" rows="8" name="Address" id="Address"></textarea>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="Town" class="select">Town</label>
+				<select name="Town" id="Town" data-native-menu="false">
+					<option value="" data-placeholder="true">Choose one...</option>
+					<option value="London">London City</option>
+					<option value="Liverpool">Liverpool City</option>
+					<option value="Lothian">Lothian City</option>
+					<option value="Newcastle">Newcastle City</option>
+					<option value="Buckinghamshire">Buckinghamshire City</option>
+					<option value="Essex">Essex City</option> 
+				</select>
+			</div>
+			
+			<div data-role="fieldcontain">
+				<label for="Country" class="select">Country:</label>
+				<select name="Country" id="Country" multiple="multiple" data-native-menu="false">
+					<option value="" data-placeholder="true">Select some..</option>
+					<option value="UK">United Kingdom</option>
+                    <option value="SRB">Serbia</option>
+					<option value="USA">United States</option>
+					<option value="FRA">France</option> 
+				</select>
+			</div>
+
+			<div data-role="fieldcontain">
+
+				<label for="Family">Family:</label>
+				<select name="Family" id="Family" data-role="slider">
+					<option value="true">Yes</option>
+					<option value="false">No</option>
+				</select> 
+
+			</div>
+			
+			<div data-role="fieldcontain">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<legend>Contact by:</legend>
+						<input type="radio" name="Contact" id="Email" value="Email" />
+						<label for="Email">Email</label>
+
+						<input type="radio" name="Contact" id="Phone" value="Phone"  />
+						<label for="Phone">Phone</label>
+
+						<input type="radio" name="Contact" id="Post" value="Post"  />
+						<label for="Post">Post</label>
+				</fieldset>
+			</div>
+
+	</form>
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		<h4>Footer</h4>
+	</div><!-- /footer -->
+	
+</div><!-- /page -->
+
+</body>
+</html>

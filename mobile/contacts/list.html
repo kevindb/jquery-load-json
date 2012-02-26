@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html> 
+<html> 
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<title>Contact List - jQuery Mobile List</title> 
+	<link rel="stylesheet"  href="media/jquery.mobile-1.0.1.min.css" />  
+	<script src="media/jquery-1.6.4.min.js"></script>
+	<script src="media/jquery.mobile-1.0.1.min.js"></script>
+	<script src="media/jquery.loadJSON.js"></script>
+	<script language="javascript" type="text/javascript">
+			$( '#listpage' ).live( 'pageinit',function(event){
+				 $('li').loadJSON('list.js');
+			});
+	</script>
+</head> 
+<body> 
+
+	<div id="listpage" data-role="page">
+	
+		<div data-role="header">
+			<h1>My Contacts</h1>
+		</div>
+
+		<div data-role="content">
+			<ul data-role="listview" data-inset="true" data-filter="true">
+				<li> 
+					<a href="details.html" data-ajax="false" class="ID"><span id="Name" class="Name"></span></a>
+				</li>
+			</ul>
+		</div>
+		
+	</div><!-- /page -->
+
+</body>
+</html>
