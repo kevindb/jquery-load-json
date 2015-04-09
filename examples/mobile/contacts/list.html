@@ -1,12 +1,12 @@
- <!DOCTYPE html> 
-<html> 
+ <!DOCTYPE html>
+<html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1"> 
-	<title>Contact List - jQuery Mobile List</title> 
-	<link rel="stylesheet"  href="media/jquery.mobile-1.0.1.min.css" /> 
-  <link rel="apple-touch-icon" href="http://jquery-load-json.googlecode.com/svn/trunk/mobile/contacts/images/dave.png" />
-  <link rel="apple-touch-startup-image" href="http://jquery-load-json.googlecode.com/svn/trunk/mobile/contacts/images/dental-affiliate.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Contact List - jQuery Mobile List</title>
+	<link rel="stylesheet"  href="media/jquery.mobile-1.0.1.min.css" />
+  <link rel="apple-touch-icon" href="mobile/contacts/images/dave.png" />
+  <link rel="apple-touch-startup-image" href="mobile/contacts/images/dental-affiliate.png">
 	<script src="media/jquery-1.6.4.min.js"></script>
 	<script src="media/jquery.mobile-1.0.1.min.js"></script>
 	<script src="media/jquery.loadJSON.js"></script>
@@ -15,23 +15,23 @@
 				 $('li').loadJSON('list.js');
 			});
 	</script>
-</head> 
-<body> 
+</head>
+<body>
 
 	<div id="listpage" data-role="page">
-	
+
 		<div data-role="header">
 			<h1>My Contacts</h1>
 		</div>
 
 		<div data-role="content">
 			<ul data-role="listview" data-inset="true" data-filter="true">
-				<li> 
+				<li>
 					<a href="details.html" data-ajax="false" class="ID"><span id="Name" class="Name"></span></a>
 				</li>
 			</ul>
 		</div>
-		
+
 	</div><!-- /page -->
 
 </body>

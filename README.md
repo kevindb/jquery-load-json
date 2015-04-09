@@ -54,15 +54,15 @@ You can find detailed instructions how the plugin can be used in the following p
 
 ## Examples
 You can see few live examples where it is shown how loadJSON plugin can be used:
-  1. [Creating list of elements](http://jquery-load-json.googlecode.com/svn/trunk/list.html) - in this example is shown how the array of JSON objects can be bound to the simple HTML template,
-  1. [Showing details of the JSON object](http://jquery-load-json.googlecode.com/svn/trunk/details.html?ID=17) - this example shows how details about the single object can be bound to the HTML template,
-  1. [Populating form with JSON object](http://jquery-load-json.googlecode.com/svn/trunk/edit.html?ID=17) - this example shows how you can populate form elements from the JSON object,
-  1. [Loading complex/hierarchical structure](http://jquery-load-json.googlecode.com/svn/trunk/hierarchy.html) this example show how you can generate complex structures using loadJSON plugin,
-  1. [Generate template for array elements](http://jquery-load-json.googlecode.com/svn/trunk/array.html) in this example is shown how you can define custom templates for different elements in the array,
-  1. [Adding load events](http://jquery-load-json.googlecode.com/svn/trunk/events.html) in this example is shown how you can define on load events,
-  1. [Loading JSON from the external sites](http://jquery-load-json.googlecode.com/svn/trunk/BingMapsSearch.html) - in this example is shown how you can load JSON data that will be loaded from the external sites - in this case from the Bing Maps web service.
-  1. [Populating connected drop-downs  using the Ajax calls](http://jquery-load-json.googlecode.com/svn/trunk/categories-ajax.html) - in this example is shown how you can load subcategories drop-downs when parent category drop-down is changed. Drop-down values are taken from the server-side via Ajax calls.
-  1. [Populating connected dropdowns using LINQ](http://jquery-load-json.googlecode.com/svn/trunk/linq.html) - in this example is shown how you can load subcategories dropdown when parent category dropdown is changed. Values are stored as a local JavaScript arrays and filtered using the LINQ library.
+  1. [Creating list of elements](examples/list.html) - in this example is shown how the array of JSON objects can be bound to the simple HTML template,
+  1. [Showing details of the JSON object](examples/details.html?ID=17) - this example shows how details about the single object can be bound to the HTML template,
+  1. [Populating form with JSON object](examples/edit.html?ID=17) - this example shows how you can populate form elements from the JSON object,
+  1. [Loading complex/hierarchical structure](examples/hierarchy.html) this example show how you can generate complex structures using loadJSON plugin,
+  1. [Generate template for array elements](examples/array.html) in this example is shown how you can define custom templates for different elements in the array,
+  1. [Adding load events](examples/events.html) in this example is shown how you can define on load events,
+  1. [Loading JSON from the external sites](examples/BingMapsSearch.html) - in this example is shown how you can load JSON data that will be loaded from the external sites - in this case from the Bing Maps web service.
+  1. [Populating connected drop-downs  using the Ajax calls](examples/categories-ajax.html) - in this example is shown how you can load subcategories drop-downs when parent category drop-down is changed. Drop-down values are taken from the server-side via Ajax calls.
+  1. [Populating connected dropdowns using LINQ](examples/linq.html) - in this example is shown how you can load subcategories dropdown when parent category dropdown is changed. Values are stored as a local JavaScript arrays and filtered using the LINQ library.
 
 ## Origin
 
