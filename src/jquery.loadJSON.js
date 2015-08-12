@@ -19,19 +19,17 @@
 
 (function ($) {
 	$.fn.loadJSON = function (obj, options) {
-
-
 		function refreshMobileSelect(element) {
 			try {
 				if ($.isFunction($(element).selectmenu)) {
 					$(element).selectmenu('refresh'); //used in the JQuery mobile
 				}
+
 			} catch (ex) {
 				try {
 					//$(element).selectmenu();//This will create duplicate select menu!!!!!
 					//$(element).selectmenu('refresh');
 				} catch (ex) { }
-
 			}
 		}
 
@@ -73,7 +71,6 @@
 			///////////////////////////////////////////////////////////////////////////////////////////
 			refreshMobileSelect(element);
 			//////////////////////////////////////////////////////////////////////////////////////////
-
 		}
 
 		function setElementValue(element, value, name) {
@@ -86,7 +83,6 @@
 			}
 			type = type.toLowerCase();
 			switch (type) {
-
 				case 'radio':
 					if (value.toString().toLowerCase() == element.value.toLowerCase()) {
 						$(element).prop('checked', true);
@@ -104,18 +100,21 @@
 					}
 					refreshMobileCheckBox(element);
 					break;
+
 				case 'option':
 					$(element).attr("value", value.value);
 					$(element).text(value.text);
 					if (value.selected)
 						$(element).attr("selected", true);
 					break;
+
 				case 'select-multiple':
 					//This is "interesting". In mobile use element.options while in the desktop use element[0].options
 					var select = element[0];
 					if (element[0].options === null || typeof (element[0].options) == "undefined") {
 						select = element;
 					}
+
 					if (select.options.length > 1) {
 						//If select list is not empty use values array to select optionses
 						var values = value.constructor == Array ? value : [value];
@@ -126,6 +125,7 @@
 							}
 						}
 						refreshMobileSelect(element);
+
 					} else {
 						//ELSE: Instead of selecting values use values array to populate select list
 						loadSelect(element, value, name);
@@ -142,19 +142,18 @@
 						loadSelect(element, value, name);
 					}
 					break;
+
 				case 'text':
 				case 'hidden':
 					$(element).attr("value", value);
 					break;
+
 				case 'a':
 					var href = $(element).attr("href");
-
-
-
 					var iPosition = href.indexOf('#');
+
 					if (iPosition > 1000000) {
 						href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition);
-
 					} else {
 						iPosition = href.indexOf('?');
 						if (iPosition > 0) // if parameters in the URL exists add new pair using &
@@ -164,6 +163,7 @@
 					}
 					$(element).attr("href", href);
 					break;
+
 				case 'img':
 
 					if (obj.constructor == "String") {
@@ -174,8 +174,8 @@
 						if (iPosition > 0) {
 							src = value.substring(0, iPosition);
 							alt = value.substring(iPosition + 1);
-						}
-						else {
+
+						} else {
 							src = value;
 							var iPositionStart = value.lastIndexOf('/') + 1;
 							var iPositionEnd = value.indexOf('.');
@@ -183,6 +183,7 @@
 						}
 						$(element).attr("src", src);
 						$(element).attr("alt", alt);
+
 					} else {
 						$(element).attr("src", obj.src);
 						$(element).attr("alt", obj.alt);
@@ -202,16 +203,16 @@
 		}
 
 		function browseJSON(obj, element, name) {
-
 			// no object
 			if (obj === undefined) {
-			}
+				// Do nothing
+
 			// branch
-			else if (obj.constructor == Object) {
+			} else if (obj.constructor == Object) {
 				if (element.length >= 1 && element[0].tagName == "OPTION") {
 					setElementValue(element[0], obj, name);
-					//return;
 				}
+
 				for (var prop in obj) {
 					if (prop === null || typeof prop == "undefined")
 						continue;
@@ -226,37 +227,30 @@
 						}
 					}
 				}
-			}
+
 			// array
-			/*ELSE*/else if (obj.constructor == Array) {
+			} else if (obj.constructor == Array) {
 				if (element.length == 1 &&
 						(element.type == "select" || element.type == "select-one" || element.type == "select-multiple" ||
 						element[0].type == "select" || element[0].type == "select-one" || element[0].type == "select-multiple"
 					)) {
 
-					//setElementValue(element[0], obj, name);
-
 					///nova dva reda
 					setElementValue(element, obj, name);
 					return;
 
-					///////////////////////////////////////////////////////////////////////////////////////////
-					//if ($.isFunction($(element[0]).selectmenu))
-					//	$(element[0]).selectmenu('refresh', true); //used in the JQuery mobile
-					///////////////////////////////////////////////////////////////////////////////////////////
 				} else {
 					var arrayElements = $(element).children("[rel]");
-					if (arrayElements.length > 0) {//if there are rel=[index] elements populate them instead of iteration
+					if (arrayElements.length > 0) {					//if there are rel=[index] elements populate them instead of iteration
 						arrayElements.each(function () {
 							var rel = $(this).attr("rel");
-							//setElementValue(this, obj[rel], name);
 							browseJSON(obj[rel], $(this), name);
 						});
-					} else {//recursive iteration
+
+					} else {										//recursive iteration
 						var arr = jQuery.makeArray(element);
 						var template = $(arr[arr.length - 1]).clone(true);
-						//how many duplicate
-						var nbToCreate = obj.length;
+						var nbToCreate = obj.length;				//how many duplicate
 						var i = 0;
 						if (element[0] === null || (element[0] !== null && element[0].tagName != "OPTION")) {
 							var iExist = 0;
@@ -278,24 +272,19 @@
 							browseJSON(obj[i], last, name);
 							i--;
 						}
-
-						///////////////////////////////////////////////////////////////////////////////////////////
-						//if ($.isFunction($(element).selectmenu))
-						//	$(element).selectmenu('refresh', true); //used in the JQuery mobile
-						//////////////////////////////////////////////////////////////////////////////////////////
 					}
 				}
-			}
+
 			// data only
-			else {
+			} else {
 				var value = obj;
 				var type;
 				if (element.length > 0) {
 					var i = 0;
 					for (i = 0; i < element.length; i++)
 						setElementValue(element[i], obj, name);
-				}
-				else {
+
+				} else {
 					setElementValue(element, obj, name);
 				}
 			}
@@ -322,7 +311,6 @@
 		properties = $.extend(defaults, options);
 
 		return this.each(function () {
-
 			if (obj.constructor == String) {
 				if (obj.charAt(0) == '{' || obj.charAt(0) == '[') {
 					var data = $.parseJSON(obj);
