@@ -153,7 +153,7 @@
 				case 'time':
 				case 'number':
 				case 'color':
-					$(element).attr("value", value);
+					$(element).val(value);
 					break;
 
 				case 'a':
