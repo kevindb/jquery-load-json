@@ -146,6 +146,13 @@
 
 				case 'text':
 				case 'hidden':
+				case 'email':
+				case 'url':
+				case 'date':
+				case 'datetime':
+				case 'time':
+				case 'number':
+				case 'color':
 					$(element).attr("value", value);
 					break;
 
