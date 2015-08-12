@@ -104,8 +104,9 @@
 				case 'option':
 					$(element).attr("value", value.value);
 					$(element).text(value.text);
-					if (value.selected)
+					if (value.selected) {
 						$(element).attr("selected", true);
+					}
 					break;
 
 				case 'select-multiple':
@@ -281,8 +282,9 @@
 				var type;
 				if (element.length > 0) {
 					var i = 0;
-					for (i = 0; i < element.length; i++)
+					for (i = 0; i < element.length; i++) {
 						setElementValue(element[i], obj, name);
+					}
 
 				} else {
 					setElementValue(element, obj, name);
