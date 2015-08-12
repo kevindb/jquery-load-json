@@ -1,4 +1,4 @@
-﻿/*
+/*
 * File:		jquery.loadJSON.js
 * Version:	1.2.5.
 * Author:	Jovan Popovic
@@ -23,8 +23,9 @@
 
 		function refreshMobileSelect(element) {
 			try {
-				if ($.isFunction($(element).selectmenu))
+				if ($.isFunction($(element).selectmenu)) {
 					$(element).selectmenu('refresh'); //used in the JQuery mobile
+				}
 			} catch (ex) {
 				try {
 					//$(element).selectmenu();//This will create duplicate select menu!!!!!
@@ -36,8 +37,9 @@
 
 		function refreshMobileCheckBox(element) {
 			try {
-				if ($.isFunction($(element).checkboxradio))
+				if ($.isFunction($(element).checkboxradio)) {
 					$(element).checkboxradio('refresh'); //used in the JQuery mobile
+				}
 			} catch (ex) { }
 		}
 
@@ -69,16 +71,16 @@
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////////
-			refreshMobileSelect(element)
+			refreshMobileSelect(element);
 			//////////////////////////////////////////////////////////////////////////////////////////
 
 		}
 
 		function setElementValue(element, value, name) {
 			var type = element.type || element.tagName;
-			if (type == null) {
+			if (type === null) {
 				type = element[0].type || element[0].tagName; //select returns undefined if called directly
-				if (type == null) {
+				if (type === null) {
 					return;
 				}
 			}
@@ -108,7 +110,7 @@
 				case 'select-multiple':
 					//This is "interesting". In mobile use element.options while in the desktop use element[0].options
 					var select = element[0];
-					if (element[0].options == null || typeof (element[0].options) == "undefined") {
+					if (element[0].options === null || typeof (element[0].options) == "undefined") {
 						select = element;
 					}
 					if (select.options.length > 1) {
@@ -148,7 +150,7 @@
 
 					var iPosition = href.indexOf('#');
 					if (iPosition > 1000000) {
-						href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition)
+						href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition);
 
 					} else {
 						iPosition = href.indexOf('?');
@@ -199,7 +201,7 @@
 		function browseJSON(obj, element, name) {
 
 			// no object
-			if (obj == undefined) {
+			if (obj === undefined) {
 			}
 			// branch
 			else if (obj.constructor == Object) {
@@ -208,7 +210,7 @@
 					//return;
 				}
 				for (var prop in obj) {
-					if (prop == null || typeof prop == "undefined")
+					if (prop === null || typeof prop == "undefined")
 						continue;
 					else {
 						//Find an element with class, id, name, or rel attribute that matches the propertu name
@@ -253,7 +255,7 @@
 						//how many duplicate
 						var nbToCreate = obj.length;
 						var i = 0;
-						if (element[0] == null || (element[0] != null && element[0].tagName != "OPTION")) {
+						if (element[0] === null || (element[0] !== null && element[0].tagName != "OPTION")) {
 							var iExist = 0;
 							for (iExist = 0; iExist < arr.length; iExist++) {
 								if (i < obj.length) {
@@ -262,7 +264,7 @@
 								}
 								i++;
 							}
-							var nbToCreate = obj.length - arr.length; ;
+							nbToCreate = obj.length - arr.length;
 						}
 						//fill started by last
 						i = obj.length - 1;
@@ -297,11 +299,13 @@
 		} //function browseJSON end
 
 		function init(placeholder) {
-			if (placeholder.data("loadJSON-template") != null && placeholder.data("loadJSON-template") != "") {
-				var template = placeholder.data("loadJSON-template");
+			var template;
+
+			if (placeholder.data("loadJSON-template") !== null && placeholder.data("loadJSON-template") != "") {
+				template = placeholder.data("loadJSON-template");
 				placeholder.html(template);
 			} else {
-				var template = placeholder.html()
+				template = placeholder.html();
 				placeholder.data("loadJSON-template", template);
 			}
 		}
