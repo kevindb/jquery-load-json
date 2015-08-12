@@ -89,17 +89,20 @@
 
 				case 'radio':
 					if (value.toString().toLowerCase() == element.value.toLowerCase()) {
-						$(element).attr("checked", "checked");
-						refreshMobileCheckBox(element);
+						$(element).prop('checked', true);
+					} else {
+						$(element).removeAttr('checked');
 					}
+					refreshMobileCheckBox(element);
 					break;
 
 				case 'checkbox':
 					if (value) {
-						//$(element).attr("checked", "checked");
-						$(element).attr("checked", true);
-						refreshMobileCheckBox(element);
+						$(element).prop('checked', true);
+					} else {
+						$(element).removeAttr('checked');
 					}
+					refreshMobileCheckBox(element);
 					break;
 				case 'option':
 					$(element).attr("value", value.value);
