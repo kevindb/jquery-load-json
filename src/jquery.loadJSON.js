@@ -110,25 +110,28 @@
 					break;
 
 				case 'select-multiple':
-					//This is "interesting". In mobile use element.options while in the desktop use element[0].options
+					// This is "interesting". In mobile use element.options while in the desktop use element[0].options
 					var select = element[0];
+
 					if (element[0].options === null || typeof (element[0].options) == "undefined") {
 						select = element;
 					}
 
 					if (select.options.length > 1) {
-						//If select list is not empty use values array to select optionses
+						// If select list is not empty use values array to select options
 						var values = value.constructor == Array ? value : [value];
-						//replaced element with element[0] ???? because now it reports that element.optons does not exists
+
+						// Replaced element with element[0] ???? because now it reports that element.options does not exist
 						for (var i = 0; i < select.options.length; i++) {
 							for (var j = 0; j < values.length; j++) {
 								select.options[i].selected |= select.options[i].value == values[j];
 							}
 						}
+
 						refreshMobileSelect(element);
 
 					} else {
-						//ELSE: Instead of selecting values use values array to populate select list
+						// Instead of selecting values use values array to populate select list
 						loadSelect(element, value, name);
 					}
 					break;
