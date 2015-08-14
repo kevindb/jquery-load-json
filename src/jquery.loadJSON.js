@@ -135,12 +135,12 @@
 
 				case 'select':
 				case 'select-one':
-					if (typeof value == "string") {
-						$(element).attr("value", value);
-						refreshMobileSelect(element);
+					if (typeof value === "array") {
+						loadSelect(element, value, name);
 
 					} else {
-						loadSelect(element, value, name);
+						$(element).val(value);
+						refreshMobileSelect($element);
 					}
 					break;
 
