@@ -19,24 +19,19 @@
 
 (function ($) {
 	$.fn.loadJSON = function (obj, options) {
-		function refreshMobileSelect(element) {
+		function refreshMobileSelect($element) {
 			try {
-				if ($.isFunction($(element).selectmenu)) {
-					$(element).selectmenu('refresh'); //used in the JQuery mobile
+				if ($.isFunction($element.selectmenu)) {
+					$element.selectmenu('refresh'); //used in the JQuery mobile
 				}
 
-			} catch (ex) {
-				try {
-					//$(element).selectmenu();//This will create duplicate select menu!!!!!
-					//$(element).selectmenu('refresh');
-				} catch (ex) { }
-			}
+			} catch (ex) { }
 		}
 
-		function refreshMobileCheckBox(element) {
+		function refreshMobileCheckBox($element) {
 			try {
-				if ($.isFunction($(element).checkboxradio)) {
-					$(element).checkboxradio('refresh'); //used in the JQuery mobile
+				if ($.isFunction($element.checkboxradio)) {
+					$element.checkboxradio('refresh'); //used in the JQuery mobile
 				}
 			} catch (ex) { }
 		}
@@ -69,11 +64,12 @@
 			}
 
 			///////////////////////////////////////////////////////////////////////////////////////////
-			refreshMobileSelect(element);
+			refreshMobileSelect($(element));
 			//////////////////////////////////////////////////////////////////////////////////////////
 		}
 
 		function setElementValue(element, value, name) {
+			var $element = $(element);
 			var type = element.type || element.tagName;
 			if (type === null) {
 				type = element[0].type || element[0].tagName; //select returns undefined if called directly
@@ -85,27 +81,27 @@
 			switch (type) {
 				case 'radio':
 					if (value.toString().toLowerCase() == element.value.toLowerCase()) {
-						$(element).prop('checked', true);
+						$element.prop('checked', true);
 					} else {
-						$(element).removeAttr('checked');
+						$element.removeAttr('checked');
 					}
-					refreshMobileCheckBox(element);
+					refreshMobileCheckBox($element);
 					break;
 
 				case 'checkbox':
 					if (value) {
-						$(element).prop('checked', true);
+						$element.prop('checked', true);
 					} else {
-						$(element).removeAttr('checked');
+						$element.removeAttr('checked');
 					}
-					refreshMobileCheckBox(element);
+					refreshMobileCheckBox($element);
 					break;
 
 				case 'option':
-					$(element).attr("value", value.value);
-					$(element).text(value.text);
+					$element.attr("value", value.value);
+					$element.text(value.text);
 					if (value.selected) {
-						$(element).attr("selected", true);
+						$element.attr("selected", true);
 					}
 					break;
 
@@ -128,7 +124,7 @@
 							}
 						}
 
-						refreshMobileSelect(element);
+						refreshMobileSelect($element);
 
 					} else {
 						// Instead of selecting values use values array to populate select list
@@ -142,7 +138,7 @@
 						loadSelect(element, value, name);
 
 					} else {
-						$(element).val(value);
+						$element.val(value);
 						refreshMobileSelect($element);
 					}
 					break;
@@ -156,11 +152,11 @@
 				case 'time':
 				case 'number':
 				case 'color':
-					$(element).val(value);
+					$element.val(value);
 					break;
 
 				case 'a':
-					var href = $(element).attr("href");
+					var href = $element.attr("href");
 					var iPosition = href.indexOf('#');
 
 					if (iPosition > 1000000) {
@@ -172,7 +168,7 @@
 						else//otherwise attach pair to URL
 							href = href + '?' + name + '=' + value;
 					}
-					$(element).attr("href", href);
+					$element.attr("href", href);
 					break;
 
 				case 'img':
@@ -192,13 +188,13 @@
 							var iPositionEnd = value.indexOf('.');
 							alt = value.substring(iPositionStart, iPositionEnd);
 						}
-						$(element).attr("src", src);
-						$(element).attr("alt", alt);
+						$element.attr("src", src);
+						$element.attr("alt", alt);
 
 					} else {
-						$(element).attr("src", obj.src);
-						$(element).attr("alt", obj.alt);
-						$(element).attr("title", obj.title);
+						$element.attr("src", obj.src);
+						$element.attr("alt", obj.alt);
+						$element.attr("title", obj.title);
 					}
 					break;
 
@@ -207,13 +203,15 @@
 				case 'button':
 				default:
 					try {
-						$(element).html(value.toString());
+						$element.html(value.toString());
 					} catch (exc) { }
 			}
 
 		}
 
 		function browseJSON(obj, element, name) {
+			var $element = $(element);
+
 			// no object
 			if (obj === undefined) {
 				// Do nothing
@@ -251,11 +249,12 @@
 					return;
 
 				} else {
-					var arrayElements = $(element).children("[rel]");
+					var arrayElements = $element.children("[rel]");
 					if (arrayElements.length > 0) {					//if there are rel=[index] elements populate them instead of iteration
 						arrayElements.each(function () {
-							var rel = $(this).attr("rel");
-							browseJSON(obj[rel], $(this), name);
+							var $this = $(this);
+							var rel = $this.attr("rel");
+							browseJSON(obj[rel], $this, name);
 						});
 
 					} else {										//recursive iteration
@@ -267,7 +266,7 @@
 							var iExist = 0;
 							for (iExist = 0; iExist < arr.length; iExist++) {
 								if (i < obj.length) {
-									var elem = $(element).eq(iExist);
+									var elem = $element.eq(iExist);
 									browseJSON(obj[i], elem, name);
 								}
 								i++;
@@ -323,16 +322,18 @@
 		properties = $.extend(defaults, options);
 
 		return this.each(function () {
+			var $this = $(this);
+
 			if (obj.constructor == String) {
 				if (obj.charAt(0) == '{' || obj.charAt(0) == '[') {
 					var data = $.parseJSON(obj);
-					init($(this));
+					init($this);
 					properties.onLoading();
 					browseJSON(data, this);
 					properties.onLoaded();
 				}
 				else {
-					var element = $(this);
+					var element = $this;
 					$.ajax({ url: obj,
 						success: function (data) {
 							element.loadJSON(data, properties);
@@ -344,7 +345,7 @@
 			}
 
 			else {
-				init($(this));
+				init($this);
 				properties.onLoading();
 				browseJSON(obj, this);
 				properties.onLoaded();
