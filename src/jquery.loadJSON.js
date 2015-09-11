@@ -238,7 +238,7 @@
 					if (prop === null || typeof prop == "undefined")
 						continue;
 					else {
-						//Find an element with class, id, name, or rel attribute that matches the propertu name
+						//Find an element with class, id, name, or rel attribute that matches the property name
 						var child = jQuery.makeArray(jQuery("." + prop, element)).length > 0 ? jQuery("." + prop, element) :
 													jQuery("#" + prop, element).length > 0 ? jQuery("#" + prop, element) :
 													jQuery('[name="' + prop + '"]', element).length > 0 ? jQuery('[name="' + prop + '"]', element) :
