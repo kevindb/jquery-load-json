@@ -146,7 +146,7 @@
 
 				case 'select':
 				case 'select-one':
-					if (typeof value === "array") {
+					if (value.constructor == Array) {
 						loadSelect(element, value, name);
 
 					} else {
