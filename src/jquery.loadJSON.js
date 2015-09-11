@@ -19,6 +19,16 @@
 
 (function ($) {
 	$.fn.loadJSON = function (obj, options) {
+		Array.prototype.contains = function(obj) {
+		    var i = this.length;
+		    while (i--) {
+		        if (this[i] == obj) {
+		            return true;
+		        }
+		    }
+		    return false;
+		}
+
 		function refreshMobileSelect($element) {
 			try {
 				if ($.isFunction($element.selectmenu)) {
@@ -89,7 +99,9 @@
 					break;
 
 				case 'checkbox':
-					if (value) {
+					var elementValue = $element.val();
+
+					if ((value.constructor == Array && value.contains(elementValue)) || value == elementValue) {
 						$element.prop('checked', true);
 					} else {
 						$element.removeAttr('checked');
@@ -247,6 +259,11 @@
 					///nova dva reda
 					setElementValue(element, obj, name);
 					return;
+
+				} else if (element.length > 0 && element[0].type == "checkbox") {
+					element.each(function() {
+						setElementValue(this, obj, name);
+					});
 
 				} else {
 					var arrayElements = $element.children("[rel]");
