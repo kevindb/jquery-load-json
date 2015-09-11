@@ -1,6 +1,6 @@
 /*
 * File:		jquery.loadJSON.js
-* Version:	1.2.5.
+* Version:	1.2.6
 * Author:	Jovan Popovic
 *
 * Copyright 2011 Jovan Popovic, all rights reserved.
