@@ -1,20 +1,19 @@
 /*
-* File:		jquery.loadJSON.js
-* Version:	1.2.6
-* Author:	Jovan Popovic
+* jQuery loadJSON plugin
+* v1.3.0
+* https://github.com/kevindb/jquery-load-json
 *
-* Copyright 2011 Jovan Popovic, all rights reserved.
+* This is a jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM.
 *
-* This source file is free software, under either the GPL v2 license or a
-* BSD style license, as supplied with this software.
+* Copyright 2015 Kevin Morris
+* Copyright 2011 Jovan Popovic
+* Copyright 2008 Alexandre Caprais
 *
-* This source file is distributed in the hope that it will be useful, but
-* WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-* or FITNESS FOR A PARTICULAR PURPOSE.
+* This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public
+* License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
 *
-* This file contains implementation of the JQuery templating engine that load JSON
-* objects into the HTML code. It is based on Alexandre Caprais notemplate plugin
-* with several enchancements that are added to this plugin.
+* This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
 */
 
 (function ($) {
