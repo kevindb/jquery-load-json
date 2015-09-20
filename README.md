@@ -1,12 +1,12 @@
-# JQuery loadJSON plugin
-This is a JQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM. No templating language is required - this plugin matches DOM elements in the HTML page with a JSON object using a DOM element properties.
+#jQuery loadJSON plugin
+This is a jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM. No templating language is required - this plugin matches DOM elements in the HTML page with a JSON object using a DOM element properties.
 
-## Usage
+##Usage
 To use loadJSON plugin two items should be defined:
   * HTML code that will be used as template
   * JSON object that will be used to populate template
 
-### HTML template
+###HTML template
 Template is plain HTML code. Only requirement is that elements that should be populated must have id, name, class, or rel attributes that have matching properties in the JSON object. Example of HTML template is shown below:
 ```
 		<div id="data">
@@ -20,7 +20,7 @@ Template is plain HTML code. Only requirement is that elements that should be po
 
 In the template h1 tag with id Name, and span tags with ids Address and Contact will be populated with JSON properties.
 
-### JSON object
+###JSON object
 Once HTML template is defined JSON object that will be used to populate template must be defines. Example of object that can populate template shown above is shown in the following listing:
 ```
 		data = {
@@ -31,7 +31,7 @@ Once HTML template is defined JSON object that will be used to populate template
 ```
 Object has three properties (Name, Address, and Contact) that will be injected into the template.
 
-### Binding JSON object to the template
+###Binding JSON object to the template
 Once HTML template and JSON object are defined, JSON object can be loaded into the HTML code. This can be achieved using the following line of JavaScript code:
 ```
 		$('div#data').loadJSON(data);
@@ -52,7 +52,7 @@ You can find detailed instructions how the plugin can be used in the following p
   1. [Using loadJSON plugin as a template engine](wiki/HTMLTemplate) where is explained how this plugin can be used for generating output based on template
   1. [Working with HTML forms](wiki/WorkingWithFormElements) where is explained how you can load HTML form with JavaScript object
 
-## Examples
+##Examples
 You can see few live examples where it is shown how loadJSON plugin can be used:
   1. [Creating list of elements](examples/list.html) - in this example is shown how the array of JSON objects can be bound to the simple HTML template,
   1. [Showing details of the JSON object](examples/details.html?ID=17) - this example shows how details about the single object can be bound to the HTML template,
@@ -69,7 +69,7 @@ You can see few live examples where it is shown how loadJSON plugin can be used:
 Exported from [code.google.com/p/jquery-load-json](https://code.google.com/p/jquery-load-json/) by Jovan Popovic
 Based on [notemplate plugin](https://code.google.com/p/notemplate/) by Alexandre Caprais
 
-## License
+##License
 
-This repository is licensed under the GNU Lesser General Public License v2.1.
+This repository is licensed under the GNU Lesser General Public License v2.1.  
 See [LICENSE](LICENSE.md) for details.
