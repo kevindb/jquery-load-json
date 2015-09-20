@@ -66,9 +66,10 @@ You can see few live examples where it is shown how loadJSON plugin can be used:
 
 ## Origin
 
-Exported from [code.google.com/p/jquery-load-json](https://code.google.com/p/jquery-load-json/)
+Exported from [code.google.com/p/jquery-load-json](https://code.google.com/p/jquery-load-json/) by Jovan Popovic
+Based on [notemplate plugin](https://code.google.com/p/notemplate/) by Alexandre Caprais
 
 ## License
 
-This repository is licensed under the GNU General Public License v2.
+This repository is licensed under the GNU Lesser General Public License v2.1.
 See [LICENSE](LICENSE.md) for details.
