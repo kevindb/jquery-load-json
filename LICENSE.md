@@ -502,8 +502,3 @@ necessary.  Here is a sample; alter the names:
   Ty Coon, President of Vice
 
 That's all there is to it!
-
-
-# jquery.loadJSON.js
-Copyright 2011, Jovan Popovic
-Based on notemplate plugin by Alexandre Caprais

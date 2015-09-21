@@ -64,10 +64,9 @@ You can see few live examples where it is shown how loadJSON plugin can be used:
   1. [Populating connected drop-downs  using the Ajax calls](examples/categories-ajax.html) - in this example is shown how you can load subcategories drop-downs when parent category drop-down is changed. Drop-down values are taken from the server-side via Ajax calls.
   1. [Populating connected dropdowns using LINQ](examples/linq.html) - in this example is shown how you can load subcategories dropdown when parent category dropdown is changed. Values are stored as a local JavaScript arrays and filtered using the LINQ library.
 
-## Origin
-
-Exported from [code.google.com/p/jquery-load-json](https://code.google.com/p/jquery-load-json/) by Jovan Popovic
-Based on [notemplate plugin](https://code.google.com/p/notemplate/) by Alexandre Caprais
+##Contributors
+This project has had several previous homes.
+See [CONTRIBUTORS](CONTRIBUTORS.md) for details.
 
 ##License
 
