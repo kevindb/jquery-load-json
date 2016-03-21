@@ -154,15 +154,22 @@
 					}
 					break;
 
-				case 'text':
-				case 'hidden':
-				case 'email':
-				case 'url':
+				case 'color':
 				case 'date':
 				case 'datetime':
-				case 'time':
+				case 'datetime-local':
+				case 'email':
+				case 'hidden':
+				case 'month':
 				case 'number':
-				case 'color':
+				case 'password':
+				case 'range':
+				case 'search':
+				case 'tel':
+				case 'text':
+				case 'time':
+				case 'url':
+				case 'week':
 					$element.val(value);
 					break;
 
