@@ -65,10 +65,10 @@
 				//duplicate the last
 				var last = template.clone(true).insertAfter(arr[arr.length - 1]);
 				//setElementValue(last, obj[i], name);
-				$(last).attr("value", obj[i].value);
+				$(last).attr('value', obj[i].value);
 				$(last).text(obj[i].text);
 				if (obj[i].selected)
-					$(last).attr("selected", true);
+					$(last).attr('selected', true);
 				i--;
 			}
 
@@ -109,10 +109,10 @@
 					break;
 
 				case 'option':
-					$element.attr("value", value.value);
+					$element.attr('value', value.value);
 					$element.text(value.text);
 					if (value.selected) {
-						$element.attr("selected", true);
+						$element.attr('selected', true);
 					}
 					break;
 
@@ -120,7 +120,7 @@
 					// This is "interesting". In mobile use element.options while in the desktop use element[0].options
 					var select = element[0];
 
-					if (element[0].options === null || typeof (element[0].options) == "undefined") {
+					if (element[0].options === null || typeof (element[0].options) == 'undefined') {
 						select = element;
 					}
 
@@ -174,7 +174,7 @@
 					break;
 
 				case 'a':
-					var href = $element.attr("href");
+					var href = $element.attr('href');
 					var iPosition = href.indexOf('#');
 
 					if (iPosition > 1000000) {
@@ -186,16 +186,16 @@
 						else//otherwise attach pair to URL
 							href = href + '?' + name + '=' + value;
 					}
-					$element.attr("href", href);
+					$element.attr('href', href);
 					break;
 
 				case 'img':
 
-					if (obj.constructor == "String") {
+					if (obj.constructor == 'String') {
 						//Assumption is that value is in the HREF$ALT format
 						var iPosition = value.indexOf('$');
-						var src = "";
-						var alt = "";
+						var src = '';
+						var alt = '';
 						if (iPosition > 0) {
 							src = value.substring(0, iPosition);
 							alt = value.substring(iPosition + 1);
@@ -206,13 +206,13 @@
 							var iPositionEnd = value.indexOf('.');
 							alt = value.substring(iPositionStart, iPositionEnd);
 						}
-						$element.attr("src", src);
-						$element.attr("alt", alt);
+						$element.attr('src', src);
+						$element.attr('alt', alt);
 
 					} else {
-						$element.attr("src", obj.src);
-						$element.attr("alt", obj.alt);
-						$element.attr("title", obj.title);
+						$element.attr('src', obj.src);
+						$element.attr('alt', obj.alt);
+						$element.attr('title', obj.title);
 					}
 					break;
 
@@ -236,17 +236,17 @@
 
 			// branch
 			} else if (obj.constructor == Object) {
-				if (element.length >= 1 && element[0].tagName == "OPTION") {
+				if (element.length >= 1 && element[0].tagName == 'OPTION') {
 					setElementValue(element[0], obj, name);
 				}
 
 				for (var prop in obj) {
-					if (prop === null || typeof prop == "undefined")
+					if (prop === null || typeof prop == 'undefined')
 						continue;
 					else {
 						//Find an element with class, id, name, or rel attribute that matches the property name
-						var child = jQuery.makeArray(jQuery("." + prop, element)).length > 0 ? jQuery("." + prop, element) :
-													jQuery("#" + prop, element).length > 0 ? jQuery("#" + prop, element) :
+						var child = jQuery.makeArray(jQuery('.' + prop, element)).length > 0 ? jQuery('.' + prop, element) :
+													jQuery('#' + prop, element).length > 0 ? jQuery('#' + prop, element) :
 													jQuery('[name="' + prop + '"]', element).length > 0 ? jQuery('[name="' + prop + '"]', element) :
 													jQuery('[rel="' + prop + '"]');
 						if (child.length != 0) {
@@ -258,25 +258,25 @@
 			// array
 			} else if (obj.constructor == Array) {
 				if (element.length == 1 &&
-						(element.type == "select" || element.type == "select-one" || element.type == "select-multiple" ||
-						element[0].type == "select" || element[0].type == "select-one" || element[0].type == "select-multiple"
+						(element.type == 'select' || element.type == 'select-one' || element.type == 'select-multiple' ||
+						element[0].type == 'select' || element[0].type == 'select-one' || element[0].type == 'select-multiple'
 					)) {
 
 					///nova dva reda
 					setElementValue(element, obj, name);
 					return;
 
-				} else if (element.length > 0 && element[0].type == "checkbox") {
+				} else if (element.length > 0 && element[0].type == 'checkbox') {
 					element.each(function() {
 						setElementValue(this, obj, name);
 					});
 
 				} else {
-					var arrayElements = $element.children("[rel]");
+					var arrayElements = $element.children('[rel]');
 					if (arrayElements.length > 0) {					//if there are rel=[index] elements populate them instead of iteration
 						arrayElements.each(function () {
 							var $this = $(this);
-							var rel = $this.attr("rel");
+							var rel = $this.attr('rel');
 							browseJSON(obj[rel], $this, name);
 						});
 
@@ -285,7 +285,7 @@
 						var template = $(arr[arr.length - 1]).clone(true);
 						var nbToCreate = obj.length;				//how many duplicate
 						var i = 0;
-						if (element[0] === null || (element[0] !== null && element[0].tagName != "OPTION")) {
+						if (element[0] === null || (element[0] !== null && element[0].tagName != 'OPTION')) {
 							var iExist = 0;
 							for (iExist = 0; iExist < arr.length; iExist++) {
 								if (i < obj.length) {
@@ -327,12 +327,12 @@
 		function init(placeholder) {
 			var template;
 
-			if (placeholder.data("loadJSON-template") !== null && placeholder.data("loadJSON-template") != "") {
-				template = placeholder.data("loadJSON-template");
+			if (placeholder.data('loadJSON-template') !== null && placeholder.data('loadJSON-template') != '') {
+				template = placeholder.data('loadJSON-template');
 				placeholder.html(template);
 			} else {
 				template = placeholder.html();
-				placeholder.data("loadJSON-template", template);
+				placeholder.data('loadJSON-template', template);
 			}
 		}
 
@@ -362,7 +362,7 @@
 							element.loadJSON(data, properties);
 						},
 						cache: false,
-						dataType: "json"
+						dataType: 'json'
 					});
 				}
 			}
