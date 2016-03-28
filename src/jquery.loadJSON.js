@@ -175,16 +175,21 @@
 
 				case 'a':
 					var href = $element.attr('href');
-					var iPosition = href.indexOf('#');
 
-					if (iPosition > 1000000) {
-						href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition);
-					} else {
-						iPosition = href.indexOf('?');
-						if (iPosition > 0) // if parameters in the URL exists add new pair using &
-							href += '&' + name + '=' + value;
-						else//otherwise attach pair to URL
-							href = href + '?' + name + '=' + value;
+					if (href) {					// If a href value exists, append value
+						var iPosition = href.indexOf('#');
+
+						if (iPosition > 1000000) {
+							href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition);
+						} else {
+							iPosition = href.indexOf('?');
+							if (iPosition > 0)	// If parameters in the URL exists add new pair using &
+								href += '&' + name + '=' + value;
+							else				//otherwise attach pair to URL
+								href = href + '?' + name + '=' + value;
+						}
+					} else {					// If no href exists, set href to value
+						href = value;
 					}
 					$element.attr('href', href);
 					break;
