@@ -270,7 +270,10 @@
 					///nova dva reda
 					setElementValue(element, obj, name);
 					return;
-
+				} else if (element.length > 0 && element.filter('input:hidden').length > 0 && element.filter(':checkbox').length > 0) {
+					element.filter(':checkbox').each(function () {
+						setElementValue(this, obj, name);
+					});
 				} else if (element.length > 0 && element[0].type == 'checkbox') {
 					element.each(function() {
 						setElementValue(this, obj, name);
@@ -318,11 +321,14 @@
 				var value = obj;
 				var type;
 				if (element.length > 0) {
-					var i = 0;
-					for (i = 0; i < element.length; i++) {
-						setElementValue(element[i], obj, name);
+					if (element.filter('input:hidden').length > 0 && element.filter(':checkbox').length > 0) {
+						setElementValue(element.filter(':checkbox').first()[0], obj, name);
+					} else {
+						var i = 0;
+						for (i = 0; i < element.length; i++) {
+							setElementValue(element[i], obj, name);
+						}
 					}
-
 				} else {
 					setElementValue(element, obj, name);
 				}
