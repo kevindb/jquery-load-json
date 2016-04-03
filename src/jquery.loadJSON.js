@@ -55,13 +55,12 @@
 
 			var arr = jQuery.makeArray(element);
 			var template = $(arr[arr.length - 1]).clone(true);
-			//how many duplicate
-			var nbToCreate = obj.length;
-			var i = 0;
+
 			//fill started by last
-			i = obj.length - 1;
-			var iCreate = 0;
-			for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
+			var objLen = obj.length;
+			var i = objLen - 1;
+
+			for (var iCreate=0; iCreate < objLen; ++iCreate) {
 				//duplicate the last
 				var last = template.clone(true).insertAfter(arr[arr.length - 1]);
 				//setElementValue(last, obj[i], name);
@@ -287,26 +286,27 @@
 
 					} else {										//recursive iteration
 						var arr = jQuery.makeArray(element);
-						var template = $(arr[arr.length - 1]).clone(true);
+						var arrLen = arr.length;
+						var template = $(arr[arrLen - 1]).clone(true);
 						var nbToCreate = obj.length;				//how many duplicate
 						var i = 0;
+
 						if (element[0] === null || (element[0] !== null && element[0].tagName != 'OPTION')) {
-							var iExist = 0;
-							for (iExist = 0; iExist < arr.length; iExist++) {
+							for (var iExist=0; iExist < arrLen; ++iExist) {
 								if (i < obj.length) {
 									var elem = $element.eq(iExist);
 									browseJSON(obj[i], elem, name);
 								}
 								i++;
 							}
-							nbToCreate = obj.length - arr.length;
+							nbToCreate = obj.length - arrLen;
 						}
+
 						//fill started by last
 						i = obj.length - 1;
-						var iCreate = 0;
-						for (iCreate = 0; iCreate < nbToCreate; iCreate++) {
+						for (var iCreate=0; iCreate < nbToCreate; ++iCreate) {
 							//duplicate the last
-							var last = template.clone(true).insertAfter(arr[arr.length - 1]);
+							var last = template.clone(true).insertAfter(arr[arrLen - 1]);
 							browseJSON(obj[i], last, name);
 							i--;
 						}
@@ -316,10 +316,10 @@
 			// data only
 			} else {
 				var value = obj;
-				var type;
-				if (element.length > 0) {
-					var i = 0;
-					for (i = 0; i < element.length; i++) {
+				var elemLen = element.length;
+
+				if (elemLen > 0) {
+					for (var i=0; i < elemLen; ++i) {
 						setElementValue(element[i], obj, name);
 					}
 
