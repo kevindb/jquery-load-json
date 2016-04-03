@@ -181,6 +181,7 @@
 
 						if (iPosition > 1000000) {
 							href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition);
+
 						} else {
 							iPosition = href.indexOf('?');
 
@@ -190,9 +191,11 @@
 								href = href + '?' + name + '=' + value;
 							}
 						}
+
 					} else {					// If no href exists, set href to value
 						href = value;
 					}
+
 					$element.attr('href', href);
 					break;
 
@@ -203,6 +206,7 @@
 						var iPosition = value.indexOf('$');
 						var src = '';
 						var alt = '';
+
 						if (iPosition > 0) {
 							src = value.substring(0, iPosition);
 							alt = value.substring(iPosition + 1);
@@ -213,6 +217,7 @@
 							var iPositionEnd = value.indexOf('.');
 							alt = value.substring(iPositionStart, iPositionEnd);
 						}
+
 						$element.attr('src', src);
 						$element.attr('alt', alt);
 
@@ -257,6 +262,7 @@
 													jQuery('#' + prop, element).length > 0 ? jQuery('#' + prop, element) :
 													jQuery('[name="' + prop + '"]', element).length > 0 ? jQuery('[name="' + prop + '"]', element) :
 													jQuery('[rel="' + prop + '"]');
+
 						if (child.length != 0) {
 							browseJSON(obj[prop], jQuery(child, element), prop);
 						}
