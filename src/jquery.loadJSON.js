@@ -66,8 +66,9 @@
 				//setElementValue(last, obj[i], name);
 				$(last).attr('value', obj[i].value);
 				$(last).text(obj[i].text);
-				if (obj[i].selected)
+				if (obj[i].selected) {
 					$(last).attr('selected', true);
+				}
 				i--;
 			}
 
@@ -182,10 +183,12 @@
 							href = href.substr(0, iPosition) + '&' + name + '=' + value + href.substr(iPosition);
 						} else {
 							iPosition = href.indexOf('?');
-							if (iPosition > 0)	// If parameters in the URL exists add new pair using &
+
+							if (iPosition > 0) {	// If parameters in the URL exists add new pair using &
 								href += '&' + name + '=' + value;
-							else				//otherwise attach pair to URL
+							} else {				//otherwise attach pair to URL
 								href = href + '?' + name + '=' + value;
+							}
 						}
 					} else {					// If no href exists, set href to value
 						href = value;
@@ -245,9 +248,10 @@
 				}
 
 				for (var prop in obj) {
-					if (prop === null || typeof prop == 'undefined')
+					if (prop === null || typeof prop == 'undefined') {
 						continue;
-					else {
+
+					} else {
 						//Find an element with class, id, name, or rel attribute that matches the property name
 						var child = jQuery.makeArray(jQuery('.' + prop, element)).length > 0 ? jQuery('.' + prop, element) :
 													jQuery('#' + prop, element).length > 0 ? jQuery('#' + prop, element) :
