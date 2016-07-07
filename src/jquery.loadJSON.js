@@ -92,7 +92,7 @@
 					if (value.toString().toLowerCase() == element.value.toLowerCase()) {
 						$element.prop('checked', true);
 					} else {
-						$element.removeAttr('checked');
+						$element.prop('checked', false);
 					}
 					refreshMobileCheckBox($element);
 					break;
@@ -103,7 +103,7 @@
 					if ((value.constructor == Array && value.contains(elementValue)) || value == elementValue) {
 						$element.prop('checked', true);
 					} else {
-						$element.removeAttr('checked');
+						$element.prop('checked', false);
 					}
 					refreshMobileCheckBox($element);
 					break;
