@@ -253,7 +253,7 @@
 				}
 
 				for (var prop in obj) {
-					if (prop === null || typeof prop == 'undefined') {
+					if (prop === null || typeof prop == 'undefined' || prop.length == 0) {
 						continue;
 
 					} else {
