@@ -1,6 +1,15 @@
 #jQuery loadJSON plugin
 This is a jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM. No templating language is required - this plugin matches DOM elements in the HTML page with a JSON object using a DOM element properties.
 
+##Community
+Want to contribute to jQuery loadJSON? Awesome! See [CONTRIBUTING](CONTRIBUTING.md) for more information.
+
+###Code of Conduct
+Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md) to ensure that this project is a welcoming place for **everyone** to contribute to. By participating in this project you agree to abide by its terms.
+
+##Requirements
+Requires jQuery 1.7+.
+
 ##Usage
 To use loadJSON plugin two items should be defined:
   * HTML code that will be used as template
