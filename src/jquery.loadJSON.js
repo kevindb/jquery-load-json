@@ -42,6 +42,8 @@
     }
 
 }(function ($) {
+	"use strict";
+
 	$.fn.loadJSON = function (obj, options) {
 		Array.prototype.contains = function(obj) {
 		    var i = this.length;
@@ -51,7 +53,7 @@
 		        }
 		    }
 		    return false;
-		}
+		};
 
 		function refreshMobileSelect($element) {
 			try {
@@ -278,7 +280,7 @@
 				}
 
 				for (var prop in obj) {
-					if (prop === null || typeof prop == 'undefined' || prop.length == 0) {
+					if (prop === null || typeof prop == 'undefined' || prop.length === 0) {
 						continue;
 
 					} else {
@@ -288,7 +290,7 @@
 													jQuery('[name="' + prop + '"]', element).length > 0 ? jQuery('[name="' + prop + '"]', element) :
 													jQuery('[rel="' + prop + '"]');
 
-						if (child.length != 0) {
+						if (child.length !== 0) {
 							browseJSON(obj[prop], jQuery(child, element), prop);
 						}
 					}
@@ -350,7 +352,6 @@
 
 			// data only
 			} else {
-				var value = obj;
 				var elemLen = element.length;
 
 				if (elemLen > 0) {
@@ -382,7 +383,7 @@
 			mobile: false
 		};
 
-		properties = $.extend(defaults, options);
+		var properties = $.extend(defaults, options);
 
 		return this.each(function () {
 			var $this = $(this);
