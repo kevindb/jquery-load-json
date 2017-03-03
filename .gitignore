@@ -235,7 +235,6 @@ App_Data/*.ldf
 # Packages
 *.egg
 *.egg-info
-dist/
 build/
 eggs/
 parts/
