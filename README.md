@@ -10,6 +10,15 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 ##Requirements
 Requires jQuery 1.7+.
 
+##Download
+* **Development:** [src/jquery.loadJSON.js](https://github.com/kevindb/jquery-load-json/blob/master/src/jquery.loadJSON.js)
+* **Production/Minified:** [dist/jquery.loadJSON.min.js](https://github.com/kevindb/jquery-load-json/blob/master/dist/jquery.form.min.js)
+
+###CDN
+```html
+<script src="https://cdn.rawgit.com/kevindb/jquery-load-json/v1.3.3/dist/jquery.loadJSON.min.js" integrity="sha384-fG4z44FEBJnIevyzvSDobSmVTsO/oVsxNvKcUl7bO1ihWYDPg2QI83Xi+7wSBzap" crossorigin="anonymous"></script>
+```
+
 ##Usage
 To use loadJSON plugin two items should be defined:
   * HTML code that will be used as template
