@@ -4,6 +4,7 @@ Want to contribute to jQuery loadJSON? That's great! Contributions are most welc
 Here are a couple of guidelines that will help you contribute. Before we get started: Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md) to ensure that this project is a welcoming place for **everyone** to contribute to. By participating in this project you agree to abide by its terms.
 
 #### Overview
+
 * [Contribution workflow](#contribution-workflow)
 * [Reporting a bug](#reporting-a-bug)
 * [Contributing to an existing issue](#contributing-to-an-existing-issue)
@@ -12,11 +13,11 @@ Here are a couple of guidelines that will help you contribute. Before we get sta
 
 ## Contribution workflow
 
-* Fork the repository in GitHub with the `Fork` button.
-* Switch to a new branch (ie. `new-feature`), and work from there:  
+1. Fork the repository in GitHub with the `Fork` button.
+2. Switch to a new branch (ie. `new-feature`), and work from there:  
   `git checkout -b new-feature`
-* Make your feature addition or bug fix.
-* Send a pull request (PR). Bonus points for topic branches.
+3. Make your feature addition or bug fix.
+4. Send a pull request (PR). Bonus points for topic branches.
   * Please make sure all of your commits are atomic (one feature per commit).
   * Use sensible commit messages.
     * Always write a clear log message for your commits. One-line messages are fine for small changes, but bigger changes should look like this:
@@ -26,12 +27,12 @@ Here are a couple of guidelines that will help you contribute. Before we get sta
     >
     > A paragraph describing what changed and its impact."
 ```
-
   * If your PR fixes a separate issue number, include it in the commit message.
 
 ### Things to keep in mind
+
 * Smaller PRs are likely to be merged more quickly than bigger changes.
-* If it is a useful PR it **will** get merged in eventually.
+* If it is a useful PR, it **will** get merged in eventually.
 * This project is using [Semantic Versioning 2.0.0](http://semver.org/)
 
 ## Reporting a bug
@@ -39,8 +40,10 @@ Here are a couple of guidelines that will help you contribute. Before we get sta
 So you've found a bug, and want to help us fix it? Before filing a bug report, please double-check the bug hasn't already been reported. You can do so [on our issue tracker](https://github.com/kevindb/jquery-load-json/issues?q=is%3Aopen+is%3Aissue). If something hasn't been raised, you can go ahead and create a new issue with the following information:
 
 * Which version of the plugin are you using?
+* Which version of the jQuery library are you using?
+* What browsers (and versions) have you tested in?
 * How can the error be reproduced?
-* If possible, include a link to a [CodePen](https://codepen.io/) or [JSFiddle](https://jsfiddle.net/) example of the error.
+* If possible, include a link to a [JSFiddle](https://jsfiddle.net/) or [CodePen](https://codepen.io/) example of the error.
 
 If you want to be really thorough, there is a great overview on Stack Overflow of [what you should consider when reporting a bug](https://stackoverflow.com/questions/240323/how-to-report-bugs-the-smart-way).
 
@@ -64,6 +67,7 @@ And if at any point you get stuck: don't hesitate to ask for help.
 We've outlined the contribution workflow [here](#contribution-workflow). If you're a first-timer, don't worry! GitHub has a ton of guides to help you through your first pull request: You can find out more about pull requests [here](https://help.github.com/articles/about-pull-requests/) and about creating a pull request [here](https://help.github.com/articles/creating-a-pull-request/).
 
 ## Feature Requests
+
 * You can _request_ a new feature by [submitting an issue](https://github.com/kevindb/jquery-load-json/issues).
 * If you would like to _implement_ a new feature:
   * For a **Major Feature**, first open an issue and outline your proposal so that it can be discussed. This will also allow us to better coordinate our efforts, prevent duplication of work, and help you to craft the change so that it is successfully accepted into the project.
