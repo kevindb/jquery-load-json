@@ -269,8 +269,8 @@
 		function browseJSON(obj, element, name) {
 			var $element = $(element);
 
-			// no object
-			if (obj === undefined) {
+			// no object: obj mayby undefined or null,so use unstrict 
+			if (obj == undefined) {
 				// Do nothing
 
 			// branch
@@ -327,8 +327,8 @@
 						var template = $(arr[arrLen - 1]).clone(true);
 						var nbToCreate = obj.length;				//how many duplicate
 						var i = 0;
-
-						if (element[0] === null || (element[0] !== null && element[0].tagName != 'OPTION')) {
+                        //use unstrict ==,when element[0] is undefined,the second conditon will not execute  
+						if (element[0] == null || (element[0] != null && element[0].tagName != 'OPTION')) {
 							for (var iExist=0; iExist < arrLen; ++iExist) {
 								if (i < obj.length) {
 									var elem = $element.eq(iExist);
