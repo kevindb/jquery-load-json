@@ -70,9 +70,9 @@ As a result 'data' object will be loaded into the HTML fragment with id data. Re
 ```
 
 You can find detailed instructions how the plugin can be used in the following pages:
-  1. [How to load object into the HTML element](wiki/LoadingHTMLElements) where is explained how the JavaScript objects are loaded in the HTML elements
-  1. [Using loadJSON plugin as a template engine](wiki/HTMLTemplate) where is explained how this plugin can be used for generating output based on template
-  1. [Working with HTML forms](wiki/WorkingWithFormElements) where is explained how you can load HTML form with JavaScript object
+  1. [How to load object into the HTML element](https://github.com/kevindb/jquery-load-json/wiki/LoadingHTMLElements) where is explained how the JavaScript objects are loaded in the HTML elements
+  1. [Using loadJSON plugin as a template engine](https://github.com/kevindb/jquery-load-json/wiki/HTMLTemplate) where is explained how this plugin can be used for generating output based on template
+  1. [Working with HTML forms](https://github.com/kevindb/jquery-load-json/wiki/WorkingWithFormElements) where is explained how you can load HTML form with JavaScript object
 
 ## Examples
 You can see few live examples where it is shown how loadJSON plugin can be used:
