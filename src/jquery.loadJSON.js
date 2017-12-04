@@ -270,7 +270,7 @@
 			var $element = $(element);
 
 			// no object
-			if (obj === undefined) {
+			if (obj === undefined || obj === null) {
 				// Do nothing
 
 			// branch
