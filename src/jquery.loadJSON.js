@@ -328,7 +328,7 @@
 						var nbToCreate = obj.length;				//how many duplicate
 						var i = 0;
 
-						if (element[0] === null || (element[0] !== null && element[0].tagName != 'OPTION')) {
+						if ($element[0] === null || ($element[0] !== null && $element[0].tagName != 'OPTION')) {
 							for (var iExist=0; iExist < arrLen; ++iExist) {
 								if (i < obj.length) {
 									var elem = $element.eq(iExist);
