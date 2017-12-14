@@ -86,15 +86,16 @@ describe("arrays", function () {
       expect(texts($root.find(".p"))).toEqual(["1", "2"]);
     });
 
-    it("should throw for an element that is not a select or form", function () {
-      const $list = fixture('<ul><li class="i"></li></ul>');
+    it("should repeat an element that is not a select or form, once per item", function () {
+      const $root = fixture('<div><ul><li class="i"></li></ul></div>');
 
-      const load = () => $list.loadJSON([{ i: 1 }, { i: 2 }]);
+      $root.find("ul").loadJSON([{ i: 1 }, { i: 2 }]);
 
-      expect(load).toThrow(TypeError);
+      expect($root.find("ul").length).toBe(2);
+      expect(texts($root.find(".i"))).toEqual(["1", "2"]);
     });
 
-    it.fails("should load each item into a copy of the element (#28)", function () {
+    it("should load each item into a copy of the element (#28)", function () {
       const $root = fixture('<div><p class="item"><b class="n"></b></p></div>');
 
       $root.find(".item").loadJSON([{ n: 1 }, { n: 2 }]);
