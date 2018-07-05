@@ -1,6 +1,6 @@
 /*!
 * jQuery loadJSON plugin
-* v1.3.3
+* v1.3.4
 * https://github.com/kevindb/jquery-load-json
 *
 * This is a jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM.
