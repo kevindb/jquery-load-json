@@ -16,11 +16,11 @@ Requires jQuery 1.7+.
 
 ### CDN
 ```html
-<script src="https://cdn.jsdelivr.net/gh/kevindb/jquery-load-json@1.3.3/dist/jquery.loadJSON.min.js" integrity="sha384-fG4z44FEBJnIevyzvSDobSmVTsO/oVsxNvKcUl7bO1ihWYDPg2QI83Xi+7wSBzap" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/gh/kevindb/jquery-load-json@1.3.4/dist/jquery.loadJSON.min.js" integrity="sha384-ivtX4sn4dcdfHiO4e0/956wIQSerxsy2QZ6EHzdCVLlyGYYjSb8bqdxKY8IsfDGh" crossorigin="anonymous"></script>
 ```
 or
 ```html
-<script src="https://cdn.rawgit.com/kevindb/jquery-load-json/v1.3.3/dist/jquery.loadJSON.min.js" integrity="sha384-fG4z44FEBJnIevyzvSDobSmVTsO/oVsxNvKcUl7bO1ihWYDPg2QI83Xi+7wSBzap" crossorigin="anonymous"></script>
+<script src="https://cdn.rawgit.com/kevindb/jquery-load-json/v1.3.4/dist/jquery.loadJSON.min.js" integrity="sha384-ivtX4sn4dcdfHiO4e0/956wIQSerxsy2QZ6EHzdCVLlyGYYjSb8bqdxKY8IsfDGh" crossorigin="anonymous"></script>
 ```
 
 ## Usage
