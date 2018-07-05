@@ -147,7 +147,7 @@
 					// This is "interesting". In mobile use element.options while in the desktop use element[0].options
 					var select = element[0];
 
-					if (element[0].options === null || typeof (element[0].options) == 'undefined') {
+					if (typeof select === 'undefined' || !select.hasOwnProperty('options') || typeof select.options === 'undefined' || select.options === null) {
 						select = element;
 					}
 
