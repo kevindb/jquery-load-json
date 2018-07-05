@@ -17,10 +17,10 @@
     "url": "https://github.com/kevindb/jquery-load-json.git"
   },
   "dependencies": {
-    "jquery": ">=1.7.2"
+    "jquery": "^3.3.1"
   },
   "devDependencies": {
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.3",
     "grunt-contrib-uglify": "^3.0.1"
   }
 }
