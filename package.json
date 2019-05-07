@@ -16,8 +16,9 @@
   "bugs": "https://github.com/kevindb/jquery-load-json/issues",
   "license": "LGPL-2.1",
   "contributors": [
-    "Mike Alsup",
-    "Kevin Morris"
+    "Kevin Morris",
+    "Jovan Popovic",
+    "Alexandre Caprais"
   ],
   "main": "src/jquery.loadJSON.js",
   "browser": "dist/jquery.loadJSON.min.js",
@@ -26,10 +27,10 @@
     "url": "https://github.com/kevindb/jquery-load-json.git"
   },
   "dependencies": {
-    "jquery": "^3.3.1"
+    "jquery": "^3.4.1"
   },
   "devDependencies": {
-    "grunt": "^1.0.3",
+    "grunt": "^1.0.4",
     "grunt-contrib-uglify": "^3.4.0"
   }
 }
