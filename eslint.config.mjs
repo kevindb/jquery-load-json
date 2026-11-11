@@ -54,5 +54,10 @@ export default [
     ],
     languageOptions: { globals: { ...globals.node } },
   },
+  {
+    // page.evaluate callbacks run in the browser page, which has jQuery as $.
+    files: ["test/e2e/**/*.spec.mjs"],
+    languageOptions: { globals: { ...globals.node, ...globals.browser, $: "readonly" } },
+  },
   prettier,
 ];
