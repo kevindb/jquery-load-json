@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { JSDOM } from "jsdom";
 
 const require = createRequire(import.meta.url);
-const pluginPath = require.resolve("../../src/jquery.loadJSON.js");
+const pluginPath = require.resolve("../../dist/jquery.loadJSON.js");
 const jqueryPath = require.resolve("jquery");
 
 // Loads a file fresh, as Node's require would for a new consumer.
@@ -21,7 +21,7 @@ afterEach(function () {
   delete globalThis.window;
 });
 
-describe("the UMD wrapper", function () {
+describe("the classic build", function () {
   describe("when required from CommonJS", function () {
     it("should export a factory that adds loadJSON to the jQuery it is given", function () {
       const window = newWindow();
@@ -53,7 +53,7 @@ describe("the UMD wrapper", function () {
       expect(typeof jQuery.fn.loadJSON).toBe("function");
     });
 
-    it.fails("should load data with no global jQuery", function () {
+    it("should load data with no global jQuery", function () {
       const window = newWindow();
       const jQuery = requireFresh(pluginPath)(window, requireFresh(jqueryPath)(window));
 

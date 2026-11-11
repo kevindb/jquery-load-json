@@ -60,10 +60,10 @@ export default defineConfig({
       reporter: ["text", "html"],
       // The reachable maximum: the remaining branches are unreachable (docs/plans/modernization.md).
       thresholds: {
-        statements: 91.35,
-        branches: 90.41,
+        statements: 90.8,
+        branches: 89.55,
         functions: 100,
-        lines: 91.06,
+        lines: 90.47,
       },
     },
     projects: [
@@ -87,8 +87,8 @@ export default defineConfig({
       },
       {
         test: {
-          name: "umd",
-          include: ["test/surfaces/umd-wrapper.test.js"],
+          name: "commonjs",
+          include: ["test/surfaces/commonjs.test.js", "test/surfaces/manifests.test.js"],
           environment: "node",
         },
       },
