@@ -133,6 +133,15 @@ Status: done 2026-11-11 (see Findings).
 Done when: `npm test` passes locally, CI is green on the PR for all 9 jQuery x browser cells,
 `npm pack --dry-run` lists only the intended files, and coverage is unchanged from Phase 1.
 
+Status (paused 2026-11-11): done: `master` renamed to `main`; `src` is an ES module built by Rollup
+(classic UMD + `.mjs` + min/map); ESLint + Prettier with the sweep and `.git-blame-ignore-revs`;
+Grunt and `.editorconfig` removed; browser surface, CommonJS/AMD, manifest and Playwright e2e tests;
+metadata (license id, `jquery >=1.7`, `main`/`module`/`browser`/`jsdelivr`/`unpkg`, `files`).
+Coverage re-baselined to 90.8 / 89.55 / 100 / 90.47 after the UMD wrapper moved into the build;
+the same 14 dead branches remain. Left: `npm test` script (lint + format + build + coverage + other
+browsers), `ci.yml` / `codeql.yml` / `release.yml` / `dependabot.yml` / `ISSUE_TEMPLATE/`, `SECURITY.md`
+and private vulnerability reporting, repo description/topics, then push and get CI green.
+
 ## Phase 3: Architecture review
 
 - The maintainer runs `/improve-codebase-architecture` on the formatted, fully tested source.
