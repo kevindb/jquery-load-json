@@ -5,8 +5,9 @@ phases or link here.
 
 Template: `~/Sites/jquery-form/form` (Vitest browser mode, Rollup dual build, ESLint flat + Prettier,
 GitHub Actions CI/CodeQL/release with npm trusted publishing). Copy and adapt; do not invent new
-tooling. Its heavier process (stacked phase branches, mutation testing, probe suites, CodeQL canary,
-CI timing instrumentation, model tables) is out of scope.
+tooling. Its heavier process (stacked phase branches, probe suites, CodeQL canary, CI timing
+instrumentation, model tables) is out of scope. Mutation testing is in, as jquery-form ran it: one-off
+local Stryker reports, not a dependency or a CI step (Phase 4).
 
 ## Starting state (2026-11-11)
 
@@ -158,7 +159,18 @@ Phase 5, after this PR merges. ESLint warnings left for the refactors: `no-redec
 
 Done when: every opportunity has a disposition in the findings section.
 
+Status: review done 2026-11-11; eight opportunities, each with a disposition (see Findings,
+Architecture review). Open before Phase 4 starts: the image pin question and the proposed
+`GLOSSARY.md` terms, both listed there.
+
 ## Phase 4: 1.x fixes and refactors (non-breaking)
+
+- First, a one-off mutation-testing report: Stryker run locally with `npx` (not added to
+  `devDependencies` or CI) over `src/jquery.loadJSON.js` against the Vitest suite on Chromium with
+  jQuery 3.7.1; timeouts count as detected. Record the score and the surviving mutants in Findings,
+  then add tests for the gaps before any refactor, through `$.fn.loadJSON` only. A survivor that
+  sits in a dead branch is listed, not tested. Survivors in `setElementValue` and the key match
+  matter most: A2 and A3 split them. Re-run once the 1.x refactors are in and record both scores.
 
 - Land #28 by rebasing its commit onto the branch (keeps Francesco Angi's authorship); add them to
   `CONTRIBUTORS.md`.
@@ -167,8 +179,21 @@ Done when: every opportunity has a disposition in the findings section.
   keys, `img` string format, `a` encoding, template caching. A fix that changes a pinned behavior
   waits for 2.0.
 - The 1.x refactors from Phase 3, each its own `refactor` commit with the suite green before and
-  after. Bug fixes and refactors are not mixed in one commit.
-- Add the `debug` flag and a warning at each 2.0 removal point.
+  after. Bug fixes and refactors are not mixed in one commit. Order (each step names the review
+  item, see Findings):
+  1. A1: move the inner functions to module scope; pass the outer argument as `data` where today's
+     behavior reads it.
+  2. Fix commits for select (array by key x2, own values, one-option multiple), image (string,
+     object) and link (fragment). Each fix comes before the A2 refactor, because the dead branches
+     only go away with the fix that makes them live or removes them.
+  3. A2: element-kind module (`kindOf` + one function per kind).
+  4. A5: legacy module (`contains`, Mobile refresh, `notice(id)` behind `$.fn.loadJSON.debug`);
+     checkbox stops using `contains`.
+  5. A3: key-match module, then the selector-escaping fix in it.
+  6. #28, then A4 (kinds take whole values; walk split by value shape) and A6 (argument
+     normalization with the `JSON.parse` fix).
+- Add the `debug` flag and a deprecation notice at each 2.0 removal point (sites in Findings,
+  Architecture review).
 - Docs: README landing page, `docs/` from the wiki, examples on GitHub Pages, CDN snippets,
   `SECURITY.md`, CONTRIBUTING updated for the new commands.
 
@@ -197,6 +222,10 @@ listed PRs and issues are closed.
 - `jquery` moves from `dependencies` to `peerDependencies` at the chosen floor; `exports` map.
 - Remove the approved list (below) and its 1.4 warnings; drop shims for jQuery below the floor and
   the 1.7.2 cell from the matrix (replace with the floor version).
+- On the 1.x shapes (review item A7): delete the legacy module and its call sites; drop the rel
+  step from match and the rel-children arm from the walk; escape keys with `$.escapeSelector`
+  (fixes dot keys); content kind uses `.text()` unless `html: true`; template reset inside the
+  load path; link kind encodes values; argument normalization loses the URL arm.
 - `docs/migrating-to-2.md`: each removal, the 1.4 warning text that announced it, and the replacement.
 - Coverage to 100% once the dead branches are gone.
 - Release as in Phase 5 on `release-2.0`; cut `release/1.x` from `v1.4.x` and tag `v1` on npm.
@@ -216,24 +245,24 @@ Root cause of several bugs: commit 96d1690 ("Minor changes to pass JSHint", 2015
 
 ### Bugs (`it.fails`, intended behavior)
 
-| Bug                                                                                                                   | Test                                             | Fix in                                             |
-| --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------- |
-| JSON-string argument throws on jQuery 4 (`$.parseJSON` removed)                                                       | arguments: JSON string (x3, 4.0 only)            | 1.x                                                |
-| Plugin body calls the global `jQuery`; CommonJS with no global can register but not load                              | umd-wrapper: no global jQuery                    | 1.x                                                |
-| Loading an array into the plugin's own element throws reading `element[0].tagName` (#28)                              | arrays: copy of the element (#28)                | 1.x (land #28)                                     |
-| Array value for a select by key throws (`type === null` misses `undefined`)                                           | form-fields: select array by key                 | 1.x                                                |
-| Array of values for a multiple select by key throws (same cause)                                                      | form-fields: multiple select array               | 1.x                                                |
-| `loadSelect` reads the outer argument, not its own values, so options are added only when the select itself is loaded | covered by the two above once they stop throwing | 1.x                                                |
-| Scalar into a multiple select with one option is ignored (`options.length > 1`, from 1.3.4)                           | form-fields: one-option multiple select          | 1.x                                                |
-| String image value is ignored (`obj.constructor == 'String'` is never true)                                           | links-images: src string                         | 1.x (value as `src` only; no `src$alt`)            |
-| Object image value `{src, alt, title}` is ignored; images read the outer argument                                     | links-images: object value                       | 1.x                                                |
-| Link parameter is appended after a `#fragment`                                                                        | links-images: before a fragment                  | 1.x                                                |
-| Key that is not a valid selector throws on jQuery 3/4, misses on 1.7                                                  | matching: not a valid selector                   | 1.x (retry with the key escaped)                   |
-| Key with a dot builds a compound selector (`.a.b`)                                                                    | matching: class containing a dot                 | 2.0 (1.x pins it)                                  |
-| `rel` lookup ignores the loaded element and searches the document                                                     | matching: rel outside                            | 2.0 removes `rel`; 1.x warns under `debug`         |
-| Link values are not URL-encoded                                                                                       | links-images: encode the value                   | 2.0 (encoding changes existing output)             |
-| Template is never cached, so a second call loads into the first call's output                                         | template: original markup                        | 2.0 (resetting the DOM drops handlers bound since) |
-| `Array.prototype.contains` is enumerable on every array                                                               | side-effects: enumerable property                | 1.x non-enumerable; 2.0 removes                    |
+| Bug                                                                                                                                                                        | Test                                             | Fix in                                             |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------- |
+| JSON-string argument throws on jQuery 4 (`$.parseJSON` removed)                                                                                                            | arguments: JSON string (x3, 4.0 only)            | 1.x                                                |
+| CommonJS factory with no window calls `require('jquery')(root)`, which jQuery 4 does not export (it builds from `jquery/factory`), so the plugin registers but cannot load | commonjs: build jQuery 4 for the given window    | 1.x (in the UMD header)                            |
+| Loading an array into the plugin's own element throws reading `element[0].tagName` (#28)                                                                                   | arrays: copy of the element (#28)                | 1.x (land #28)                                     |
+| Array value for a select by key throws (`type === null` misses `undefined`)                                                                                                | form-fields: select array by key                 | 1.x                                                |
+| Array of values for a multiple select by key throws (same cause)                                                                                                           | form-fields: multiple select array               | 1.x                                                |
+| `loadSelect` reads the outer argument, not its own values, so options are added only when the select itself is loaded                                                      | covered by the two above once they stop throwing | 1.x                                                |
+| Scalar into a multiple select with one option is ignored (`options.length > 1`, from 1.3.4)                                                                                | form-fields: one-option multiple select          | 1.x                                                |
+| String image value is ignored (`obj.constructor == 'String'` is never true)                                                                                                | links-images: src string                         | 1.x (value as `src` only; no `src$alt`)            |
+| Object image value `{src, alt, title}` is ignored; images read the outer argument                                                                                          | links-images: object value                       | 1.x                                                |
+| Link parameter is appended after a `#fragment`                                                                                                                             | links-images: before a fragment                  | 1.x                                                |
+| Key that is not a valid selector throws on jQuery 3/4, misses on 1.7                                                                                                       | matching: not a valid selector                   | 1.x (retry with the key escaped)                   |
+| Key with a dot builds a compound selector (`.a.b`)                                                                                                                         | matching: class containing a dot                 | 2.0 (1.x pins it)                                  |
+| `rel` lookup ignores the loaded element and searches the document                                                                                                          | matching: rel outside                            | 2.0 removes `rel`; 1.x warns under `debug`         |
+| Link values are not URL-encoded                                                                                                                                            | links-images: encode the value                   | 2.0 (encoding changes existing output)             |
+| Template is never cached, so a second call loads into the first call's output                                                                                              | template: original markup                        | 2.0 (resetting the DOM drops handlers bound since) |
+| `Array.prototype.contains` is enumerable on every array                                                                                                                    | side-effects: enumerable property                | 1.x non-enumerable; 2.0 removes                    |
 
 ### Pinned behavior (tested as is)
 
@@ -274,3 +303,75 @@ Root cause of several bugs: commit 96d1690 ("Minor changes to pass JSHint", 2015
 
 `case 'datetime'` never matches either (browsers report an obsolete `type="datetime"` as `text`),
 but it shares an arm with live labels, so coverage cannot count it.
+
+Correction (Phase 3): the bug list above originally blamed the plugin body's use of the global
+`jQuery` for the CommonJS failure. Since the ESM conversion the body uses the imported binding (the
+factory parameter in the classic build); the failure is the UMD header's jQuery 4 resolution.
+
+### Architecture review (Phase 3, 2026-11-11)
+
+Scope: `src/jquery.loadJSON.js` and the UMD header in `rollup.config.mjs`. The test surface stays
+`$.fn.loadJSON(data, options)`; no candidate changes a test. Lines refer to the source as of
+`b04ff04`.
+
+| Item | Opportunity                                                                                                                            | Line | Dead branches removed                                                                               | ESLint warnings removed                                                           |
+| ---- | -------------------------------------------------------------------------------------------------------------------------------------- | ---- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| A1   | Move the five inner functions out of the per-call closure; pass the outer argument as `data` where pinned behavior reads it            | 1.x  | none                                                                                                | none                                                                              |
+| A2   | Element-kind module: `kindOf(element)` normalizes once, one function per kind, the walk calls only `setValue`                          | 1.x  | 13 of 14 (type sniff 5, `case 'select'` 1, multiple guard 3, link 1, image 3); the 14th comes alive | `no-prototype-builtins`, `no-redeclare` (`iPosition`), `no-useless-assignment` x2 |
+| A3   | Key-match module: `match(key, $scope)` tries class, id, name, rel in order, one query per step                                         | 1.x  | none                                                                                                | none                                                                              |
+| A4   | Element kinds say which value shapes they take whole (option: object; selects, checkboxes: array); the walk splits by value shape      | 1.x  | none counted (drops the always-false `element.type` checks)                                         | `no-redeclare` (`i`)                                                              |
+| A5   | Legacy module: `installContains`, `refreshMobile`, `notice(id)` with the debug flag and message table; checkbox stops using `contains` | 1.x  | none                                                                                                | none                                                                              |
+| A6   | Argument normalization: decide data or URL once, then one load path (template, callbacks, walk)                                        | 1.x  | none                                                                                                | none                                                                              |
+| A7   | 2.0 follow-ons on the A2–A6 shapes (see Phase 6)                                                                                       | 2.0  | n/a                                                                                                 | n/a                                                                               |
+| A8   | Move the UMD header out of `rollup.config.mjs`                                                                                         | No   | n/a                                                                                                 | n/a                                                                               |
+
+Reasons and constraints:
+
+- A1 first: the select and image bugs come from inner functions reading the call's `obj` through
+  the closure. Naming it `data` keeps behavior and turns each fix into a one-token change.
+- A2 holds 7 of the 1.x fixes (select x4, image x2, link fragment). The type-sniff, select and
+  image dead branches only disappear with their fix, so the fix commit lands before the refactor.
+  The `value.constructor == Array ? value : [value]` arm becomes live with the select fixes.
+- A3 escaping rule: retry with the escaped key only when the raw selector throws. Retrying on a
+  miss would make a dot key match its literal class whenever the compound selector misses, which is
+  the dot-key fix deferred to 2.0. jQuery 1.7 misses instead of throwing, so the 1.x rule needs its
+  own validity check, and `$.escapeSelector` (jQuery 3.0+) is unavailable on 1.7: use `CSS.escape`
+  or a local escape. 2.0 (floor 3.5) uses `$.escapeSelector`.
+- A4: #28 lands as wrapping the scope with `$()` once. It flips two tests: its `it.fails` and the
+  pinned "should throw for an element that is not a select or form", which pins the same crash.
+- A5 adds `$.fn.loadJSON.debug`, the one public addition 1.x makes (already decided). The message
+  table is the source for `docs/migrating-to-2.md`.
+- A6 is small; do it alongside A1 or last, not as its own project. The repeat's clone source,
+  currently a local named `template`, is renamed so "template" means only the saved markup.
+- A8: the header is already one module with a small interface (ADR-0001's contract) and full
+  surface-test coverage; moving it moves complexity without concentrating it. The CommonJS fix
+  stays in the header: use `require('jquery/factory').jQueryFactory(root)` when present, else the
+  jQuery 3 call.
+- Rejected, no ADR needed: a DOM adapter seam over jQuery (one adapter, nothing varies across it);
+  exposing kinds or match as public interface (widens the 1.x surface).
+
+Deprecation notice sites (1.4, under `$.fn.loadJSON.debug`, once per page):
+
+| 2.0 removal                             | Notice fires in                      | When                                                  |
+| --------------------------------------- | ------------------------------------ | ----------------------------------------------------- |
+| `Array.prototype.contains`              | `installContains` (A5), at the entry | first install on the page                             |
+| jQuery Mobile refresh hooks             | `refreshMobile` (A5)                 | `selectmenu` or `checkboxradio` exists on the element |
+| `mobile` option                         | options merge at the entry (A6)      | `"mobile" in options`                                 |
+| `src$alt` image string                  | image kind (A2)                      | a string value contains `$`                           |
+| `rel` key matching                      | rel step of match (A3)               | the rel step produced the match                       |
+| `rel=index` array children              | array branch of the walk (A4)        | children with `rel` were found                        |
+| URL string argument                     | argument normalization (A6)          | a string not starting with `{` or `[`                 |
+| `.html()` by default (change, optional) | content kind (A2)                    | a string that looks like markup and `html` unset      |
+
+Open questions:
+
+- Image pin: "the top-level `src`/`alt`/`title` are set on every matched image" is pinned, but the
+  1.x object-image fix makes the image read its own value. Either the fix falls back to `data` when
+  the value is neither a string nor `{src}` (pin kept), or that pin moves to 2.0. Decide before A2.
+- Glossary: proposed terms for `GLOSSARY.md`, written once settled: **data** (the value passed to
+  `loadJSON`), **key** (a property name of the data; preferred over "binding key"), **scope** (the
+  element a key is matched inside), **match** (the elements a key resolves to), **element kind**
+  (how a value is set: field, checkbox, radio, option, select-one, select-multiple, link, image,
+  content), **repeat** (fill existing elements in order, then append copies of the last one),
+  **template** (only the markup saved under `loadJSON-template`), **deprecation notice** (the
+  debug-flag warning).
