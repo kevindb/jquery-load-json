@@ -1,0 +1,3 @@
+# Trunk-based branching and two release lines
+
+One maintainer, one trunk: **`master`**. Work happens on a short-lived branch per release (`release-1.4`, `release-2.0`) merged by PR. 1.x (compatible) ships before 2.0 (breaking), sequentially on `master`. After 2.0, 1.x patches come from an on-demand **`release/1.x`** branch cut from the last 1.x tag; npm dist-tags are **`latest`** (current major) and **`v1`**. Releases are maintainer-tagged `vX.Y.Z`; `release.yml` publishes the tag to npm through trusted publishing with provenance after the maintainer approves the `npm` environment. `master` requires a PR and the `test` check, with no approving review (a sole maintainer cannot approve their own PR).
