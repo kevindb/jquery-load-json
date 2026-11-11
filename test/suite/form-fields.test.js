@@ -144,6 +144,16 @@ describe("form fields", function () {
 
       expect(checked($form.find("input"))).toEqual(["false"]);
     });
+
+    it("should uncheck a matched button whose value differs, whatever its group", function () {
+      const $form = fixture(
+        '<form><input type="radio" class="r" name="x" value="a" checked><input type="radio" class="r" name="y" value="b"></form>'
+      );
+
+      $form.loadJSON({ r: "b" });
+
+      expect(checked($form.find("input"))).toEqual(["b"]);
+    });
   });
 
   describe("when loading a single select", function () {
@@ -207,6 +217,29 @@ describe("form fields", function () {
       expect($select.val()).toBe("v");
     });
 
+    it("should select a classed option loaded from an object with selected true", function () {
+      const $form = fixture(
+        '<form><select name="s"><option value="x">X</option><option class="o" value="y">Y</option></select></form>'
+      );
+
+      $form.loadJSON({ o: { value: "v", text: "Vee", selected: true } });
+
+      expect($form.find("select").val()).toBe("v");
+    });
+
+    it("should copy event handlers to the appended options", function () {
+      const $select = fixture('<select><option value="x">X</option></select>');
+      const clicked = [];
+      $select.find("option").on("click", function () {
+        clicked.push(this.value);
+      });
+
+      $select.loadJSON([{ value: "a", text: "A" }]);
+      $select.find("option").trigger("click");
+
+      expect(clicked).toEqual(["x", "a"]);
+    });
+
     it("should add an option per item for an array loaded into a classed option", function () {
       const $form = fixture(
         '<form><select name="s"><option class="o" value="">Pick</option></select></form>'
@@ -249,6 +282,16 @@ describe("form fields", function () {
       $form.loadJSON({ m: "y" });
 
       expect($form.find("select").val()).toEqual(["x", "y"]);
+    });
+
+    it("should compare a scalar with each option's whole value", function () {
+      const $form = fixture(
+        '<form><select multiple name="m"><option value="y">Y</option><option value="yes">Yes</option></select></form>'
+      );
+
+      $form.loadJSON({ m: "yes" });
+
+      expect($form.find("select").val()).toEqual(["yes"]);
     });
 
     it.fails("should select the values in an array", function () {

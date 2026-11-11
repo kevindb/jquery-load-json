@@ -37,6 +37,37 @@ describe("jQuery Mobile refresh", function () {
     expect(calls).toEqual([["s", "refresh"]]);
   });
 
+  itBeforeJQuery4("should refresh a select after appending options to it", function () {
+    const calls = [];
+    stubPlugin("selectmenu", function (method) {
+      calls.push([this[0].type, method]);
+    });
+    const $one = fixture('<select><option value="x">X</option></select>');
+    const $multiple = fixture('<select multiple><option value="x">X</option></select>');
+
+    $one.loadJSON([{ value: "a", text: "A" }]);
+    $multiple.loadJSON([{ value: "a", text: "A" }]);
+
+    expect(calls).toEqual([
+      ["select-one", "refresh"],
+      ["select-multiple", "refresh"],
+    ]);
+  });
+
+  itBeforeJQuery4("should refresh a multiple select after selecting values in it", function () {
+    const calls = [];
+    stubPlugin("selectmenu", function (method) {
+      calls.push([this[0].name, method]);
+    });
+    const $form = fixture(
+      '<form><select multiple name="m"><option value="x">X</option><option value="y">Y</option></select></form>'
+    );
+
+    $form.loadJSON({ m: "y" });
+
+    expect(calls).toEqual([["m", "refresh"]]);
+  });
+
   itBeforeJQuery4(
     "should refresh a checkbox or radio through checkboxradio when present",
     function () {

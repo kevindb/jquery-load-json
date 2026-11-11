@@ -34,6 +34,18 @@ describe("template reuse", function () {
     });
   });
 
+  describe("when the loadJSON-template data is set to an empty string first", function () {
+    it("should save the markup and restore it on the next call", function () {
+      const $root = fixture('<div><ul><li class="i"></li></ul></div>');
+      $root.data("loadJSON-template", "");
+      $root.loadJSON({ i: ["a", "b"] });
+
+      $root.loadJSON({ i: ["c"] });
+
+      expect(texts($root.find(".i"))).toEqual(["c"]);
+    });
+  });
+
   describe("when the loadJSON-template data holds markup", function () {
     it("should replace the element's content with it before loading", function () {
       const $root = fixture('<div><span class="old"></span></div>');

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fixture, itBeforeJQuery4 } from "./helpers.js";
+import { fixture, itBeforeJQuery4, texts } from "./helpers.js";
 
 describe("loadJSON arguments", function () {
   describe("when given an object", function () {
@@ -39,6 +39,22 @@ describe("loadJSON arguments", function () {
 
       expect($root.text()).toBe("5");
     });
+
+    it("should set each control of a form", function () {
+      const $form = fixture('<form><input name="a"><input name="b"></form>');
+
+      $form.loadJSON(5);
+
+      expect([$form.find("[name=a]").val(), $form.find("[name=b]").val()]).toEqual(["5", "5"]);
+    });
+
+    it("should set the content of a form with no controls", function () {
+      const $form = fixture("<form></form>");
+
+      $form.loadJSON(5);
+
+      expect($form.text()).toBe("5");
+    });
   });
 
   describe("when given a JSON string", function () {
@@ -56,6 +72,43 @@ describe("loadJSON arguments", function () {
       $root.loadJSON('{"i":["one","two"]}');
 
       expect($root.find(".i").length).toBe(2);
+    });
+
+    itBeforeJQuery4("should parse an array string and load it", function () {
+      const $list = fixture('<ul><li rel="1"></li><li rel="0"></li></ul>');
+
+      $list.loadJSON('["zero","one"]');
+
+      expect(texts($list.find("li"))).toEqual(["one", "zero"]);
+    });
+
+    it.fails("should add one option per item of an array string loaded into a select", function () {
+      const $select = fixture('<select><option value="x">X</option></select>');
+
+      $select.loadJSON('[{"value":"a","text":"A"}]');
+
+      expect($select.find("option").length).toBe(2);
+    });
+
+    itBeforeJQuery4("should call onLoading before and onLoaded after loading", function () {
+      const $root = fixture('<div><span class="a"></span></div>');
+      const calls = [];
+
+      $root.loadJSON('{"a":"x"}', {
+        onLoading: () => calls.push("loading:" + $root.find(".a").text()),
+        onLoaded: () => calls.push("loaded:" + $root.find(".a").text()),
+      });
+
+      expect(calls).toEqual(["loading:", "loaded:x"]);
+    });
+
+    itBeforeJQuery4("should replace the content with the saved template first", function () {
+      const $root = fixture('<div><span class="old"></span></div>');
+      $root.data("loadJSON-template", '<b class="a"></b>');
+
+      $root.loadJSON('{"a":"x"}');
+
+      expect($root.html()).toBe('<b class="a">x</b>');
     });
 
     itBeforeJQuery4("should throw when the string is not valid JSON", function () {

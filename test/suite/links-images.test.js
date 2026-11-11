@@ -46,6 +46,14 @@ describe("links", function () {
       expect($root.find("a").attr("href")).toBe("/page?l=a%20b%26c");
     });
 
+    it.fails("should append with & when the href is only a query", function () {
+      const $root = fixture('<div><a class="l" href="?x=1">text</a></div>');
+
+      $root.loadJSON({ l: 5 });
+
+      expect($root.find("a").attr("href")).toBe("?x=1&l=5");
+    });
+
     it.fails("should add the parameter before a fragment", function () {
       const $root = fixture('<div><a class="l" href="/page?x=1#top">text</a></div>');
 
