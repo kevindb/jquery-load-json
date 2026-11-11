@@ -34,7 +34,9 @@ describe("arrays", function () {
     });
 
     it("should leave extra existing elements unchanged when the array is shorter", function () {
-      const $root = fixture('<div><ul><li class="i">1</li><li class="i">2</li><li class="i">3</li></ul></div>');
+      const $root = fixture(
+        '<div><ul><li class="i">1</li><li class="i">2</li><li class="i">3</li></ul></div>'
+      );
 
       $root.loadJSON({ i: ["a"] });
 
@@ -65,7 +67,9 @@ describe("arrays", function () {
 
   describe("when the array's container has rel children", function () {
     it("should load each child from the item at its rel index", function () {
-      const $root = fixture('<div><ul class="l"><li rel="1"></li><li rel="0"></li><li rel="5">keep</li></ul></div>');
+      const $root = fixture(
+        '<div><ul class="l"><li rel="1"></li><li rel="0"></li><li rel="5">keep</li></ul></div>'
+      );
 
       $root.loadJSON({ l: ["zero", "one"] });
 

@@ -37,22 +37,25 @@ describe("jQuery Mobile refresh", function () {
     expect(calls).toEqual([["s", "refresh"]]);
   });
 
-  itBeforeJQuery4("should refresh a checkbox or radio through checkboxradio when present", function () {
-    const calls = [];
-    stubPlugin("checkboxradio", function (method) {
-      calls.push([this[0].type, method]);
-    });
-    const $form = fixture(
-      '<form><input type="checkbox" name="c" value="a"><input type="radio" name="r" value="b"></form>'
-    );
+  itBeforeJQuery4(
+    "should refresh a checkbox or radio through checkboxradio when present",
+    function () {
+      const calls = [];
+      stubPlugin("checkboxradio", function (method) {
+        calls.push([this[0].type, method]);
+      });
+      const $form = fixture(
+        '<form><input type="checkbox" name="c" value="a"><input type="radio" name="r" value="b"></form>'
+      );
 
-    $form.loadJSON({ c: "a", r: "b" });
+      $form.loadJSON({ c: "a", r: "b" });
 
-    expect(calls).toEqual([
-      ["checkbox", "refresh"],
-      ["radio", "refresh"],
-    ]);
-  });
+      expect(calls).toEqual([
+        ["checkbox", "refresh"],
+        ["radio", "refresh"],
+      ]);
+    }
+  );
 
   it("should ignore an error thrown by the refresh", function () {
     stubPlugin("selectmenu", function () {

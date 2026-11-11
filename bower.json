@@ -2,18 +2,19 @@
   "name": "jquery-load-json",
   "description": "jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM.",
   "main": "src/jquery.loadJSON.js",
-  "moduleType": [ "globals", "amd", "node" ],
+  "moduleType": ["globals", "amd", "node"],
   "license": "LGPL-2.1",
-  "ignore": [
-    "README.md",
-    "composer.json",
-    "package.json"
+  "ignore": ["README.md", "composer.json", "package.json"],
+  "keywords": [
+    "javascript",
+    "jquery",
+    "html-form",
+    "ajax-form",
+    "json",
+    "loadjson-plugin",
+    "jquery-plugin"
   ],
-  "keywords": [ "javascript", "jquery", "html-form", "ajax-form", "json", "loadjson-plugin", "jquery-plugin" ],
-  "authors": [
-    { "name": "Kevin Morris" },
-    { "name": "Jovan Popovic" }
-  ],
+  "authors": [{ "name": "Kevin Morris" }, { "name": "Jovan Popovic" }],
   "homepage": "https://github.com/kevindb/jquery-load-json",
   "repository": {
     "type": "git",

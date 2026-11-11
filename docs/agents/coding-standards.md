@@ -7,15 +7,15 @@ Human PR/process stays in `CONTRIBUTING.md`.
 
 ## Workshop
 
-| Concern      | Target                                                                                                      |
-| ------------ | ----------------------------------------------------------------------------------------------------------- |
-| Runtime / CI | **Node 26** (`.nvmrc`); **GitHub Actions** runs `npm test`.                                                 |
-| Lint         | **ESLint** flat config: correctness and quality.                                                            |
-| Format       | **Prettier** defaults with `printWidth: 100` and `trailingComma: "es5"`. No `.editorconfig`.                |
-| Verify       | **`npm test`** is the one command agents run.                                                               |
-| Tests        | Vitest browser mode (Playwright provider, v8 coverage); jQuery matrix on Chromium, Firefox and WebKit.      |
+| Concern      | Target                                                                                                     |
+| ------------ | ---------------------------------------------------------------------------------------------------------- |
+| Runtime / CI | **Node 26** (`.nvmrc`); **GitHub Actions** runs `npm test`.                                                |
+| Lint         | **ESLint** flat config: correctness and quality.                                                           |
+| Format       | **Prettier** defaults with `printWidth: 100` and `trailingComma: "es5"`. No `.editorconfig`.               |
+| Verify       | **`npm test`** is the one command agents run.                                                              |
+| Tests        | Vitest browser mode (Playwright provider, v8 coverage); jQuery matrix on Chromium, Firefox and WebKit.     |
 | Publish      | **Dual surface** (ADR-0001): module entry **and** classic UMD / script-tag `$.fn` build, both from Rollup. |
-| Language     | Plain JavaScript.                                                                                           |
+| Language     | Plain JavaScript.                                                                                          |
 
 ## Commits
 

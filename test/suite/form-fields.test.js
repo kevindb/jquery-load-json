@@ -171,7 +171,9 @@ describe("form fields", function () {
     });
 
     it("should append options to a select with several options loaded with an array", function () {
-      const $select = fixture('<select><option value="x">X</option><option value="y">Y</option></select>');
+      const $select = fixture(
+        '<select><option value="x">X</option><option value="y">Y</option></select>'
+      );
 
       $select.loadJSON([{ value: "a", text: "A" }]);
 
@@ -194,7 +196,9 @@ describe("form fields", function () {
     });
 
     it("should set an option's value, text and selected state from an object", function () {
-      const $select = fixture('<select><option value="x">X</option><option value="old">Old</option></select>');
+      const $select = fixture(
+        '<select><option value="x">X</option><option value="old">Old</option></select>'
+      );
 
       $select.loadJSON({ value: "v", text: "Vee", selected: true });
 
@@ -204,7 +208,9 @@ describe("form fields", function () {
     });
 
     it("should add an option per item for an array loaded into a classed option", function () {
-      const $form = fixture('<form><select name="s"><option class="o" value="">Pick</option></select></form>');
+      const $form = fixture(
+        '<form><select name="s"><option class="o" value="">Pick</option></select></form>'
+      );
 
       $form.loadJSON({
         o: [
@@ -256,7 +262,9 @@ describe("form fields", function () {
     });
 
     it.fails("should select a scalar value in a select with one option", function () {
-      const $form = fixture('<form><select multiple name="m"><option value="x">X</option></select></form>');
+      const $form = fixture(
+        '<form><select multiple name="m"><option value="x">X</option></select></form>'
+      );
 
       $form.loadJSON({ m: "x" });
 

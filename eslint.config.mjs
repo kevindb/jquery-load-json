@@ -4,7 +4,15 @@ import globals from "globals";
 
 export default [
   {
-    ignores: [".jquery/**", ".vitest/**", "coverage/**", "dist/**", "examples/**", "test-results/**", "playwright-report/**"],
+    ignores: [
+      ".jquery/**",
+      ".vitest/**",
+      "coverage/**",
+      "dist/**",
+      "examples/**",
+      "test-results/**",
+      "playwright-report/**",
+    ],
   },
   js.configs.recommended,
   {
@@ -25,14 +33,25 @@ export default [
     },
   },
   {
-    files: ["test/suite/**/*.js", "test/setup.js", "test/jquery-esm.js", "test/surfaces/browser.test.js"],
+    files: [
+      "test/suite/**/*.js",
+      "test/setup.js",
+      "test/jquery-esm.js",
+      "test/surfaces/browser.test.js",
+    ],
     languageOptions: {
       sourceType: "module",
       globals: { ...globals.browser, $: "readonly", jQuery: "readonly" },
     },
   },
   {
-    files: ["*.config.mjs", "scripts/**/*.mjs", "test/surfaces/commonjs.test.js", "test/surfaces/manifests.test.js", "test/e2e/**/*.mjs"],
+    files: [
+      "*.config.mjs",
+      "scripts/**/*.mjs",
+      "test/surfaces/commonjs.test.js",
+      "test/surfaces/manifests.test.js",
+      "test/e2e/**/*.mjs",
+    ],
     languageOptions: { globals: { ...globals.node } },
   },
   prettier,

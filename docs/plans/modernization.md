@@ -201,24 +201,24 @@ Root cause of several bugs: commit 96d1690 ("Minor changes to pass JSHint", 2015
 
 ### Bugs (`it.fails`, intended behavior)
 
-| Bug | Test | Fix in |
-| --- | --- | --- |
-| JSON-string argument throws on jQuery 4 (`$.parseJSON` removed) | arguments: JSON string (x3, 4.0 only) | 1.x |
-| Plugin body calls the global `jQuery`; CommonJS with no global can register but not load | umd-wrapper: no global jQuery | 1.x |
-| Loading an array into the plugin's own element throws reading `element[0].tagName` (#28) | arrays: copy of the element (#28) | 1.x (land #28) |
-| Array value for a select by key throws (`type === null` misses `undefined`) | form-fields: select array by key | 1.x |
-| Array of values for a multiple select by key throws (same cause) | form-fields: multiple select array | 1.x |
-| `loadSelect` reads the outer argument, not its own values, so options are added only when the select itself is loaded | covered by the two above once they stop throwing | 1.x |
-| Scalar into a multiple select with one option is ignored (`options.length > 1`, from 1.3.4) | form-fields: one-option multiple select | 1.x |
-| String image value is ignored (`obj.constructor == 'String'` is never true) | links-images: src string | 1.x (value as `src` only; no `src$alt`) |
-| Object image value `{src, alt, title}` is ignored; images read the outer argument | links-images: object value | 1.x |
-| Link parameter is appended after a `#fragment` | links-images: before a fragment | 1.x |
-| Key that is not a valid selector throws on jQuery 3/4, misses on 1.7 | matching: not a valid selector | 1.x (retry with the key escaped) |
-| Key with a dot builds a compound selector (`.a.b`) | matching: class containing a dot | 2.0 (1.x pins it) |
-| `rel` lookup ignores the loaded element and searches the document | matching: rel outside | 2.0 removes `rel`; 1.x warns under `debug` |
-| Link values are not URL-encoded | links-images: encode the value | 2.0 (encoding changes existing output) |
-| Template is never cached, so a second call loads into the first call's output | template: original markup | 2.0 (resetting the DOM drops handlers bound since) |
-| `Array.prototype.contains` is enumerable on every array | side-effects: enumerable property | 1.x non-enumerable; 2.0 removes |
+| Bug                                                                                                                   | Test                                             | Fix in                                             |
+| --------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------- |
+| JSON-string argument throws on jQuery 4 (`$.parseJSON` removed)                                                       | arguments: JSON string (x3, 4.0 only)            | 1.x                                                |
+| Plugin body calls the global `jQuery`; CommonJS with no global can register but not load                              | umd-wrapper: no global jQuery                    | 1.x                                                |
+| Loading an array into the plugin's own element throws reading `element[0].tagName` (#28)                              | arrays: copy of the element (#28)                | 1.x (land #28)                                     |
+| Array value for a select by key throws (`type === null` misses `undefined`)                                           | form-fields: select array by key                 | 1.x                                                |
+| Array of values for a multiple select by key throws (same cause)                                                      | form-fields: multiple select array               | 1.x                                                |
+| `loadSelect` reads the outer argument, not its own values, so options are added only when the select itself is loaded | covered by the two above once they stop throwing | 1.x                                                |
+| Scalar into a multiple select with one option is ignored (`options.length > 1`, from 1.3.4)                           | form-fields: one-option multiple select          | 1.x                                                |
+| String image value is ignored (`obj.constructor == 'String'` is never true)                                           | links-images: src string                         | 1.x (value as `src` only; no `src$alt`)            |
+| Object image value `{src, alt, title}` is ignored; images read the outer argument                                     | links-images: object value                       | 1.x                                                |
+| Link parameter is appended after a `#fragment`                                                                        | links-images: before a fragment                  | 1.x                                                |
+| Key that is not a valid selector throws on jQuery 3/4, misses on 1.7                                                  | matching: not a valid selector                   | 1.x (retry with the key escaped)                   |
+| Key with a dot builds a compound selector (`.a.b`)                                                                    | matching: class containing a dot                 | 2.0 (1.x pins it)                                  |
+| `rel` lookup ignores the loaded element and searches the document                                                     | matching: rel outside                            | 2.0 removes `rel`; 1.x warns under `debug`         |
+| Link values are not URL-encoded                                                                                       | links-images: encode the value                   | 2.0 (encoding changes existing output)             |
+| Template is never cached, so a second call loads into the first call's output                                         | template: original markup                        | 2.0 (resetting the DOM drops handlers bound since) |
+| `Array.prototype.contains` is enumerable on every array                                                               | side-effects: enumerable property                | 1.x non-enumerable; 2.0 removes                    |
 
 ### Pinned behavior (tested as is)
 
