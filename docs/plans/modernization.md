@@ -133,14 +133,20 @@ Status: done 2026-11-11 (see Findings).
 Done when: `npm test` passes locally, CI is green on the PR for all 9 jQuery x browser cells,
 `npm pack --dry-run` lists only the intended files, and coverage is unchanged from Phase 1.
 
-Status (paused 2026-11-11): done: `master` renamed to `main`; `src` is an ES module built by Rollup
-(classic UMD + `.mjs` + min/map); ESLint + Prettier with the sweep and `.git-blame-ignore-revs`;
-Grunt and `.editorconfig` removed; browser surface, CommonJS/AMD, manifest and Playwright e2e tests;
-metadata (license id, `jquery >=1.7`, `main`/`module`/`browser`/`jsdelivr`/`unpkg`, `files`).
-Coverage re-baselined to 90.8 / 89.55 / 100 / 90.47 after the UMD wrapper moved into the build;
-the same 14 dead branches remain. Left: `npm test` script (lint + format + build + coverage + other
-browsers), `ci.yml` / `codeql.yml` / `release.yml` / `dependabot.yml` / `ISSUE_TEMPLATE/`, `SECURITY.md`
-and private vulnerability reporting, repo description/topics, then push and get CI green.
+Status: done 2026-11-11. `master` renamed to `main`. `src` is an ES module built by Rollup (classic
+UMD + `.mjs` + min/map); ESLint + Prettier with the sweep in `.git-blame-ignore-revs`; Grunt and
+`.editorconfig` removed. Surface (script tag, AMD, native ESM), CommonJS (jQuery 3 and 4), manifest
+and Playwright e2e tests. CI (`test` + 9 jQuery x browser cells running suite and e2e), CodeQL
+(JavaScript + Actions, `security-extended`), `release.yml`, Dependabot, bug form, `SECURITY.md`;
+all green on PR #39 with no code-scanning alerts. Repo: private vulnerability reporting on, new
+description, npm homepage, topics (dropped the misleading `ajax-form`), delete branch on merge.
+`npm pack`: 8 files, 24.8 kB (1.3.4 tag: 127 files, 573 kB).
+
+Coverage thresholds are 90.8 / 89.55 / 100 / 90.47: lower than Phase 1 only because the fully
+covered UMD wrapper moved from `src` into `rollup.config.mjs`; the same 14 dead branches remain.
+The `release.yml` rehearsal by `workflow_dispatch` needs the workflow on `main`, so it moves to
+Phase 5, after this PR merges. ESLint warnings left for the refactors: `no-redeclare` (2),
+`no-useless-assignment` (2), `no-prototype-builtins` (1).
 
 ## Phase 3: Architecture review
 
