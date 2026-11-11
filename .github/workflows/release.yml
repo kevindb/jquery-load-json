@@ -1,0 +1,78 @@
+name: Release
+
+# Publishes a v* tag to npm through trusted publishing (OIDC, with provenance). The publish job runs
+# in the `npm` environment, which needs a maintainer's approval and accepts only v* tags; npm accepts
+# OIDC tokens only from this workflow file in that environment. Run it by hand to rehearse `verify`.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Get Playwright version
+        id: playwright
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright browsers
+        uses: actions/cache@v6
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-all
+      # npm test runs the suite in Chromium, Firefox and WebKit, which need their system libraries.
+      - run: npx playwright install --with-deps chromium firefox webkit
+      - run: npm test
+      - name: Check committed dist matches the build
+        run: git diff --exit-code -- dist
+      - name: Check the tag matches an unpublished package version
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          version=$(node -p "require('./package.json').version")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version v$version."
+            exit 1
+          fi
+          if [ -n "$(npm view "jquery-load-json@$version" version 2>/dev/null)" ]; then
+            echo "jquery-load-json@$version is already on npm."
+            exit 1
+          fi
+      # npm pack lists the same files as npm publish without asking the registry, so a rehearsal from
+      # a branch passes even though its version is already published.
+      - name: Show the tarball that would be published
+        run: npm pack --dry-run
+
+  publish:
+    needs: verify
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    environment: npm
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      # No npm ci: no dependency code runs in the job that can publish. dist/ is committed, and the
+      # verify job has checked it against a fresh build.
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          registry-url: https://registry.npmjs.org
+      - run: npm publish
