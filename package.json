@@ -14,7 +14,7 @@
   ],
   "homepage": "https://github.com/kevindb/jquery-load-json",
   "bugs": "https://github.com/kevindb/jquery-load-json/issues",
-  "license": "LGPL-2.1",
+  "license": "LGPL-2.1-or-later",
   "contributors": [
     "Kevin Morris",
     "Jovan Popovic",
@@ -27,7 +27,7 @@
     "url": "https://github.com/kevindb/jquery-load-json.git"
   },
   "dependencies": {
-    "jquery": "^3.4.1"
+    "jquery": ">=1.7"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -53,7 +53,22 @@
     "build": "rollup -c",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "test:e2e": "playwright test"
   },
-  "module": "dist/jquery.loadJSON.mjs"
+  "module": "dist/jquery.loadJSON.mjs",
+  "jsdelivr": "dist/jquery.loadJSON.min.js",
+  "unpkg": "dist/jquery.loadJSON.min.js",
+  "files": [
+    "dist",
+    "src",
+    "LICENSE.md"
+  ],
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": ">=26",
+      "onFail": "error"
+    }
+  }
 }

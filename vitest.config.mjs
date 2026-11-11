@@ -25,6 +25,27 @@ const jsonFixtures = {
   },
 };
 
+// Surface pages load files as consumers would, without Vite rewriting bare imports.
+const rawFiles = {
+  name: "raw-files",
+  configureServer(server) {
+    server.middlewares.use(async (req, res, next) => {
+      const match = req.url.match(/^\/raw\/((?:dist|node_modules)\/[\w./@-]+\.m?js)$/);
+      if (!match) {
+        return next();
+      }
+      try {
+        const body = await readFile(new URL(`./${match[1]}`, import.meta.url));
+        res.setHeader("Content-Type", "text/javascript");
+        res.end(body);
+      } catch {
+        res.statusCode = 404;
+        res.end("not found");
+      }
+    });
+  },
+};
+
 const jqueryEsm = new URL("./test/jquery-esm.js", import.meta.url);
 
 // JQUERY_FILE picks the classic jQuery build: 1.7.2 comes from scripts/fetch-jquery.sh, 3.7.1 and
@@ -82,6 +103,19 @@ export default defineConfig({
             headless: true,
             provider: playwright(),
             instances: suiteBrowsers.map((name) => ({ browser: name, name: `suite-${name}` })),
+          },
+        },
+      },
+      {
+        plugins: [rawFiles],
+        test: {
+          name: "surfaces",
+          include: ["test/surfaces/browser.test.js"],
+          browser: {
+            enabled: true,
+            headless: true,
+            provider: playwright(),
+            instances: [{ browser: "chromium" }],
           },
         },
       },

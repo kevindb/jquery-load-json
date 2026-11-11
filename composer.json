@@ -11,7 +11,7 @@
     "jquery-plugin"
   ],
   "homepage": "https://github.com/kevindb/jquery-load-json",
-  "license": "LGPL-2.1",
+  "license": "LGPL-2.1-or-later",
   "authors": [
     {
       "name": "Kevin Morris"
@@ -24,12 +24,12 @@
     "issues": "https://github.com/kevindb/jquery-load-json/issues"
   },
   "require": {
-    "components/jquery": "^3.4.1"
+    "components/jquery": ">=1.7"
   },
   "extra": {
     "component": {
       "scripts": [
-        "src/jquery.loadJSON.js"
+        "dist/jquery.loadJSON.js"
       ],
       "shim": {
         "deps": [
