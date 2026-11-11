@@ -74,7 +74,8 @@ Bugs visible by reading, before tests (the Findings section has the tested resul
   - 2.0 jQuery floor: `>=3.5` as a peer dependency. 2.0 matrix: 3.5.1, 3.7.1, 4.0.0.
   - 2.0 removes: the `Array.prototype.contains` patch, jQuery Mobile refresh hooks, the `mobile`
     option and the `src$alt` img string; `rel` attribute matching (keys and `rel=index` array
-    children); the URL string argument (built-in `$.ajax`).
+    children); the URL string argument (built-in `$.ajax`); the top-level `src`/`alt`/`title`
+    fallback for images (added 2026-11-11 in Phase 3, see Findings).
   - 2.0 changes: non-form elements get `.text(value)` by default; `html: true` opts back in to
     `.html(value)`.
   - Manifests: drop `bower.json` in 2.0. Keep `composer.json` (14 Packagist installs; it costs one
@@ -159,9 +160,9 @@ Phase 5, after this PR merges. ESLint warnings left for the refactors: `no-redec
 
 Done when: every opportunity has a disposition in the findings section.
 
-Status: review done 2026-11-11; eight opportunities, each with a disposition (see Findings,
-Architecture review). Open before Phase 4 starts: the image pin question and the proposed
-`GLOSSARY.md` terms, both listed there.
+Status: done 2026-11-11. Eight opportunities, each with a disposition (see Findings,
+Architecture review). The image question is decided and the terms are in `GLOSSARY.md`; no ADR
+was needed.
 
 ## Phase 4: 1.x fixes and refactors (non-breaking)
 
@@ -206,8 +207,11 @@ three browsers.
 - Maintainer: add the GitHub Actions trusted publisher on npmjs.com for `release.yml` + environment
   `npm`. Agent: create the `npm` environment (v* tags only, maintainer approval), protect `main`
   (PR + `test` check).
-- Version 1.4.0, header, CDN snippets with SRI; rehearse `release.yml` by `workflow_dispatch`.
-- After merge: tag `v1.4.0`, maintainer approves the publish, GitHub release notes (fixes, jQuery 4
+- Version 1.4.0, header, CDN snippets with SRI on `release-1.4`; mark PR #39 ready, review and
+  merge it. PR #39 is the whole 1.4 release (ADR-0002), so it stays a draft until here.
+- After merge: rehearse `release.yml` by `workflow_dispatch` on `main` (a dispatch needs the
+  workflow on the default branch, and on a non-tag ref it runs verify only, never publish).
+- Then tag `v1.4.0`, maintainer approves the publish, GitHub release notes (fixes, jQuery 4
   support, the 1.3.4 changes that never reached npm, deprecations, credit for #28).
 - Close Dependabot #30 #34 #35 #36 #38 with a comment; comment on and close #32 (examples live,
   wiki links fixed) and #25 (thank Jovan, link jquery-view-engine from the README).
@@ -342,7 +346,8 @@ Reasons and constraints:
 - A5 adds `$.fn.loadJSON.debug`, the one public addition 1.x makes (already decided). The message
   table is the source for `docs/migrating-to-2.md`.
 - A6 is small; do it alongside A1 or last, not as its own project. The repeat's clone source,
-  currently a local named `template`, is renamed so "template" means only the saved markup.
+  currently a local named `template`, is renamed: in `GLOSSARY.md` the template is the markup being
+  filled and the saved template is the `loadJSON-template` copy.
 - A8: the header is already one module with a small interface (ADR-0001's contract) and full
   surface-test coverage; moving it moves complexity without concentrating it. The CommonJS fix
   stays in the header: use `require('jquery/factory').jQueryFactory(root)` when present, else the
@@ -358,20 +363,18 @@ Deprecation notice sites (1.4, under `$.fn.loadJSON.debug`, once per page):
 | jQuery Mobile refresh hooks             | `refreshMobile` (A5)                 | `selectmenu` or `checkboxradio` exists on the element |
 | `mobile` option                         | options merge at the entry (A6)      | `"mobile" in options`                                 |
 | `src$alt` image string                  | image kind (A2)                      | a string value contains `$`                           |
+| top-level image fallback                | image kind (A2)                      | the image took `src`/`alt`/`title` from the top level |
 | `rel` key matching                      | rel step of match (A3)               | the rel step produced the match                       |
 | `rel=index` array children              | array branch of the walk (A4)        | children with `rel` were found                        |
 | URL string argument                     | argument normalization (A6)          | a string not starting with `{` or `[`                 |
 | `.html()` by default (change, optional) | content kind (A2)                    | a string that looks like markup and `html` unset      |
 
-Open questions:
+Decisions (maintainer, 2026-11-11):
 
-- Image pin: "the top-level `src`/`alt`/`title` are set on every matched image" is pinned, but the
-  1.x object-image fix makes the image read its own value. Either the fix falls back to `data` when
-  the value is neither a string nor `{src}` (pin kept), or that pin moves to 2.0. Decide before A2.
-- Glossary: proposed terms for `GLOSSARY.md`, written once settled: **data** (the value passed to
-  `loadJSON`), **key** (a property name of the data; preferred over "binding key"), **scope** (the
-  element a key is matched inside), **match** (the elements a key resolves to), **element kind**
-  (how a value is set: field, checkbox, radio, option, select-one, select-multiple, link, image,
-  content), **repeat** (fill existing elements in order, then append copies of the last one),
-  **template** (only the markup saved under `loadJSON-template`), **deprecation notice** (the
-  debug-flag warning).
+- Image: in 1.x an image takes its own value (a string as `src`, or `{src, alt, title}`); when the
+  value is neither, it keeps today's top-level `src`/`alt`/`title` fallback, so the pinned test
+  stays. 2.0 removes the fallback, announced by a 1.4 deprecation notice; added to the 2.0 list.
+- Glossary: `GLOSSARY.md` records data, key, scope, match, repeat, template, saved template,
+  element kind (field, checkbox, radio, option, select-one, select-multiple, link, image, content)
+  and deprecation notice. "Key" replaces "binding key"; "template" keeps the README's sense (the
+  markup being filled).
