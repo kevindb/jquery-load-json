@@ -21,7 +21,7 @@ CI timing instrumentation, model tables) is out of scope.
   from the tag: its `package.json` narrows `jquery` from `>=1.7` (1.3.3 on npm) to `^3.3.1`, which
   in a patch would install a second jQuery for jQuery 1/2 users and attach the plugin to it; it
   also lists "Mike Alsup" as a contributor and ships 127 files / 573 kB (examples included).
-- `master` declares `jquery: ^3.4.1`. 1.4.0 restores `>=1.7` to keep npm's current contract.
+- The trunk's `package.json` declares `jquery: ^3.4.1`. 1.4.0 restores `>=1.7` to keep npm's current contract.
 - Open PRs: Dependabot #30, #34, #35, #36, #38 (Grunt/jQuery lockfile bumps, all superseded once Grunt
   goes); community fix #28 (`element[0]` to `$element[0]` in the array branch).
 - Open issues: #32 (wiki "live example" links 404: they point at the dead
@@ -49,7 +49,7 @@ Bugs visible by reading, before tests (the Findings section has the tested resul
 
 ## Decisions (defaults picked; the maintainer-only ones are marked)
 
-- Branches: `release-1.4` then `release-2.0`, each one PR to `master`. Trunk stays `master`.
+- Branches: `release-1.4` then `release-2.0`, each one PR to `main`. Trunk stays `main`.
   After 2.0, 1.x patches come from an on-demand `release/1.x` cut from the last 1.x tag;
   npm dist-tags `latest` (2.x) and `v1`.
 - Node 26 via `.nvmrc` and `devEngines`. Plain JS, no TypeScript.
@@ -124,7 +124,11 @@ Status: done 2026-11-11 (see Findings).
   provenance, `npm` environment), `dependabot.yml`, `ISSUE_TEMPLATE/` (bug form + config).
 - Remove Grunt, `Gruntfile.js`, `.editorconfig`, `issue_template.md`. `files` in `package.json`;
   `jquery` dependency back to `>=1.7`; license id `LGPL-2.1-or-later`.
-- `npm test` = lint + format:check + build + coverage (+ WebKit run).
+- `npm test` = lint + format:check + build + coverage (+ Firefox and WebKit run).
+- Repository meta: rename `master` to `main` (done 2026-11-11; GitHub retargeted the open PRs and
+  redirects old links); private vulnerability reporting + `SECURITY.md`; description, homepage and
+  topics; Actions pinned to current majors. Branch protection and the `npm` environment wait until CI
+  reports a `test` check (Phase 5). The wiki is disabled once its pages live in `docs/` (Phase 4).
 
 Done when: `npm test` passes locally, CI is green on the PR for all 9 jQuery x browser cells,
 `npm pack --dry-run` lists only the intended files, and coverage is unchanged from Phase 1.
@@ -160,7 +164,7 @@ three browsers.
 ## Phase 5: 1.4.0 release
 
 - Maintainer: add the GitHub Actions trusted publisher on npmjs.com for `release.yml` + environment
-  `npm`. Agent: create the `npm` environment (v* tags only, maintainer approval), protect `master`
+  `npm`. Agent: create the `npm` environment (v* tags only, maintainer approval), protect `main`
   (PR + `test` check).
 - Version 1.4.0, header, CDN snippets with SRI; rehearse `release.yml` by `workflow_dispatch`.
 - After merge: tag `v1.4.0`, maintainer approves the publish, GitHub release notes (fixes, jQuery 4

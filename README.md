@@ -11,8 +11,8 @@ Please note that this project is released with a [Contributor Code of Conduct](C
 Requires jQuery 1.7+.
 
 ## Download
-* **Development:** [src/jquery.loadJSON.js](https://github.com/kevindb/jquery-load-json/blob/master/src/jquery.loadJSON.js)
-* **Production/Minified:** [dist/jquery.loadJSON.min.js](https://github.com/kevindb/jquery-load-json/blob/master/dist/jquery.form.min.js)
+* **Development:** [src/jquery.loadJSON.js](https://github.com/kevindb/jquery-load-json/blob/main/src/jquery.loadJSON.js)
+* **Production/Minified:** [dist/jquery.loadJSON.min.js](https://github.com/kevindb/jquery-load-json/blob/main/dist/jquery.form.min.js)
 
 ### CDN
 ```html
