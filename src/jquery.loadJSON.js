@@ -45,7 +45,7 @@ import jQuery from "jquery";
     ///<param name="aoValues" type="Array{value,text,selected}">Array of object containin the options</param>
     ///<param name="name" type="String">Name of the select list</param>
 
-    var arr = jQuery.makeArray(element);
+    var arr = jQuery.makeArray($(element)[0]);
     var template = $(arr[arr.length - 1]).clone(true);
 
     //fill started by last
@@ -72,9 +72,9 @@ import jQuery from "jquery";
   function setElementValue(element, value, name, data) {
     var $element = $(element);
     var type = element.type || element.tagName;
-    if (type === null) {
+    if (type == null) {
       type = element[0].type || element[0].tagName; //select returns undefined if called directly
-      if (type === null) {
+      if (type == null) {
         return;
       }
     }

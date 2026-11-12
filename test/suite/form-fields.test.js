@@ -197,7 +197,7 @@ describe("form fields", function () {
       ).toEqual(["x", "y", "a"]);
     });
 
-    it.fails("should append options when a key's value is an array", function () {
+    it("should append options when a key's value is an array", function () {
       const $form = fixture('<form><select name="s"><option value="x">X</option></select></form>');
 
       $form.loadJSON({ s: [{ value: "a", text: "A" }] });
