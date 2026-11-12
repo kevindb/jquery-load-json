@@ -197,22 +197,24 @@
         var href = $element.attr("href");
 
         if (href) {
-          // If a href value exists, append value
-          var iPosition = href.indexOf("#");
+          // If a href value exists, add the pair to its query, before any fragment
+          var iFragment = href.indexOf("#");
+          var fragment = "";
 
-          if (iPosition > 1000000) {
-            href = href.substr(0, iPosition) + "&" + name + "=" + value + href.substr(iPosition);
-          } else {
-            iPosition = href.indexOf("?");
-
-            if (iPosition > 0) {
-              // If parameters in the URL exists add new pair using &
-              href += "&" + name + "=" + value;
-            } else {
-              //otherwise attach pair to URL
-              href = href + "?" + name + "=" + value;
-            }
+          if (iFragment >= 0) {
+            fragment = href.substring(iFragment);
+            href = href.substring(0, iFragment);
           }
+
+          if (href.indexOf("?") > 0) {
+            // If parameters in the URL exists add new pair using &
+            href += "&" + name + "=" + value;
+          } else {
+            //otherwise attach pair to URL
+            href = href + "?" + name + "=" + value;
+          }
+
+          href += fragment;
         } else {
           // If no href exists, set href to value
           href = value;

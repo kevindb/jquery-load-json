@@ -54,7 +54,7 @@ describe("links", function () {
       expect($root.find("a").attr("href")).toBe("?x=1&l=5");
     });
 
-    it.fails("should add the parameter before a fragment", function () {
+    it("should add the parameter before a fragment", function () {
       const $root = fixture('<div><a class="l" href="/page?x=1#top">text</a></div>');
 
       $root.loadJSON({ l: 5 });
