@@ -74,15 +74,7 @@ describe("links", function () {
 
 describe("images", function () {
   describe("when the value is a string", function () {
-    it("should leave the image unchanged", function () {
-      const $root = fixture('<div><img class="p" src="data:,old"></div>');
-
-      $root.loadJSON({ p: "photo.png" });
-
-      expect($root.find("img").attr("src")).toBe("data:,old");
-    });
-
-    it.fails("should set src to the string", function () {
+    it("should set src to the string", function () {
       const $root = fixture('<div><img class="p" src="data:,old"></div>');
 
       $root.loadJSON({ p: "photo.png" });
@@ -92,7 +84,7 @@ describe("images", function () {
   });
 
   describe("when the value is an object with src, alt and title", function () {
-    it.fails("should set those attributes", function () {
+    it("should set those attributes", function () {
       const $root = fixture('<div><img class="p" src="data:,old"></div>');
 
       $root.loadJSON({ p: { src: "a.png", alt: "A", title: "T" } });
@@ -100,13 +92,28 @@ describe("images", function () {
       expect($root.find("img").attr("src")).toBe("a.png");
       expect($root.find("img").attr("alt")).toBe("A");
     });
+
+    it("should set them on every matched image", function () {
+      const $root = fixture('<div><img class="p" src="data:,old"><img class="p"></div>');
+
+      $root.loadJSON({ p: { src: "data:,new", alt: "A", title: "T" } });
+
+      expect(
+        $root
+          .find("img")
+          .map(function () {
+            return this.getAttribute("src");
+          })
+          .get()
+      ).toEqual(["data:,new", "data:,new"]);
+    });
   });
 
   describe("when the top-level data has src, alt and title", function () {
-    it("should set them on every matched image, whatever the image's own value", function () {
+    it("should set them on every matched image, when the image's own value is neither a string nor an object", function () {
       const $root = fixture('<div><img class="p" src="data:,old"></div>');
 
-      $root.loadJSON({ p: "ignored", src: "data:,top", alt: "Top", title: "T" });
+      $root.loadJSON({ p: 7, src: "data:,top", alt: "Top", title: "T" });
 
       const $img = $root.find("img");
       expect([$img.attr("src"), $img.attr("alt"), $img.attr("title")]).toEqual([

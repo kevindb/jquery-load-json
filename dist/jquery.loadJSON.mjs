@@ -200,25 +200,16 @@ export { default } from 'jquery';
         break;
 
       case "img":
-        if (data.constructor == "String") {
-          //Assumption is that value is in the HREF$ALT format
-          var iPosition = value.indexOf("$");
-          var src = "";
-          var alt = "";
-
-          if (iPosition > 0) {
-            src = value.substring(0, iPosition);
-            alt = value.substring(iPosition + 1);
-          } else {
-            src = value;
-            var iPositionStart = value.lastIndexOf("/") + 1;
-            var iPositionEnd = value.indexOf(".");
-            alt = value.substring(iPositionStart, iPositionEnd);
-          }
-
-          $element.attr("src", src);
-          $element.attr("alt", alt);
+        if (typeof value == "string") {
+          // A string is the image address
+          $element.attr("src", value);
+        } else if (value.constructor == Object) {
+          // An object sets the image's own src, alt and title
+          $element.attr("src", value.src);
+          $element.attr("alt", value.alt);
+          $element.attr("title", value.title);
         } else {
+          // Otherwise the top-level src, alt and title apply to every matched image
           $element.attr("src", data.src);
           $element.attr("alt", data.alt);
           $element.attr("title", data.title);
@@ -242,6 +233,10 @@ export { default } from 'jquery';
     if (obj === undefined || obj === null) ; else if (obj.constructor == Object) {
       if (element.length >= 1 && element[0].tagName == "OPTION") {
         setElementValue(element[0], obj, name, data);
+      } else if (element.length >= 1 && element[0].tagName == "IMG") {
+        element.each(function () {
+          setElementValue(this, obj, name, data);
+        });
       }
 
       for (var prop in obj) {
