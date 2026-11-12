@@ -79,13 +79,7 @@ export default defineConfig({
       provider: "v8",
       include: ["src/**/*.js"],
       reporter: ["text", "html"],
-      // The reachable maximum: the remaining branches are unreachable (docs/plans/modernization.md).
-      thresholds: {
-        statements: 90.8,
-        branches: 89.55,
-        functions: 100,
-        lines: 90.47,
-      },
+      thresholds: { 100: true },
     },
     projects: [
       {
