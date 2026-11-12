@@ -146,8 +146,8 @@
           select = $element[0];
         }
 
-        if (select.options.length > 1) {
-          // If select list is not empty use values array to select options
+        if (select.options.length > 1 || value.constructor != Array) {
+          // Select the values, unless an array is loaded into a select with one option or none
           var values = value.constructor == Array ? value : [value];
 
           // Replaced element with element[0] ???? because now it reports that element.options does not exist

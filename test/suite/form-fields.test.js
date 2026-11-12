@@ -304,7 +304,7 @@ describe("form fields", function () {
       expect($form.find("select").val()).toEqual(["x", "z"]);
     });
 
-    it.fails("should select a scalar value in a select with one option", function () {
+    it("should select a scalar value in a select with one option", function () {
       const $form = fixture(
         '<form><select multiple name="m"><option value="x">X</option></select></form>'
       );
