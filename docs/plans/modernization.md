@@ -209,7 +209,8 @@ credit and jquery-view-engine link for #25); the four wiki pages are rewritten f
 `docs/{loading-data,elements,forms,arrays}.md`, plus `docs/debugging.md` for `debug` and every
 notice in `src/legacy.js`; `docs/examples/` holds eight working examples on jQuery 4.0.0 (code.jquery.com,
 SRI) and a copy of the classic build that Rollup writes and CI diffs with `dist/`. Bing Maps (needs a
-key) and the jQuery Mobile pages are not ported; DataTables and LINQ are replaced by plain jQuery and
+key) and the jQuery Mobile pages are not ported, and the old `examples/` folder with its vendored
+libraries (the 17 code-scanning alerts) is deleted (maintainer, 2026-11-11); DataTables and LINQ are replaced by plain jQuery and
 `Array.prototype.filter`. CONTRIBUTING has the current commands. GitHub Pages is not enabled yet
 (maintainer: Settings, Pages, deploy from `main` `/docs`), so the example links 404 until then.
 `JQUERY_LOAD_JSON_FIREFOX` from the Decisions was never implemented: `npm test` runs Firefox too, and
