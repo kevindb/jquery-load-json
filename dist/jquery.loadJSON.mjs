@@ -274,17 +274,29 @@ function setValue(element, value, name, data) {
   kinds[kindOf(node)](node, value, name, data);
 }
 
+/**
+ * The match of a key: the elements inside `scope` whose class, then id, then name is the key.
+ * When none match, the elements anywhere in the document whose rel attribute is the key.
+ */
+function match(key, scope) {
+  var steps = ["." + key, "#" + key, '[name="' + key + '"]'];
+
+  for (var i = 0; i < steps.length; i++) {
+    var $matches = jQuery(steps[i], scope);
+    if ($matches.length > 0) {
+      return $matches;
+    }
+  }
+
+  var $rel = jQuery('[rel="' + key + '"]');
+  if ($rel.length > 0) {
+    notice("rel");
+  }
+  return $rel;
+}
+
 
 (function ($) {
-
-  // Elements anywhere in the document whose rel attribute is the key.
-  function relMatch(key) {
-    var $matches = jQuery('[rel="' + key + '"]');
-    if ($matches.length > 0) {
-      notice("rel");
-    }
-    return $matches;
-  }
 
   function browseJSON(obj, element, name, data) {
     var $element = $(element);
@@ -303,15 +315,7 @@ function setValue(element, value, name, data) {
         if (prop === null || typeof prop == "undefined" || prop.length === 0) {
           continue;
         } else {
-          //Find an element with class, id, name, or rel attribute that matches the property name
-          var child =
-            jQuery.makeArray(jQuery("." + prop, element)).length > 0
-              ? jQuery("." + prop, element)
-              : jQuery("#" + prop, element).length > 0
-                ? jQuery("#" + prop, element)
-                : jQuery('[name="' + prop + '"]', element).length > 0
-                  ? jQuery('[name="' + prop + '"]', element)
-                  : relMatch(prop);
+          var child = match(prop, element);
 
           if (child.length !== 0) {
             browseJSON(obj[prop], jQuery(child, element), prop, data);

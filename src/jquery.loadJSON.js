@@ -19,18 +19,10 @@
 import jQuery from "jquery";
 import { setValue } from "./element-kinds.js";
 import { installContains, notice } from "./legacy.js";
+import { match } from "./key-match.js";
 
 (function ($) {
   "use strict";
-
-  // Elements anywhere in the document whose rel attribute is the key.
-  function relMatch(key) {
-    var $matches = jQuery('[rel="' + key + '"]');
-    if ($matches.length > 0) {
-      notice("rel");
-    }
-    return $matches;
-  }
 
   function browseJSON(obj, element, name, data) {
     var $element = $(element);
@@ -52,15 +44,7 @@ import { installContains, notice } from "./legacy.js";
         if (prop === null || typeof prop == "undefined" || prop.length === 0) {
           continue;
         } else {
-          //Find an element with class, id, name, or rel attribute that matches the property name
-          var child =
-            jQuery.makeArray(jQuery("." + prop, element)).length > 0
-              ? jQuery("." + prop, element)
-              : jQuery("#" + prop, element).length > 0
-                ? jQuery("#" + prop, element)
-                : jQuery('[name="' + prop + '"]', element).length > 0
-                  ? jQuery('[name="' + prop + '"]', element)
-                  : relMatch(prop);
+          var child = match(prop, element);
 
           if (child.length !== 0) {
             browseJSON(obj[prop], jQuery(child, element), prop, data);
