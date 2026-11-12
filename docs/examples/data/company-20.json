@@ -1,0 +1,16 @@
+{
+  "ID": 20,
+  "Name": "Star Records",
+  "Address": "Nobel House, Regent Centre",
+  "Town": "London",
+  "Contact": "Phone",
+  "IsFeatured": true,
+  "Country": [
+    "SRB",
+    "UK"
+  ],
+  "Logo": {
+    "src": "images/logo20.jpg",
+    "alt": "Star Records logo"
+  }
+}

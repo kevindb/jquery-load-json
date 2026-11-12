@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Nested objects and arrays · jQuery loadJSON</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
+<main>
+<h1>Nested objects and arrays</h1>
+<p>Each company has a <code>Manager</code> object and an <code>Employees</code> array. Their keys are looked up inside the element their own key matched, so each <code>FirstName</code> lands in the right place, and the employees repeat inside each company's copy.</p>
+<h2>Result</h2>
+<div class="result">
+<ul id="companies">
+  <li>
+    <a class="ID" href="details.html"><strong class="Name"></strong></a>, <span class="Address"></span>
+    <div class="Manager">Manager: <span class="FirstName"></span> <span class="LastName"></span></div>
+    <div>Employees:</div>
+    <ul>
+      <li class="Employees"><span class="FirstName"></span> <span class="LastName"></span></li>
+    </ul>
+  </li>
+</ul>
+</div>
+
+<h2>Template</h2>
+<pre data-source="#companies"><code></code></pre>
+<h2>Script</h2>
+<pre data-script="#example"><code></code></pre>
+
+</main>
+<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV" crossorigin="anonymous"></script>
+<script src="jquery.loadJSON.js"></script>
+<script src="show-source.js"></script>
+<script id="example">
+$.getJSON("data/hierarchy.json")
+  .done(function (companies) {
+    $("#companies > li").loadJSON(companies);
+  })
+  .fail(function () {
+    $("#companies").addClass("error").text("The data could not be loaded.");
+  });
+</script>
+</body>
+</html>

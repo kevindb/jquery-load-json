@@ -1,0 +1,138 @@
+:root {
+  color-scheme: light dark;
+  --text: #1d2125;
+  --muted: #5c6670;
+  --background: #f4f5f7;
+  --surface: #ffffff;
+  --border: #d5d9de;
+  --accent: #0b5cad;
+  --code: #eef1f4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e6e8eb;
+    --muted: #a1a9b2;
+    --background: #15181b;
+    --surface: #1e2226;
+    --border: #3a4047;
+    --accent: #7db7f0;
+    --code: #262b30;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0 16px;
+  background: var(--background);
+  color: var(--text);
+  font:
+    16px/1.5 system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+
+main {
+  max-width: 760px;
+  margin: 24px auto 48px;
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+nav {
+  max-width: 760px;
+  margin: 16px auto 0;
+  font-size: 14px;
+}
+
+a {
+  color: var(--accent);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.6rem;
+}
+
+h2 {
+  margin-top: 2rem;
+  font-size: 1.2rem;
+}
+
+.result {
+  padding: 16px;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+}
+
+pre {
+  overflow-x: auto;
+  padding: 12px;
+  background: var(--code);
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+fieldset label {
+  display: inline;
+  margin-right: 12px;
+  font-weight: normal;
+}
+
+fieldset {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  max-width: 420px;
+  padding: 6px;
+  font: inherit;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.status {
+  color: var(--muted);
+  font-style: italic;
+}
+
+.error {
+  color: #c0392b;
+}
+tr.selected td { background: var(--code); }
