@@ -10,7 +10,6 @@ export default [
       "coverage/**",
       "dist/**",
       "docs/examples/jquery.loadJSON.js",
-      "examples/**",
       "test-results/**",
       "playwright-report/**",
     ],

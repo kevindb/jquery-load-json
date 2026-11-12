@@ -33,14 +33,12 @@ jobs:
           languages: ${{ matrix.language }}
           build-mode: none
           queries: security-extended
-          # Scan the source once: every dist/ build repeats its alerts, and tests, docs and the
-          # legacy examples are not shipped.
+          # Scan the source once: every dist/ build repeats its alerts, and tests and docs are not shipped.
           config: |
             paths-ignore:
               - dist
               - test
               - docs
-              - examples
               - node_modules
       - uses: github/codeql-action/analyze@v4
         with:

@@ -7,7 +7,6 @@
   "ignore": [
     "**/.*",
     "docs",
-    "examples",
     "node_modules",
     "scripts",
     "test",
