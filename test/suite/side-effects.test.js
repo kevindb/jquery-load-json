@@ -11,6 +11,17 @@ describe("Array.prototype.contains", function () {
     expect([1, "2"].contains(3)).toBe(false);
   });
 
+  it("should stay writable and configurable, so a page can replace or remove it", function () {
+    const $root = fixture("<div></div>");
+
+    $root.loadJSON({});
+
+    expect(Object.getOwnPropertyDescriptor(Array.prototype, "contains")).toMatchObject({
+      writable: true,
+      configurable: true,
+    });
+  });
+
   it("should not add an enumerable property to every array", function () {
     const $root = fixture("<div></div>");
     $root.loadJSON({});

@@ -180,11 +180,12 @@ describe("element matching", function () {
     });
 
     it("should match a name containing a quote", function () {
-      const $form = fixture("<form><input name='a\"b'></form>");
+      const $form = fixture("<form><input name='a\"b'><input name='c'></form>");
 
       $form.loadJSON({ 'a"b': "x" });
 
-      expect($form.find("input").val()).toBe("x");
+      expect($form.find("input").eq(0).val()).toBe("x");
+      expect($form.find("input").eq(1).val()).toBe("");
     });
 
     it("should match a rel containing a quote", function () {

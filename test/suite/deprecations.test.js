@@ -30,7 +30,9 @@ describe("deprecation notices", function () {
     });
   });
 
-  describe("when debug is on", function () {
+  // These run before the tests below: each notice shows once per page, and every load installs
+  // the contains patch.
+  describe("when debug is on, first in the page", function () {
     beforeEach(function () {
       $.fn.loadJSON.debug = true;
     });
@@ -41,9 +43,48 @@ describe("deprecation notices", function () {
       $root.loadJSON({});
       $root.loadJSON({});
 
+      expect(warnings()[0]).toMatch(/^jQuery loadJSON: /);
       expect(warnings().filter((text) => text.includes("Array.prototype.contains"))).toHaveLength(
         1
       );
+    });
+
+    it("should not warn about jQuery Mobile when the element has no widget", function () {
+      const $form = fixture('<form><input type="checkbox" name="c" value="a"></form>');
+
+      $form.loadJSON({ c: "a" });
+
+      expect(warnings().join()).not.toContain("jQuery Mobile");
+    });
+
+    it('should not warn about "src$alt" for a string without $', function () {
+      const $root = fixture('<div><img class="p"></div>');
+
+      $root.loadJSON({ p: "data:,a" });
+
+      expect(warnings().join()).not.toContain("src$alt");
+    });
+
+    it("should not warn about the top-level fallback when there is none", function () {
+      const $root = fixture('<div><img class="p"></div>');
+
+      $root.loadJSON({ p: 1 });
+
+      expect(warnings().join()).not.toContain("top-level");
+    });
+
+    it("should not warn about HTML for plain text", function () {
+      const $root = fixture('<div><span class="a"></span></div>');
+
+      $root.loadJSON({ a: "a < b" });
+
+      expect(warnings().join()).not.toContain("inserted as HTML");
+    });
+  });
+
+  describe("when debug is on", function () {
+    beforeEach(function () {
+      $.fn.loadJSON.debug = true;
     });
 
     itBeforeJQuery4("should warn when refreshing a jQuery Mobile widget", function () {
@@ -74,17 +115,9 @@ describe("deprecation notices", function () {
     it("should warn when an image takes the top-level src, alt and title", function () {
       const $root = fixture('<div><img class="p"></div>');
 
-      $root.loadJSON({ p: 1, src: "data:,top" });
+      $root.loadJSON({ p: 1, title: "Top" });
 
       expect(warnings().join()).toContain("top-level src, alt and title");
-    });
-
-    it("should not warn about the top-level fallback when there is none", function () {
-      const $root = fixture('<div><img class="p"></div>');
-
-      $root.loadJSON({ p: 1 });
-
-      expect(warnings().join()).not.toContain("top-level");
     });
 
     it("should warn when a key matches by rel", function () {
@@ -117,14 +150,6 @@ describe("deprecation notices", function () {
       $root.loadJSON({ a: "<b>x</b>" });
 
       expect(warnings().join()).toContain("inserted as HTML");
-    });
-
-    it("should not warn about HTML for plain text", function () {
-      const $root = fixture('<div><span class="a"></span></div>');
-
-      $root.loadJSON({ a: "a < b" });
-
-      expect(warnings().join()).not.toContain("inserted as HTML");
     });
   });
 });

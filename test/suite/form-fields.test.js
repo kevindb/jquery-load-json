@@ -55,6 +55,14 @@ describe("form fields", function () {
 
       expect($form.find("textarea").val()).toBe("<b>x</b>");
     });
+
+    it("should set its content, not only its current value", function () {
+      const $form = fixture('<form><textarea name="t"></textarea></form>');
+
+      $form.loadJSON({ t: "x" });
+
+      expect($form.find("textarea").text()).toBe("x");
+    });
   });
 
   describe("when loading buttons", function () {
@@ -113,6 +121,14 @@ describe("form fields", function () {
       $form.loadJSON({ c: 1 });
 
       expect(checked($form.find("input"))).toEqual(["1"]);
+    });
+
+    it("should not check a box whose value is only part of a scalar", function () {
+      const $form = fixture('<form><input type="checkbox" name="c" value="a" checked></form>');
+
+      $form.loadJSON({ c: "ab" });
+
+      expect(checked($form.find("input"))).toEqual([]);
     });
 
     it("should not check a box without a value attribute for true", function () {
