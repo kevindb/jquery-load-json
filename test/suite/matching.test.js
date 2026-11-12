@@ -155,12 +155,52 @@ describe("element matching", function () {
       expect($root.find("span").text()).toBe("x");
     });
 
-    it.fails("should match a class that is not a valid selector", function () {
+    it("should match a class that is not a valid selector", function () {
       const $root = fixture('<div><span class="a:b("></span></div>');
 
       $root.loadJSON({ "a:b(": "x" });
 
       expect($root.find("span").text()).toBe("x");
+    });
+
+    it("should match a class that is a jQuery-only selector when it finds nothing as one", function () {
+      const $root = fixture('<div><span class="a:first"></span></div>');
+
+      $root.loadJSON({ "a:first": "x" });
+
+      expect($root.find("span").text()).toBe("x");
+    });
+
+    it("should match an id that is not a valid selector", function () {
+      const $root = fixture('<div><span id="a:b("></span></div>');
+
+      $root.loadJSON({ "a:b(": "x" });
+
+      expect($root.find("span").text()).toBe("x");
+    });
+
+    it("should match a name containing a quote", function () {
+      const $form = fixture("<form><input name='a\"b'></form>");
+
+      $form.loadJSON({ 'a"b': "x" });
+
+      expect($form.find("input").val()).toBe("x");
+    });
+
+    it("should match a rel containing a quote", function () {
+      const $root = fixture("<div><span rel='a\"b'></span></div>");
+
+      $root.loadJSON({ 'a"b': "x" });
+
+      expect($root.find("span").text()).toBe("x");
+    });
+
+    it("should leave the element unchanged when nothing matches a key that is not a valid selector", function () {
+      const $root = fixture('<div><span class="a">keep</span></div>');
+
+      $root.loadJSON({ "a:b(": "x" });
+
+      expect($root.text()).toBe("keep");
     });
 
     it("should match a class that starts with a digit", function () {
