@@ -15,3 +15,6 @@ It is based on Alexandre Caprais's notemplate plugin with several enhancements t
 Original work on [notemplate plugin](https://code.google.com/p/notemplate/) by Alexandre Caprais.  
 Project Home: [code.google.com/p/notemplate](https://code.google.com/p/notemplate/)  
 Plugin for jQuery. Populate HTML with a JSON data source.
+
+### Francesco Angi
+Fixed loading an array into an element that is not a select or form ([#28](https://github.com/kevindb/jquery-load-json/pull/28)).
