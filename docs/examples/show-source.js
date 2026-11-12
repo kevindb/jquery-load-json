@@ -26,7 +26,10 @@ function dedent(text, skipFirst) {
 
 document.querySelectorAll("pre[data-source]").forEach(function (pre) {
   var source = document.querySelector(pre.getAttribute("data-source"));
-  pre.querySelector("code").textContent = dedent(source.outerHTML.replace(/ (multiple|selected|checked|disabled|hidden)=""/g, " $1"), true);
+  pre.querySelector("code").textContent = dedent(
+    source.outerHTML.replace(/ (multiple|selected|checked|disabled|hidden)=""/g, " $1"),
+    true
+  );
 });
 
 // The example's script comes after this one, so it is shown once the page is parsed.

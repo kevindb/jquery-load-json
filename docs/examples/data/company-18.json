@@ -5,9 +5,7 @@
   "Town": "London",
   "Contact": "Email",
   "IsFeatured": false,
-  "Country": [
-    "UK"
-  ],
+  "Country": ["UK"],
   "Logo": {
     "src": "images/logo18.jpg",
     "alt": "The Empire logo"

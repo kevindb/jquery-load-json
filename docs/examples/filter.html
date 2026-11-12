@@ -1,75 +1,81 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Connected selects from local data · jQuery loadJSON</title>
-<link rel="stylesheet" href="style.css" />
-</head>
-<body>
-<nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
-<main>
-<h1>Connected selects from local data</h1>
-<p>The same connected selects, with the data already in the page. Choosing a region filters the towns with <code>Array.prototype.filter</code>, sorts them, and loads the result.</p>
-<h2>Result</h2>
-<div class="result">
-<form id="locations">
-  <label for="Region">Region</label>
-  <select id="Region" name="Region">
-    <option value="" class="regions">Choose a region</option>
-  </select>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Connected selects from local data · jQuery loadJSON</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
+    <main>
+      <h1>Connected selects from local data</h1>
+      <p>
+        The same connected selects, with the data already in the page. Choosing a region filters the
+        towns with <code>Array.prototype.filter</code>, sorts them, and loads the result.
+      </p>
+      <h2>Result</h2>
+      <div class="result">
+        <form id="locations">
+          <label for="Region">Region</label>
+          <select id="Region" name="Region">
+            <option value="" class="regions">Choose a region</option>
+          </select>
 
-  <label for="Town">Town</label>
-  <select id="Town" name="Town">
-    <option value="" class="towns">Choose a town</option>
-  </select>
-</form>
-</div>
+          <label for="Town">Town</label>
+          <select id="Town" name="Town">
+            <option value="" class="towns">Choose a town</option>
+          </select>
+        </form>
+      </div>
 
-<h2>Template</h2>
-<pre data-source="#locations"><code></code></pre>
-<h2>Script</h2>
-<pre data-script="#example"><code></code></pre>
+      <h2>Template</h2>
+      <pre data-source="#locations"><code></code></pre>
+      <h2>Script</h2>
+      <pre data-script="#example"><code></code></pre>
+    </main>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="jquery.loadJSON.js"></script>
+    <script src="show-source.js"></script>
+    <script id="example">
+      var regions = [
+        { value: 1, text: "East Europe" },
+        { value: 2, text: "West Europe" },
+        { value: 3, text: "Middle Europe" },
+      ];
+      var towns = [
+        { value: 17, text: "Belgrade", region: 1 },
+        { value: 19, text: "Moscow", region: 1 },
+        { value: 20, text: "Kiev", region: 1 },
+        { value: 21, text: "London", region: 2 },
+        { value: 22, text: "Paris", region: 2 },
+        { value: 23, text: "Madrid", region: 2 },
+        { value: 24, text: "Lisbon", region: 2 },
+        { value: 31, text: "Berlin", region: 3 },
+        { value: 32, text: "Vienna", region: 3 },
+        { value: 33, text: "Budapest", region: 3 },
+        { value: 34, text: "Prague", region: 3 },
+      ];
 
-</main>
-<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV" crossorigin="anonymous"></script>
-<script src="jquery.loadJSON.js"></script>
-<script src="show-source.js"></script>
-<script id="example">
-var regions = [
-  { value: 1, text: "East Europe" },
-  { value: 2, text: "West Europe" },
-  { value: 3, text: "Middle Europe" },
-];
-var towns = [
-  { value: 17, text: "Belgrade", region: 1 },
-  { value: 19, text: "Moscow", region: 1 },
-  { value: 20, text: "Kiev", region: 1 },
-  { value: 21, text: "London", region: 2 },
-  { value: 22, text: "Paris", region: 2 },
-  { value: 23, text: "Madrid", region: 2 },
-  { value: 24, text: "Lisbon", region: 2 },
-  { value: 31, text: "Berlin", region: 3 },
-  { value: 32, text: "Vienna", region: 3 },
-  { value: 33, text: "Budapest", region: 3 },
-  { value: 34, text: "Prague", region: 3 },
-];
+      $("#locations").loadJSON({ regions: regions });
 
-$("#locations").loadJSON({ regions: regions });
+      $("#Region").on("change", function () {
+        var region = Number($(this).val());
+        var inRegion = towns
+          .filter(function (town) {
+            return town.region === region;
+          })
+          .sort(function (a, b) {
+            return a.text.localeCompare(b.text);
+          });
 
-$("#Region").on("change", function () {
-  var region = Number($(this).val());
-  var inRegion = towns
-    .filter(function (town) {
-      return town.region === region;
-    })
-    .sort(function (a, b) {
-      return a.text.localeCompare(b.text);
-    });
-
-  $("#Town option").slice(1).remove();
-  $("#locations").loadJSON({ towns: inRegion });
-});
-</script>
-</body>
+        $("#Town option").slice(1).remove();
+        $("#locations").loadJSON({ towns: inRegion });
+      });
+    </script>
+  </body>
 </html>

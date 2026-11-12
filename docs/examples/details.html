@@ -1,53 +1,68 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Details of one object · jQuery loadJSON</title>
-<link rel="stylesheet" href="style.css" />
-</head>
-<body>
-<nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
-<main>
-<h1>Details of one object</h1>
-<p>One object loaded into a block of content elements, an image and a link. The company comes from the <code>ID</code> in the address: <a href="?ID=17">17</a>, <a href="?ID=18">18</a>, <a href="?ID=19">19</a>, <a href="?ID=20">20</a>, <a href="?ID=21">21</a>.</p>
-<h2>Result</h2>
-<div class="result">
-<div id="company">
-  <h2><img class="Logo" alt="" /> <span class="Name"></span></h2>
-  <dl>
-    <dt>Address</dt>
-    <dd><span class="Address"></span>, <span class="Town"></span></dd>
-    <dt>Contact by</dt>
-    <dd class="Contact"></dd>
-    <dt>Countries</dt>
-    <dd><ul><li class="Country"></li></ul></dd>
-  </dl>
-  <a class="ID" href="edit.html">Edit this company</a>
-</div>
-</div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Details of one object · jQuery loadJSON</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
+    <main>
+      <h1>Details of one object</h1>
+      <p>
+        One object loaded into a block of content elements, an image and a link. The company comes
+        from the <code>ID</code> in the address: <a href="?ID=17">17</a>, <a href="?ID=18">18</a>,
+        <a href="?ID=19">19</a>, <a href="?ID=20">20</a>, <a href="?ID=21">21</a>.
+      </p>
+      <h2>Result</h2>
+      <div class="result">
+        <div id="company">
+          <h2><img class="Logo" alt="" /> <span class="Name"></span></h2>
+          <dl>
+            <dt>Address</dt>
+            <dd><span class="Address"></span>, <span class="Town"></span></dd>
+            <dt>Contact by</dt>
+            <dd class="Contact"></dd>
+            <dt>Countries</dt>
+            <dd>
+              <ul>
+                <li class="Country"></li>
+              </ul>
+            </dd>
+          </dl>
+          <a class="ID" href="edit.html">Edit this company</a>
+        </div>
+      </div>
 
-<h2>Template</h2>
-<pre data-source="#company"><code></code></pre>
-<h2>Script</h2>
-<pre data-script="#example"><code></code></pre>
-<p>The <code>Logo</code> value is an object, which sets the image's <code>src</code> and <code>alt</code>. <code>Country</code> is an array, so its <code>li</code> is repeated.</p>
-</main>
-<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV" crossorigin="anonymous"></script>
-<script src="jquery.loadJSON.js"></script>
-<script src="show-source.js"></script>
-<script id="example">
-var id = new URLSearchParams(location.search).get("ID") || "17";
+      <h2>Template</h2>
+      <pre data-source="#company"><code></code></pre>
+      <h2>Script</h2>
+      <pre data-script="#example"><code></code></pre>
+      <p>
+        The <code>Logo</code> value is an object, which sets the image's <code>src</code> and
+        <code>alt</code>. <code>Country</code> is an array, so its <code>li</code> is repeated.
+      </p>
+    </main>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="jquery.loadJSON.js"></script>
+    <script src="show-source.js"></script>
+    <script id="example">
+      var id = new URLSearchParams(location.search).get("ID") || "17";
 
-if (/^\d+$/.test(id)) {
-  $.getJSON("data/company-" + id + ".json")
-    .done(function (company) {
-      $("#company").loadJSON(company);
-    })
-    .fail(function () {
-    $("#company").addClass("error").text("The data could not be loaded.");
-  });
-}
-</script>
-</body>
+      if (/^\d+$/.test(id)) {
+        $.getJSON("data/company-" + id + ".json")
+          .done(function (company) {
+            $("#company").loadJSON(company);
+          })
+          .fail(function () {
+            $("#company").addClass("error").text("The data could not be loaded.");
+          });
+      }
+    </script>
+  </body>
 </html>

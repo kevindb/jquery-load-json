@@ -5,10 +5,7 @@
   "Town": "London",
   "Contact": "Phone",
   "IsFeatured": true,
-  "Country": [
-    "SRB",
-    "UK"
-  ],
+  "Country": ["SRB", "UK"],
   "Logo": {
     "src": "images/logo20.jpg",
     "alt": "Star Records logo"

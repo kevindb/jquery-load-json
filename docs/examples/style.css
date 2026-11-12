@@ -135,4 +135,6 @@ img {
 .error {
   color: #c0392b;
 }
-tr.selected td { background: var(--code); }
+tr.selected td {
+  background: var(--code);
+}
