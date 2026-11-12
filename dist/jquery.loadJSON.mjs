@@ -510,7 +510,7 @@ function match(key, scope) {
     if (argument.constructor != String) {
       load(element, argument, argument, properties);
     } else if (argument.charAt(0) == "{" || argument.charAt(0) == "[") {
-      load(element, $.parseJSON(argument), argument, properties);
+      load(element, JSON.parse(argument), argument, properties);
     } else {
       notice("url");
       $.ajax({

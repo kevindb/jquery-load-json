@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fixture, itBeforeJQuery4, texts } from "./helpers.js";
+import { fixture, texts } from "./helpers.js";
 
 describe("loadJSON arguments", function () {
   describe("when given an object", function () {
@@ -58,7 +58,7 @@ describe("loadJSON arguments", function () {
   });
 
   describe("when given a JSON string", function () {
-    itBeforeJQuery4("should parse an object string and load it", function () {
+    it("should parse an object string and load it", function () {
       const $root = fixture('<div><span class="a"></span></div>');
 
       $root.loadJSON('{"a":"parsed"}');
@@ -66,7 +66,7 @@ describe("loadJSON arguments", function () {
       expect($root.find(".a").text()).toBe("parsed");
     });
 
-    itBeforeJQuery4("should parse a string holding arrays and load it", function () {
+    it("should parse a string holding arrays and load it", function () {
       const $root = fixture('<div><ul><li class="i"></li></ul></div>');
 
       $root.loadJSON('{"i":["one","two"]}');
@@ -74,7 +74,7 @@ describe("loadJSON arguments", function () {
       expect($root.find(".i").length).toBe(2);
     });
 
-    itBeforeJQuery4("should parse an array string and load it", function () {
+    it("should parse an array string and load it", function () {
       const $list = fixture('<ul><li rel="1"></li><li rel="0"></li></ul>');
 
       $list.loadJSON('["zero","one"]');
@@ -82,18 +82,15 @@ describe("loadJSON arguments", function () {
       expect(texts($list.find("li"))).toEqual(["one", "zero"]);
     });
 
-    itBeforeJQuery4(
-      "should add one option per item of an array string loaded into a select",
-      function () {
-        const $select = fixture('<select><option value="x">X</option></select>');
+    it("should add one option per item of an array string loaded into a select", function () {
+      const $select = fixture('<select><option value="x">X</option></select>');
 
-        $select.loadJSON('[{"value":"a","text":"A"}]');
+      $select.loadJSON('[{"value":"a","text":"A"}]');
 
-        expect($select.find("option").length).toBe(2);
-      }
-    );
+      expect($select.find("option").length).toBe(2);
+    });
 
-    itBeforeJQuery4("should call onLoading before and onLoaded after loading", function () {
+    it("should call onLoading before and onLoaded after loading", function () {
       const $root = fixture('<div><span class="a"></span></div>');
       const calls = [];
 
@@ -105,7 +102,7 @@ describe("loadJSON arguments", function () {
       expect(calls).toEqual(["loading:", "loaded:x"]);
     });
 
-    itBeforeJQuery4("should replace the content with the saved template first", function () {
+    it("should replace the content with the saved template first", function () {
       const $root = fixture('<div><span class="old"></span></div>');
       $root.data("loadJSON-template", '<b class="a"></b>');
 
@@ -114,7 +111,7 @@ describe("loadJSON arguments", function () {
       expect($root.html()).toBe('<b class="a">x</b>');
     });
 
-    itBeforeJQuery4("should throw when the string is not valid JSON", function () {
+    it("should throw when the string is not valid JSON", function () {
       const $root = fixture("<div></div>");
 
       const load = () => $root.loadJSON("{not json");
