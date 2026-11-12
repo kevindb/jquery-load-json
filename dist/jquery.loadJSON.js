@@ -43,212 +43,200 @@
 
 }(function (jQuery) {
 	'use strict';
+// Element kinds: how a value is set on each kind of element.
+
+var $ = jQuery;
+
+// Input types whose value is set directly.
+var rField =
+  /^(?:color|date|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/;
+
+function refreshMobileSelect($element) {
+  try {
+    if ($.isFunction($element.selectmenu)) {
+      $element.selectmenu("refresh"); //used in the JQuery mobile
+    }
+  } catch (ex) {}
+}
+
+function refreshMobileCheckBox($element) {
+  try {
+    if ($.isFunction($element.checkboxradio)) {
+      $element.checkboxradio("refresh"); //used in the JQuery mobile
+    }
+  } catch (ex) {}
+}
+
+// Appends a copy of the select's last option for each {value, text, selected} item.
+function addOptions(select, items) {
+  var options = jQuery.makeArray(select);
+  var last = options[options.length - 1];
+  var template = $(last).clone(true);
+
+  // Each copy goes right after the original last option, so the items are added from the end
+  for (var i = items.length - 1; i >= 0; i--) {
+    var $option = template.clone(true).insertAfter(last);
+    $option.attr("value", items[i].value);
+    $option.text(items[i].text);
+    if (items[i].selected) {
+      $option.attr("selected", true);
+    }
+  }
+
+  refreshMobileSelect($(select));
+}
+
+function field(element, value) {
+  $(element).val(value);
+}
+
+function checkbox(element, value) {
+  var $element = $(element);
+  var elementValue = $element.val();
+
+  $element.prop(
+    "checked",
+    (value.constructor == Array && value.contains(elementValue)) || value == elementValue
+  );
+  refreshMobileCheckBox($element);
+}
+
+function radio(element, value) {
+  var $element = $(element);
+
+  $element.prop("checked", value.toString().toLowerCase() == element.value.toLowerCase());
+  refreshMobileCheckBox($element);
+}
+
+function option(element, value) {
+  var $element = $(element);
+
+  $element.attr("value", value.value);
+  $element.text(value.text);
+  if (value.selected) {
+    $element.attr("selected", true);
+  }
+}
+
+function selectOne(element, value) {
+  if (value.constructor == Array) {
+    addOptions(element, value);
+  } else {
+    $(element).val(value);
+    refreshMobileSelect($(element));
+  }
+}
+
+function selectMultiple(element, value) {
+  var options = element.options;
+
+  // An array loaded into a select with one option or none adds options; otherwise it selects
+  if (value.constructor == Array && options.length <= 1) {
+    addOptions(element, value);
+    return;
+  }
+
+  var values = value.constructor == Array ? value : [value];
+  for (var i = 0; i < options.length; i++) {
+    for (var j = 0; j < values.length; j++) {
+      options[i].selected |= options[i].value == values[j];
+    }
+  }
+  refreshMobileSelect($(element));
+}
+
+function link(element, value, name) {
+  var $element = $(element);
+  var href = $element.attr("href");
+
+  if (href) {
+    // If a href value exists, add the pair to its query, before any fragment
+    var iFragment = href.indexOf("#");
+    var fragment = "";
+
+    if (iFragment >= 0) {
+      fragment = href.substring(iFragment);
+      href = href.substring(0, iFragment);
+    }
+
+    href += (href.indexOf("?") >= 0 ? "&" : "?") + name + "=" + value + fragment;
+  } else {
+    // If no href exists, set href to value
+    href = value;
+  }
+
+  $element.attr("href", href);
+}
+
+function image(element, value, name, data) {
+  var $element = $(element);
+
+  if (typeof value == "string") {
+    // A string is the image address
+    $element.attr("src", value);
+  } else if (value.constructor == Object) {
+    // An object sets the image's own src, alt and title
+    $element.attr("src", value.src);
+    $element.attr("alt", value.alt);
+    $element.attr("title", value.title);
+  } else {
+    // Otherwise the top-level src, alt and title apply to every matched image
+    $element.attr("src", data.src);
+    $element.attr("alt", data.alt);
+    $element.attr("title", data.title);
+  }
+}
+
+function content(element, value) {
+  try {
+    $(element).html(value.toString());
+  } catch (exc) {}
+}
+
+var kinds = {
+  field: field,
+  checkbox: checkbox,
+  radio: radio,
+  option: option,
+  "select-one": selectOne,
+  "select-multiple": selectMultiple,
+  link: link,
+  image: image,
+  content: content,
+};
+
+// The element kind of a DOM element, from its type or, when it has none, its tag name.
+function kindOf(element) {
+  var type = (element.type || element.tagName).toLowerCase();
+
+  switch (type) {
+    case "checkbox":
+    case "radio":
+    case "option":
+    case "select-one":
+    case "select-multiple":
+      return type;
+    case "a":
+      return "link";
+    case "img":
+      return "image";
+    default:
+      return rField.test(type) ? "field" : "content";
+  }
+}
+
+/**
+ * Sets a value on an element by its kind. `element` is a DOM element or a jQuery set of one;
+ * `name` is the key the value was loaded from and `data` the data passed to loadJSON.
+ */
+function setValue(element, value, name, data) {
+  var node = $(element)[0];
+
+  kinds[kindOf(node)](node, value, name, data);
+}
+
 
 (function ($) {
-
-  function refreshMobileSelect($element) {
-    try {
-      if ($.isFunction($element.selectmenu)) {
-        $element.selectmenu("refresh"); //used in the JQuery mobile
-      }
-    } catch (ex) {}
-  }
-
-  function refreshMobileCheckBox($element) {
-    try {
-      if ($.isFunction($element.checkboxradio)) {
-        $element.checkboxradio("refresh"); //used in the JQuery mobile
-      }
-    } catch (ex) {}
-  }
-
-  function loadSelect(element, aoValues, name) {
-    ///<summary>
-    ///Load options into the select list
-    ///</summary>
-    ///<param name="element" type="JQuery:select">Select list</param>
-    ///<param name="aoValues" type="Array{value,text,selected}">Array of object containin the options</param>
-    ///<param name="name" type="String">Name of the select list</param>
-
-    var arr = jQuery.makeArray($(element)[0]);
-    var template = $(arr[arr.length - 1]).clone(true);
-
-    //fill started by last
-    var objLen = aoValues.length;
-    var i = objLen - 1;
-
-    for (var iCreate = 0; iCreate < objLen; ++iCreate) {
-      //duplicate the last
-      var last = template.clone(true).insertAfter(arr[arr.length - 1]);
-      //setElementValue(last, obj[i], name);
-      $(last).attr("value", aoValues[i].value);
-      $(last).text(aoValues[i].text);
-      if (aoValues[i].selected) {
-        $(last).attr("selected", true);
-      }
-      i--;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////
-    refreshMobileSelect($(element));
-    //////////////////////////////////////////////////////////////////////////////////////////
-  }
-
-  function setElementValue(element, value, name, data) {
-    var $element = $(element);
-    var type = element.type || element.tagName;
-    if (type == null) {
-      type = element[0].type || element[0].tagName; //select returns undefined if called directly
-      if (type == null) {
-        return;
-      }
-    }
-    type = type.toLowerCase();
-    switch (type) {
-      case "radio":
-        if (value.toString().toLowerCase() == element.value.toLowerCase()) {
-          $element.prop("checked", true);
-        } else {
-          $element.prop("checked", false);
-        }
-        refreshMobileCheckBox($element);
-        break;
-
-      case "checkbox":
-        var elementValue = $element.val();
-
-        if ((value.constructor == Array && value.contains(elementValue)) || value == elementValue) {
-          $element.prop("checked", true);
-        } else {
-          $element.prop("checked", false);
-        }
-        refreshMobileCheckBox($element);
-        break;
-
-      case "option":
-        $element.attr("value", value.value);
-        $element.text(value.text);
-        if (value.selected) {
-          $element.attr("selected", true);
-        }
-        break;
-
-      case "select-multiple":
-        // This is "interesting". In mobile use element.options while in the desktop use element[0].options
-        var select = element[0];
-
-        if (
-          typeof select === "undefined" ||
-          !select.hasOwnProperty("options") ||
-          typeof select.options === "undefined" ||
-          select.options === null
-        ) {
-          select = $element[0];
-        }
-
-        if (select.options.length > 1 || value.constructor != Array) {
-          // Select the values, unless an array is loaded into a select with one option or none
-          var values = value.constructor == Array ? value : [value];
-
-          // Replaced element with element[0] ???? because now it reports that element.options does not exist
-          for (var i = 0; i < select.options.length; i++) {
-            for (var j = 0; j < values.length; j++) {
-              select.options[i].selected |= select.options[i].value == values[j];
-            }
-          }
-
-          refreshMobileSelect($element);
-        } else {
-          // Instead of selecting values use values array to populate select list
-          loadSelect(element, value);
-        }
-        break;
-
-      case "select":
-      case "select-one":
-        if (value.constructor == Array) {
-          loadSelect(element, value);
-        } else {
-          $element.val(value);
-          refreshMobileSelect($element);
-        }
-        break;
-
-      case "color":
-      case "date":
-      case "datetime":
-      case "datetime-local":
-      case "email":
-      case "hidden":
-      case "month":
-      case "number":
-      case "password":
-      case "range":
-      case "search":
-      case "tel":
-      case "text":
-      case "time":
-      case "url":
-      case "week":
-        $element.val(value);
-        break;
-
-      case "a":
-        var href = $element.attr("href");
-
-        if (href) {
-          // If a href value exists, add the pair to its query, before any fragment
-          var iFragment = href.indexOf("#");
-          var fragment = "";
-
-          if (iFragment >= 0) {
-            fragment = href.substring(iFragment);
-            href = href.substring(0, iFragment);
-          }
-
-          if (href.indexOf("?") >= 0) {
-            // If parameters in the URL exists add new pair using &
-            href += "&" + name + "=" + value;
-          } else {
-            //otherwise attach pair to URL
-            href = href + "?" + name + "=" + value;
-          }
-
-          href += fragment;
-        } else {
-          // If no href exists, set href to value
-          href = value;
-        }
-
-        $element.attr("href", href);
-        break;
-
-      case "img":
-        if (typeof value == "string") {
-          // A string is the image address
-          $element.attr("src", value);
-        } else if (value.constructor == Object) {
-          // An object sets the image's own src, alt and title
-          $element.attr("src", value.src);
-          $element.attr("alt", value.alt);
-          $element.attr("title", value.title);
-        } else {
-          // Otherwise the top-level src, alt and title apply to every matched image
-          $element.attr("src", data.src);
-          $element.attr("alt", data.alt);
-          $element.attr("title", data.title);
-        }
-        break;
-
-      case "textarea":
-      case "submit":
-      case "button":
-      default:
-        try {
-          $element.html(value.toString());
-        } catch (exc) {}
-    }
-  }
 
   function browseJSON(obj, element, name, data) {
     var $element = $(element);
@@ -256,10 +244,10 @@
     // no object
     if (obj === undefined || obj === null) ; else if (obj.constructor == Object) {
       if (element.length >= 1 && element[0].tagName == "OPTION") {
-        setElementValue(element[0], obj, name, data);
+        setValue(element[0], obj, name, data);
       } else if (element.length >= 1 && element[0].tagName == "IMG") {
         element.each(function () {
-          setElementValue(this, obj, name, data);
+          setValue(this, obj, name, data);
         });
       }
 
@@ -295,11 +283,11 @@
           element[0].type == "select-multiple")
       ) {
         ///nova dva reda
-        setElementValue(element, obj, name, data);
+        setValue(element, obj, name, data);
         return;
       } else if (element.length > 0 && element[0].type == "checkbox") {
         element.each(function () {
-          setElementValue(this, obj, name, data);
+          setValue(this, obj, name, data);
         });
       } else {
         var arrayElements = $element.children("[rel]");
@@ -346,10 +334,10 @@
 
       if (elemLen > 0) {
         for (var i = 0; i < elemLen; ++i) {
-          setElementValue(element[i], obj, name, data);
+          setValue(element[i], obj, name, data);
         }
       } else {
-        setElementValue(element, obj, name, data);
+        setValue(element, obj, name, data);
       }
     }
   } //function browseJSON end
