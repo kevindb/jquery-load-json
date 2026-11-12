@@ -49,6 +49,7 @@ var $$1 = jQuery;
 
 // Adds Array.prototype.contains (loose equality), which earlier versions defined on every call.
 function installContains() {
+  notice("contains");
   Array.prototype.contains = function (obj) {
     var i = this.length;
     while (i--) {
@@ -64,9 +65,38 @@ function installContains() {
 function refreshMobile($element, widget) {
   try {
     if ($$1.isFunction($element[widget])) {
+      notice("mobile");
       $element[widget]("refresh");
     }
   } catch (ex) {}
+}
+
+// Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
+var messages = {
+  contains:
+    "Array.prototype.contains is deprecated and will be removed in 2.0. Use Array.prototype.indexOf instead.",
+  mobile:
+    "Refreshing jQuery Mobile selectmenu and checkboxradio widgets is deprecated and will be removed in 2.0. Refresh them in onLoaded instead.",
+  mobileOption: "The mobile option has no effect and will be removed in 2.0.",
+  srcAlt:
+    'An image value is used as the whole src: the "src$alt" format is not supported. Pass {src, alt} instead.',
+  imageFallback:
+    "Setting images from the top-level src, alt and title is deprecated and will be removed in 2.0. Give each image its own value.",
+  rel: "Matching keys by the rel attribute is deprecated and will be removed in 2.0. Use a class, id or name.",
+  relIndex:
+    'Loading array items into rel="index" children is deprecated and will be removed in 2.0.',
+  url: "Passing a URL to loadJSON is deprecated and will be removed in 2.0. Load the data with $.getJSON and pass it to loadJSON.",
+  html: "Values are inserted as HTML. From 2.0 they are inserted as text unless the html option is true.",
+};
+
+var shown = {};
+
+function notice(id) {
+  if (!$$1.fn.loadJSON.debug || shown[id]) {
+    return;
+  }
+  shown[id] = true;
+  console.warn("jQuery loadJSON: " + messages[id]);
 }
 
 // Element kinds: how a value is set on each kind of element.
@@ -183,6 +213,9 @@ function image(element, value, name, data) {
 
   if (typeof value == "string") {
     // A string is the image address
+    if (value.indexOf("$") >= 0) {
+      notice("srcAlt");
+    }
     $element.attr("src", value);
   } else if (value.constructor == Object) {
     // An object sets the image's own src, alt and title
@@ -191,6 +224,9 @@ function image(element, value, name, data) {
     $element.attr("title", value.title);
   } else {
     // Otherwise the top-level src, alt and title apply to every matched image
+    if (data.src !== undefined || data.alt !== undefined || data.title !== undefined) {
+      notice("imageFallback");
+    }
     $element.attr("src", data.src);
     $element.attr("alt", data.alt);
     $element.attr("title", data.title);
@@ -198,6 +234,9 @@ function image(element, value, name, data) {
 }
 
 function content(element, value) {
+  if (typeof value == "string" && /<[a-z!/?]/i.test(value)) {
+    notice("html");
+  }
   try {
     $(element).html(value.toString());
   } catch (exc) {}
@@ -248,6 +287,15 @@ function setValue(element, value, name, data) {
 
 (function ($) {
 
+  // Elements anywhere in the document whose rel attribute is the key.
+  function relMatch(key) {
+    var $matches = jQuery('[rel="' + key + '"]');
+    if ($matches.length > 0) {
+      notice("rel");
+    }
+    return $matches;
+  }
+
   function browseJSON(obj, element, name, data) {
     var $element = $(element);
 
@@ -273,7 +321,7 @@ function setValue(element, value, name, data) {
                 ? jQuery("#" + prop, element)
                 : jQuery('[name="' + prop + '"]', element).length > 0
                   ? jQuery('[name="' + prop + '"]', element)
-                  : jQuery('[rel="' + prop + '"]');
+                  : relMatch(prop);
 
           if (child.length !== 0) {
             browseJSON(obj[prop], jQuery(child, element), prop, data);
@@ -302,6 +350,7 @@ function setValue(element, value, name, data) {
       } else {
         var arrayElements = $element.children("[rel]");
         if (arrayElements.length > 0) {
+          notice("relIndex");
           //if there are rel=[index] elements populate them instead of iteration
           arrayElements.each(function () {
             var $this = $(this);
@@ -389,6 +438,7 @@ function setValue(element, value, name, data) {
           browseJSON(data, this, undefined, obj);
           properties.onLoaded();
         } else {
+          notice("url");
           var element = $this;
           $.ajax({
             url: obj,
@@ -407,5 +457,8 @@ function setValue(element, value, name, data) {
       }
     });
   };
+
+  // Set to true to show a console warning, once per page, for each behavior removed in 2.0.
+  $.fn.loadJSON.debug = false;
 })(jQuery);
 }));

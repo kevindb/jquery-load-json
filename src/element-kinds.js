@@ -1,5 +1,5 @@
 import jQuery from "jquery";
-import { refreshMobile } from "./legacy.js";
+import { notice, refreshMobile } from "./legacy.js";
 
 // Element kinds: how a value is set on each kind of element.
 
@@ -115,6 +115,9 @@ function image(element, value, name, data) {
 
   if (typeof value == "string") {
     // A string is the image address
+    if (value.indexOf("$") >= 0) {
+      notice("srcAlt");
+    }
     $element.attr("src", value);
   } else if (value.constructor == Object) {
     // An object sets the image's own src, alt and title
@@ -123,6 +126,9 @@ function image(element, value, name, data) {
     $element.attr("title", value.title);
   } else {
     // Otherwise the top-level src, alt and title apply to every matched image
+    if (data.src !== undefined || data.alt !== undefined || data.title !== undefined) {
+      notice("imageFallback");
+    }
     $element.attr("src", data.src);
     $element.attr("alt", data.alt);
     $element.attr("title", data.title);
@@ -130,6 +136,9 @@ function image(element, value, name, data) {
 }
 
 function content(element, value) {
+  if (typeof value == "string" && /<[a-z!/?]/i.test(value)) {
+    notice("html");
+  }
   try {
     $(element).html(value.toString());
   } catch (exc) {}

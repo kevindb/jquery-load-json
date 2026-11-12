@@ -18,10 +18,19 @@
 
 import jQuery from "jquery";
 import { setValue } from "./element-kinds.js";
-import { installContains } from "./legacy.js";
+import { installContains, notice } from "./legacy.js";
 
 (function ($) {
   "use strict";
+
+  // Elements anywhere in the document whose rel attribute is the key.
+  function relMatch(key) {
+    var $matches = jQuery('[rel="' + key + '"]');
+    if ($matches.length > 0) {
+      notice("rel");
+    }
+    return $matches;
+  }
 
   function browseJSON(obj, element, name, data) {
     var $element = $(element);
@@ -51,7 +60,7 @@ import { installContains } from "./legacy.js";
                 ? jQuery("#" + prop, element)
                 : jQuery('[name="' + prop + '"]', element).length > 0
                   ? jQuery('[name="' + prop + '"]', element)
-                  : jQuery('[rel="' + prop + '"]');
+                  : relMatch(prop);
 
           if (child.length !== 0) {
             browseJSON(obj[prop], jQuery(child, element), prop, data);
@@ -80,6 +89,7 @@ import { installContains } from "./legacy.js";
       } else {
         var arrayElements = $element.children("[rel]");
         if (arrayElements.length > 0) {
+          notice("relIndex");
           //if there are rel=[index] elements populate them instead of iteration
           arrayElements.each(function () {
             var $this = $(this);
@@ -167,6 +177,7 @@ import { installContains } from "./legacy.js";
           browseJSON(data, this, undefined, obj);
           properties.onLoaded();
         } else {
+          notice("url");
           var element = $this;
           $.ajax({
             url: obj,
@@ -185,6 +196,9 @@ import { installContains } from "./legacy.js";
       }
     });
   };
+
+  // Set to true to show a console warning, once per page, for each behavior removed in 2.0.
+  $.fn.loadJSON.debug = false;
 })(jQuery);
 
 export default jQuery;
