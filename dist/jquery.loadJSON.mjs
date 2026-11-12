@@ -182,7 +182,7 @@ export { default } from 'jquery';
             href = href.substring(0, iFragment);
           }
 
-          if (href.indexOf("?") > 0) {
+          if (href.indexOf("?") >= 0) {
             // If parameters in the URL exists add new pair using &
             href += "&" + name + "=" + value;
           } else {
