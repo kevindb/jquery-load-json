@@ -303,22 +303,12 @@ function setValue(element, value, name, data) {
   kinds[kindOf(node)](node, value, name, data);
 }
 
-/**
- * Whether a DOM element's kind takes a value of this shape whole, rather than the walk splitting
- * it: an option or an image takes an object; a select or a checkbox takes an array.
- */
-function takesWhole(element, value) {
-  switch (kindOf(element)) {
-    case "option":
-    case "image":
-      return value.constructor == Object;
-    case "select-one":
-    case "select-multiple":
-    case "checkbox":
-      return value.constructor == Array;
-    default:
-      return false;
-  }
+// Whether a DOM element's kind takes an object whole (an option or an image), rather than the walk
+// loading each of its keys into a match.
+function takesObject(element) {
+  var kind = kindOf(element);
+
+  return kind == "option" || kind == "image";
 }
 
 // Each step of a match: its selector for the key, and the same test without a selector.
@@ -418,7 +408,7 @@ function match(key, scope) {
   // Loads each key of an object into its match within the element.
   function walkObject(object, element, name, data) {
     // An option or an image matched by the enclosing key takes the object whole
-    if (element.length >= 1 && takesWhole(element[0], object)) {
+    if (element.length >= 1 && takesObject(element[0])) {
       if (kindOf(element[0]) == "option") {
         setValue(element[0], object, name, data);
       } else {

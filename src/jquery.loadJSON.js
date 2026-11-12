@@ -17,7 +17,7 @@
  */
 
 import jQuery from "jquery";
-import { kindOf, setValue, takesWhole } from "./element-kinds.js";
+import { kindOf, setValue, takesObject } from "./element-kinds.js";
 import { installContains, notice } from "./legacy.js";
 import { match } from "./key-match.js";
 
@@ -32,7 +32,7 @@ import { match } from "./key-match.js";
   // Loads each key of an object into its match within the element.
   function walkObject(object, element, name, data) {
     // An option or an image matched by the enclosing key takes the object whole
-    if (element.length >= 1 && takesWhole(element[0], object)) {
+    if (element.length >= 1 && takesObject(element[0])) {
       if (kindOf(element[0]) == "option") {
         setValue(element[0], object, name, data);
       } else {

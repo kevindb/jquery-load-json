@@ -196,20 +196,10 @@ export function setValue(element, value, name, data) {
   kinds[kindOf(node)](node, value, name, data);
 }
 
-/**
- * Whether a DOM element's kind takes a value of this shape whole, rather than the walk splitting
- * it: an option or an image takes an object; a select or a checkbox takes an array.
- */
-export function takesWhole(element, value) {
-  switch (kindOf(element)) {
-    case "option":
-    case "image":
-      return value.constructor == Object;
-    case "select-one":
-    case "select-multiple":
-    case "checkbox":
-      return value.constructor == Array;
-    default:
-      return false;
-  }
+// Whether a DOM element's kind takes an object whole (an option or an image), rather than the walk
+// loading each of its keys into a match.
+export function takesObject(element) {
+  var kind = kindOf(element);
+
+  return kind == "option" || kind == "image";
 }
