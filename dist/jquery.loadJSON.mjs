@@ -26,15 +26,19 @@ var $$1 = jQuery;
 // Adds Array.prototype.contains (loose equality), which earlier versions defined on every call.
 function installContains() {
   notice("contains");
-  Array.prototype.contains = function (obj) {
-    var i = this.length;
-    while (i--) {
-      if (this[i] == obj) {
-        return true;
+  Object.defineProperty(Array.prototype, "contains", {
+    configurable: true,
+    writable: true,
+    value: function (obj) {
+      var i = this.length;
+      while (i--) {
+        if (this[i] == obj) {
+          return true;
+        }
       }
-    }
-    return false;
-  };
+      return false;
+    },
+  });
 }
 
 // Refreshes a jQuery Mobile widget (selectmenu or checkboxradio) when the element has one.
