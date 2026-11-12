@@ -25,11 +25,6 @@ export default [
     rules: {
       "no-empty": ["error", { allowEmptyCatch: true }],
       "no-unused-vars": ["error", { args: "none", caughtErrors: "none" }],
-      // Warnings, not errors, until the 1.x refactors remove them: var redeclared across switch
-      // cases, assignments in the unreachable image branch, and the select options guard.
-      "no-prototype-builtins": "warn",
-      "no-redeclare": "warn",
-      "no-useless-assignment": "warn",
     },
   },
   {
