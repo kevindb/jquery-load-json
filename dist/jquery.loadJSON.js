@@ -126,6 +126,16 @@ function addOptions(select, items) {
   refreshMobile($(select), "selectmenu");
 }
 
+// Whether an array holds a value, comparing with ==.
+function containsLoosely(values, value) {
+  for (var i = 0; i < values.length; i++) {
+    if (values[i] == value) {
+      return true;
+    }
+  }
+  return false;
+}
+
 function field(element, value) {
   $(element).val(value);
 }
@@ -136,7 +146,7 @@ function checkbox(element, value) {
 
   $element.prop(
     "checked",
-    (value.constructor == Array && value.contains(elementValue)) || value == elementValue
+    (value.constructor == Array && containsLoosely(value, elementValue)) || value == elementValue
   );
   refreshMobile($element, "checkboxradio");
 }
