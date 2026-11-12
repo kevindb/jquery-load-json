@@ -1,4 +1,5 @@
 import jQuery from "jquery";
+import { refreshMobile } from "./legacy.js";
 
 // Element kinds: how a value is set on each kind of element.
 
@@ -7,22 +8,6 @@ var $ = jQuery;
 // Input types whose value is set directly.
 var rField =
   /^(?:color|date|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/;
-
-function refreshMobileSelect($element) {
-  try {
-    if ($.isFunction($element.selectmenu)) {
-      $element.selectmenu("refresh"); //used in the JQuery mobile
-    }
-  } catch (ex) {}
-}
-
-function refreshMobileCheckBox($element) {
-  try {
-    if ($.isFunction($element.checkboxradio)) {
-      $element.checkboxradio("refresh"); //used in the JQuery mobile
-    }
-  } catch (ex) {}
-}
 
 // Appends a copy of the select's last option for each {value, text, selected} item.
 function addOptions(select, items) {
@@ -40,7 +25,7 @@ function addOptions(select, items) {
     }
   }
 
-  refreshMobileSelect($(select));
+  refreshMobile($(select), "selectmenu");
 }
 
 function field(element, value) {
@@ -55,14 +40,14 @@ function checkbox(element, value) {
     "checked",
     (value.constructor == Array && value.contains(elementValue)) || value == elementValue
   );
-  refreshMobileCheckBox($element);
+  refreshMobile($element, "checkboxradio");
 }
 
 function radio(element, value) {
   var $element = $(element);
 
   $element.prop("checked", value.toString().toLowerCase() == element.value.toLowerCase());
-  refreshMobileCheckBox($element);
+  refreshMobile($element, "checkboxradio");
 }
 
 function option(element, value) {
@@ -80,7 +65,7 @@ function selectOne(element, value) {
     addOptions(element, value);
   } else {
     $(element).val(value);
-    refreshMobileSelect($(element));
+    refreshMobile($(element), "selectmenu");
   }
 }
 
@@ -99,7 +84,7 @@ function selectMultiple(element, value) {
       options[i].selected |= options[i].value == values[j];
     }
   }
-  refreshMobileSelect($(element));
+  refreshMobile($(element), "selectmenu");
 }
 
 function link(element, value, name) {

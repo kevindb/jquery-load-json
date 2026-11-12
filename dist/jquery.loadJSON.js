@@ -43,6 +43,32 @@
 
 }(function (jQuery) {
 	'use strict';
+// Behavior kept for compatibility with earlier versions and removed in 2.0.
+
+var $$1 = jQuery;
+
+// Adds Array.prototype.contains (loose equality), which earlier versions defined on every call.
+function installContains() {
+  Array.prototype.contains = function (obj) {
+    var i = this.length;
+    while (i--) {
+      if (this[i] == obj) {
+        return true;
+      }
+    }
+    return false;
+  };
+}
+
+// Refreshes a jQuery Mobile widget (selectmenu or checkboxradio) when the element has one.
+function refreshMobile($element, widget) {
+  try {
+    if ($$1.isFunction($element[widget])) {
+      $element[widget]("refresh");
+    }
+  } catch (ex) {}
+}
+
 // Element kinds: how a value is set on each kind of element.
 
 var $ = jQuery;
@@ -50,22 +76,6 @@ var $ = jQuery;
 // Input types whose value is set directly.
 var rField =
   /^(?:color|date|datetime-local|email|hidden|month|number|password|range|search|tel|text|time|url|week)$/;
-
-function refreshMobileSelect($element) {
-  try {
-    if ($.isFunction($element.selectmenu)) {
-      $element.selectmenu("refresh"); //used in the JQuery mobile
-    }
-  } catch (ex) {}
-}
-
-function refreshMobileCheckBox($element) {
-  try {
-    if ($.isFunction($element.checkboxradio)) {
-      $element.checkboxradio("refresh"); //used in the JQuery mobile
-    }
-  } catch (ex) {}
-}
 
 // Appends a copy of the select's last option for each {value, text, selected} item.
 function addOptions(select, items) {
@@ -83,7 +93,7 @@ function addOptions(select, items) {
     }
   }
 
-  refreshMobileSelect($(select));
+  refreshMobile($(select), "selectmenu");
 }
 
 function field(element, value) {
@@ -98,14 +108,14 @@ function checkbox(element, value) {
     "checked",
     (value.constructor == Array && value.contains(elementValue)) || value == elementValue
   );
-  refreshMobileCheckBox($element);
+  refreshMobile($element, "checkboxradio");
 }
 
 function radio(element, value) {
   var $element = $(element);
 
   $element.prop("checked", value.toString().toLowerCase() == element.value.toLowerCase());
-  refreshMobileCheckBox($element);
+  refreshMobile($element, "checkboxradio");
 }
 
 function option(element, value) {
@@ -123,7 +133,7 @@ function selectOne(element, value) {
     addOptions(element, value);
   } else {
     $(element).val(value);
-    refreshMobileSelect($(element));
+    refreshMobile($(element), "selectmenu");
   }
 }
 
@@ -142,7 +152,7 @@ function selectMultiple(element, value) {
       options[i].selected |= options[i].value == values[j];
     }
   }
-  refreshMobileSelect($(element));
+  refreshMobile($(element), "selectmenu");
 }
 
 function link(element, value, name) {
@@ -358,15 +368,7 @@ function setValue(element, value, name, data) {
   }
 
   $.fn.loadJSON = function (obj, options) {
-    Array.prototype.contains = function (obj) {
-      var i = this.length;
-      while (i--) {
-        if (this[i] == obj) {
-          return true;
-        }
-      }
-      return false;
-    };
+    installContains();
 
     var defaults = {
       onLoading: function () {},

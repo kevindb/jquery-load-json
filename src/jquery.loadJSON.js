@@ -18,6 +18,7 @@
 
 import jQuery from "jquery";
 import { setValue } from "./element-kinds.js";
+import { installContains } from "./legacy.js";
 
 (function ($) {
   "use strict";
@@ -145,15 +146,7 @@ import { setValue } from "./element-kinds.js";
   }
 
   $.fn.loadJSON = function (obj, options) {
-    Array.prototype.contains = function (obj) {
-      var i = this.length;
-      while (i--) {
-        if (this[i] == obj) {
-          return true;
-        }
-      }
-      return false;
-    };
+    installContains();
 
     var defaults = {
       onLoading: function () {},
