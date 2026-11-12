@@ -38,7 +38,7 @@ export { default } from 'jquery';
     } catch (ex) {}
   }
 
-  function loadSelect(element, aoValues, name, data) {
+  function loadSelect(element, aoValues, name) {
     ///<summary>
     ///Load options into the select list
     ///</summary>
@@ -50,16 +50,16 @@ export { default } from 'jquery';
     var template = $(arr[arr.length - 1]).clone(true);
 
     //fill started by last
-    var objLen = data.length;
+    var objLen = aoValues.length;
     var i = objLen - 1;
 
     for (var iCreate = 0; iCreate < objLen; ++iCreate) {
       //duplicate the last
       var last = template.clone(true).insertAfter(arr[arr.length - 1]);
       //setElementValue(last, obj[i], name);
-      $(last).attr("value", data[i].value);
-      $(last).text(data[i].text);
-      if (data[i].selected) {
+      $(last).attr("value", aoValues[i].value);
+      $(last).text(aoValues[i].text);
+      if (aoValues[i].selected) {
         $(last).attr("selected", true);
       }
       i--;
@@ -136,14 +136,14 @@ export { default } from 'jquery';
           refreshMobileSelect($element);
         } else {
           // Instead of selecting values use values array to populate select list
-          loadSelect(element, value, name, data);
+          loadSelect(element, value);
         }
         break;
 
       case "select":
       case "select-one":
         if (value.constructor == Array) {
-          loadSelect(element, value, name, data);
+          loadSelect(element, value);
         } else {
           $element.val(value);
           refreshMobileSelect($element);

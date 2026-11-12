@@ -82,13 +82,16 @@ describe("loadJSON arguments", function () {
       expect(texts($list.find("li"))).toEqual(["one", "zero"]);
     });
 
-    it.fails("should add one option per item of an array string loaded into a select", function () {
-      const $select = fixture('<select><option value="x">X</option></select>');
+    itBeforeJQuery4(
+      "should add one option per item of an array string loaded into a select",
+      function () {
+        const $select = fixture('<select><option value="x">X</option></select>');
 
-      $select.loadJSON('[{"value":"a","text":"A"}]');
+        $select.loadJSON('[{"value":"a","text":"A"}]');
 
-      expect($select.find("option").length).toBe(2);
-    });
+        expect($select.find("option").length).toBe(2);
+      }
+    );
 
     itBeforeJQuery4("should call onLoading before and onLoaded after loading", function () {
       const $root = fixture('<div><span class="a"></span></div>');
