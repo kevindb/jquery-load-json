@@ -55,6 +55,14 @@ describe("deprecation notices", function () {
       expect(warnings().join()).toContain("jQuery Mobile");
     });
 
+    it("should warn about the mobile option", function () {
+      const $root = fixture("<div></div>");
+
+      $root.loadJSON({}, { mobile: false });
+
+      expect(warnings().join()).toContain("mobile option");
+    });
+
     it('should warn about an image value in the "src$alt" format', function () {
       const $root = fixture('<div><img class="p"></div>');
 

@@ -169,6 +169,9 @@ import { match } from "./key-match.js";
 
   $.fn.loadJSON = function (data, options) {
     installContains();
+    if (options && "mobile" in options) {
+      notice("mobileOption");
+    }
 
     var defaults = {
       onLoading: function () {},

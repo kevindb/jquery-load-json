@@ -526,6 +526,9 @@ function match(key, scope) {
 
   $.fn.loadJSON = function (data, options) {
     installContains();
+    if (options && "mobile" in options) {
+      notice("mobileOption");
+    }
 
     var defaults = {
       onLoading: function () {},
