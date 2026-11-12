@@ -9,6 +9,7 @@ export default [
       ".vitest/**",
       "coverage/**",
       "dist/**",
+      "docs/examples/jquery.loadJSON.js",
       "examples/**",
       "test-results/**",
       "playwright-report/**",
@@ -38,6 +39,10 @@ export default [
       sourceType: "module",
       globals: { ...globals.browser, $: "readonly", jQuery: "readonly" },
     },
+  },
+  {
+    files: ["docs/examples/**/*.js"],
+    languageOptions: { globals: { ...globals.browser, $: "readonly", jQuery: "readonly" } },
   },
   {
     files: [

@@ -3,6 +3,7 @@
 .vitest/
 coverage/
 dist/
+docs/examples/jquery.loadJSON.js
 examples/
 node_modules/
 package-lock.json

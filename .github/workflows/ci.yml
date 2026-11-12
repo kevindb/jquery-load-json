@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   # Lint, format check, build, coverage on Chromium, Firefox and WebKit with jQuery 3.7.1, and a check
-  # that the committed dist/ matches the build.
+  # that the committed dist/ (and its copy for the examples) matches the build.
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -37,8 +37,8 @@ jobs:
           key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}-all
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npm test
-      - name: Check committed dist matches the build
-        run: git diff --exit-code -- dist
+      - name: Check committed dist and the examples' copy match the build
+        run: git diff --exit-code -- dist docs/examples/jquery.loadJSON.js
 
   # The suite and the end-to-end tests against the jQuery support floor, the latest 3.x, and 4.x.
   jquery:

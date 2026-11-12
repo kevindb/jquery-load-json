@@ -80,6 +80,8 @@ export default {
   output: [
     { file: "dist/jquery.loadJSON.mjs", format: "es", plugins: [moduleLayout] },
     { file: "dist/jquery.loadJSON.js", format: "es", plugins: [classicLayout] },
+    // GitHub Pages serves only docs/, so the examples get their own copy of the classic build.
+    { file: "docs/examples/jquery.loadJSON.js", format: "es", plugins: [classicLayout] },
     {
       file: "dist/jquery.loadJSON.min.js",
       format: "es",
