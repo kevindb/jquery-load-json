@@ -202,6 +202,24 @@ Done when: the only remaining `it.fails` are bugs deferred to 2.0, coverage is b
 branches removed by the refactors), and the jQuery 1.7.2 / 3.7.1 / 4.0.0 matrix is green on all
 three browsers.
 
+Status: code steps done 2026-11-11 on `release-1.4` (local, not pushed); docs are a separate session.
+Mutation score 76.06% before, 96.59% after (Findings). Fixes: select x4, image, link x2 (fragment,
+and the query-only `href` the mutation run found), keys that are not valid selectors, `contains`
+non-enumerable, #28 (Francesco Angi, adapted to read the first item of an array-like element so
+selects keep their options), `JSON.parse`, and the CommonJS header (`jquery/factory` when present,
+checked by hand against jQuery 3). Refactors A1 to A6 as listed; the source is now four modules:
+`jquery.loadJSON.js` (entry and walk), `element-kinds.js`, `key-match.js` and `legacy.js`
+(`installContains`, `refreshMobile`, `notice`). `$.fn.loadJSON.debug` shows a deprecation notice
+once per page at every site in the Architecture review table. Coverage is 100% and enforced; ESLint
+has no warnings and its temporary overrides are gone. The remaining `it.fails` are the four 2.0 bugs
+(dot key, rel outside, link encoding, template caching) plus, on jQuery 4 only, the five pinned jQuery
+Mobile skips. All 9 jQuery x browser cells and the Playwright e2e pass locally.
+
+The key-match fix differs from the A3 note: instead of retrying with an escaped key (the Sizzle in
+jQuery 1.7 does not read CSS escapes in class names), a step whose selector is invalid (jQuery
+throws, or matches nothing for a selector the browser rejects as CSS) compares each element's
+attribute with the key. A dot key is valid CSS, so it still builds a compound selector, as pinned.
+
 ## Phase 5: 1.4.0 release
 
 - Maintainer: add the GitHub Actions trusted publisher on npmjs.com for `release.yml` + environment
@@ -249,25 +267,25 @@ Root cause of several bugs: commit 96d1690 ("Minor changes to pass JSHint", 2015
 
 ### Bugs (`it.fails`, intended behavior)
 
-| Bug                                                                                                                                                                        | Test                                          | Fix in                                             |
-| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------- |
-| JSON-string argument throws on jQuery 4 (`$.parseJSON` removed)                                                                                                            | arguments: JSON string (x3, 4.0 only)         | 1.x                                                |
-| CommonJS factory with no window calls `require('jquery')(root)`, which jQuery 4 does not export (it builds from `jquery/factory`), so the plugin registers but cannot load | commonjs: build jQuery 4 for the given window | 1.x (in the UMD header)                            |
-| Loading an array into the plugin's own element throws reading `element[0].tagName` (#28)                                                                                   | arrays: copy of the element (#28)             | 1.x (land #28)                                     |
-| Array value for a select by key throws (`type === null` misses `undefined`)                                                                                                | form-fields: select array by key              | 1.x                                                |
-| Array of values for a multiple select by key throws (same cause)                                                                                                           | form-fields: multiple select array            | 1.x                                                |
-| `loadSelect` reads the outer argument, not its own values, so options are added only when the select itself is loaded; a JSON array string adds one option per character   | arguments: array string into a select         | 1.x                                                |
-| Scalar into a multiple select with one option is ignored (`options.length > 1`, from 1.3.4)                                                                                | form-fields: one-option multiple select       | 1.x                                                |
-| String image value is ignored (`obj.constructor == 'String'` is never true)                                                                                                | links-images: src string                      | 1.x (value as `src` only; no `src$alt`)            |
-| Object image value `{src, alt, title}` is ignored; images read the outer argument                                                                                          | links-images: object value                    | 1.x                                                |
-| Link parameter is appended after a `#fragment`                                                                                                                             | links-images: before a fragment               | 1.x                                                |
-| Link `href` that is only a query (`?x=1`) gets a second `?` (`iPosition > 0`; found by mutation testing)                                                                   | links-images: href is only a query            | 1.x? (maintainer)                                  |
-| Key that is not a valid selector throws on jQuery 3/4, misses on 1.7                                                                                                       | matching: not a valid selector                | 1.x (retry with the key escaped)                   |
-| Key with a dot builds a compound selector (`.a.b`)                                                                                                                         | matching: class containing a dot              | 2.0 (1.x pins it)                                  |
-| `rel` lookup ignores the loaded element and searches the document                                                                                                          | matching: rel outside                         | 2.0 removes `rel`; 1.x warns under `debug`         |
-| Link values are not URL-encoded                                                                                                                                            | links-images: encode the value                | 2.0 (encoding changes existing output)             |
-| Template is never cached, so a second call loads into the first call's output                                                                                              | template: original markup                     | 2.0 (resetting the DOM drops handlers bound since) |
-| `Array.prototype.contains` is enumerable on every array                                                                                                                    | side-effects: enumerable property             | 1.x non-enumerable; 2.0 removes                    |
+| Bug                                                                                                                                                                        | Test                                          | Fix in                                                                     |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- | -------------------------------------------------------------------------- |
+| JSON-string argument throws on jQuery 4 (`$.parseJSON` removed)                                                                                                            | arguments: JSON string (x3, 4.0 only)         | Fixed in 1.4 (`2dcb338`, `JSON.parse`)                                     |
+| CommonJS factory with no window calls `require('jquery')(root)`, which jQuery 4 does not export (it builds from `jquery/factory`), so the plugin registers but cannot load | commonjs: build jQuery 4 for the given window | Fixed in 1.4 (`1d93d7b`, UMD header)                                       |
+| Loading an array into the plugin's own element throws reading `element[0].tagName` (#28)                                                                                   | arrays: copy of the element (#28)             | Fixed in 1.4 (`1d972fe`, #28 adapted)                                      |
+| Array value for a select by key throws (`type === null` misses `undefined`)                                                                                                | form-fields: select array by key              | Fixed in 1.4 (`fe33dd0`)                                                   |
+| Array of values for a multiple select by key throws (same cause)                                                                                                           | form-fields: multiple select array            | Fixed in 1.4 (`e22bbb7`)                                                   |
+| `loadSelect` reads the outer argument, not its own values, so options are added only when the select itself is loaded; a JSON array string adds one option per character   | arguments: array string into a select         | Fixed in 1.4 (`94cdd6f`)                                                   |
+| Scalar into a multiple select with one option is ignored (`options.length > 1`, from 1.3.4)                                                                                | form-fields: one-option multiple select       | Fixed in 1.4 (`be00bd1`)                                                   |
+| String image value is ignored (`obj.constructor == 'String'` is never true)                                                                                                | links-images: src string                      | Fixed in 1.4 (`1643e39`; value as `src` only)                              |
+| Object image value `{src, alt, title}` is ignored; images read the outer argument                                                                                          | links-images: object value                    | Fixed in 1.4 (`1643e39`)                                                   |
+| Link parameter is appended after a `#fragment`                                                                                                                             | links-images: before a fragment               | Fixed in 1.4 (`d96dcbb`)                                                   |
+| Link `href` that is only a query (`?x=1`) gets a second `?` (`iPosition > 0`; found by mutation testing)                                                                   | links-images: href is only a query            | Fixed in 1.4 (`14ebd05`, maintainer)                                       |
+| Key that is not a valid selector throws on jQuery 3/4, misses on 1.7                                                                                                       | matching: not a valid selector                | Fixed in 1.4 (`7e99aac`; compares attributes when the selector is invalid) |
+| Key with a dot builds a compound selector (`.a.b`)                                                                                                                         | matching: class containing a dot              | 2.0 (1.x pins it)                                                          |
+| `rel` lookup ignores the loaded element and searches the document                                                                                                          | matching: rel outside                         | 2.0 removes `rel`; 1.x warns under `debug`                                 |
+| Link values are not URL-encoded                                                                                                                                            | links-images: encode the value                | 2.0 (encoding changes existing output)                                     |
+| Template is never cached, so a second call loads into the first call's output                                                                                              | template: original markup                     | 2.0 (resetting the DOM drops handlers bound since)                         |
+| `Array.prototype.contains` is enumerable on every array                                                                                                                    | side-effects: enumerable property             | Non-enumerable in 1.4 (`665eecd`); 2.0 removes                             |
 
 ### Pinned behavior (tested as is)
 
@@ -279,22 +297,29 @@ Root cause of several bugs: commit 96d1690 ("Minor changes to pass JSHint", 2015
   compare case-insensitively on the string form.
 - A multiple select keeps options that were already selected.
 - Arrays fill existing elements in order, then append copies of the last one (handlers copied);
-  extra existing elements are left as is; `rel=index` children take `array[index]`.
+  extra existing elements are left as is; `rel=index` children take `array[index]`. Since #28 this
+  also holds for an element loaded directly (it used to throw `TypeError`).
 - An array loaded into a select itself appends options; `["y"]` into a multiple select with options
   appends a copy of the last option and selects nothing.
 - Links: no `href` becomes the value; otherwise `?key=value` / `&key=value`, unencoded; a link
   loaded directly gets `undefined` as the key.
-- The top-level `src`/`alt`/`title` of the argument are set on every matched image.
+- The top-level `src`/`alt`/`title` of the argument are set on every matched image whose own value is
+  neither a string nor an object (since 1.4; before, whatever the own value).
 - A string starting with anything but `{` or `[` (leading whitespace included) is a URL; the request
   is `dataType: "json"`, `cache: false`, and a failed request does nothing and calls no callback.
 - `null` or no argument throws `TypeError`. Callbacks run once per element, with no arguments,
-  as methods of an internal copy of the options. `mobile` is accepted and ignored.
+  as methods of an internal copy of the options (one copy per call, the URL path included since
+  A6). `mobile` is accepted and ignored.
 - `loadJSON-template` data set to markup replaces the content first; set to `null` or `""`, the
   current markup is saved and restored on the next call.
 - jQuery Mobile `selectmenu`/`checkboxradio` refresh runs before jQuery 4 and is silently skipped on 4
   (`$.isFunction` removed); errors from it are swallowed.
 
 ### Dead branches (14, not excluded from coverage)
+
+All 14 are gone in 1.4 (Phase 4): the select, image and link fixes removed or revived them, A2
+removed the rest, and the 14th (the values ternary) is live and covered. Coverage is 100% and
+`vitest.config.mjs` requires it. As found in Phase 1:
 
 - `if (type === null)` and its inner fallback (5 branches): `type` is never `null`; the fallback was
   meant for `undefined`. Fixing the select bugs above makes it live.
@@ -324,8 +349,19 @@ temporary and are not committed.
 | --------------------- | ------- | ------ | ------- | -------- | ----------- | ------ | --------------- |
 | Before (88 tests)     | 472     | 351    | 8       | 75       | 38          | 76.06% | 82.72%          |
 | After gap tests (102) | 472     | 388    | 8       | 38       | 38          | 83.90% | 91.24%          |
+| After refactors       | 499     | 473    | 9       | 17       | 0           | 96.59% | 96.59%          |
 
-Gap tests added (37 survivors killed, all through `$.fn.loadJSON`):
+The third row is the re-run at the end of Phase 4 (`cf76d99`), mutating all of `src/`
+(`jquery.loadJSON.js`, `element-kinds.js`, `key-match.js`, `legacy.js`) after a second round of gap
+tests (`e1317a4`: textarea content, a scalar that contains a checkbox value, a fragment-only `href`,
+the name fallback, the `contains` descriptor, and the debug notices that must not fire). Its 17
+survivors: equivalent (12: unanchored field and select regexes, `<=` in two loops, the `'"]'` and
+prefix strings that the attribute fallback or CSS end-of-input recovers, an emptied `isValidCss`
+catch, the `length > 0` short-circuit before matching, the `element.length >= 0` checkbox guard, the
+unread `mobile` default) and debug-notice conditions only (5: a `$` at index 0, and which of
+`src`/`alt`/`title` triggers the fallback notice).
+
+Gap tests added in the first round (37 survivors killed, all through `$.fn.loadJSON`):
 
 - Select: appended options copy event handlers (both `clone(true)` calls); an option loaded from an
   object with `selected: true` is selected (the old test only checked an option already first); a
