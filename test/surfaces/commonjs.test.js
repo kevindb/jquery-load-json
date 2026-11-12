@@ -81,16 +81,13 @@ describe("the classic build required from CommonJS without a jQuery", function (
     expect(typeof jQuery.fn.loadJSON).toBe("function");
   });
 
-  it.fails(
-    "should build jQuery 4 for the given window when there is no global window",
-    function () {
-      const window = newWindow();
-      requireFresh(installedJQuery);
+  it("should build jQuery 4 for the given window when there is no global window", function () {
+    const window = newWindow();
+    delete require.cache[installedJQuery];
 
-      const jQuery = requireFresh(pluginPath)(window);
-      jQuery("#root", window.document).loadJSON({ a: "x" });
+    const jQuery = requireFresh(pluginPath)(window);
+    jQuery("#root", window.document).loadJSON({ a: "x" });
 
-      expect(window.document.querySelector(".a").textContent).toBe("x");
-    }
-  );
+    expect(window.document.querySelector(".a").textContent).toBe("x");
+  });
 });

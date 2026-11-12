@@ -18,7 +18,12 @@ const umdHeader = `(function (factory) {
                     jQuery = require('jquery');
                 }
                 else {
-                    jQuery = require('jquery')(root);
+                    // jQuery 4 builds a jQuery for a window from jquery/factory; jQuery 3 from the package itself
+                    var jQueryFactory;
+                    try {
+                        jQueryFactory = require('jquery/factory').jQueryFactory;
+                    } catch (error) {}
+                    jQuery = jQueryFactory ? jQueryFactory(root) : require('jquery')(root);
                 }
             }
             factory(jQuery);
