@@ -509,22 +509,46 @@ function match(key, scope) {
     }
   }
 
-  function init(placeholder) {
-    var template;
+  // Restores the saved template, or saves the current markup when there is none.
+  function useSavedTemplate($element) {
+    var saved = $element.data("loadJSON-template");
 
-    if (
-      placeholder.data("loadJSON-template") !== null &&
-      placeholder.data("loadJSON-template") != ""
-    ) {
-      template = placeholder.data("loadJSON-template");
-      placeholder.html(template);
+    if (saved !== null && saved != "") {
+      $element.html(saved);
     } else {
-      template = placeholder.html();
-      placeholder.data("loadJSON-template", template);
+      $element.data("loadJSON-template", $element.html());
     }
   }
 
-  $.fn.loadJSON = function (obj, options) {
+  // Loads data into one element: the saved template, the callbacks and the walk.
+  function load(element, data, argument, properties) {
+    useSavedTemplate($(element));
+    properties.onLoading();
+    walk(data, element, undefined, argument);
+    properties.onLoaded();
+  }
+
+  // Loads the loadJSON argument into one element. A string starting with { or [ is JSON; any
+  // other string is a URL, requested once per element, whose response is loaded the same way.
+  function loadArgument(element, argument, properties) {
+    if (argument.constructor != String) {
+      load(element, argument, argument, properties);
+    } else if (argument.charAt(0) == "{" || argument.charAt(0) == "[") {
+      load(element, $.parseJSON(argument), argument, properties);
+    } else {
+      notice("url");
+      $.ajax({
+        url: argument,
+        success: function (response) {
+          loadArgument(element, response, properties);
+        },
+        cache: false,
+        dataType: "json",
+      });
+    }
+  }
+
+  $.fn.loadJSON = function (data, options) {
     installContains();
 
     var defaults = {
@@ -532,37 +556,10 @@ function match(key, scope) {
       onLoaded: function () {},
       mobile: false,
     };
-
     var properties = $.extend(defaults, options);
 
     return this.each(function () {
-      var $this = $(this);
-
-      if (obj.constructor == String) {
-        if (obj.charAt(0) == "{" || obj.charAt(0) == "[") {
-          var data = $.parseJSON(obj);
-          init($this);
-          properties.onLoading();
-          walk(data, this, undefined, obj);
-          properties.onLoaded();
-        } else {
-          notice("url");
-          var element = $this;
-          $.ajax({
-            url: obj,
-            success: function (data) {
-              element.loadJSON(data, properties);
-            },
-            cache: false,
-            dataType: "json",
-          });
-        }
-      } else {
-        init($this);
-        properties.onLoading();
-        walk(obj, this, undefined, obj);
-        properties.onLoaded();
-      }
+      loadArgument(this, data, properties);
     });
   };
 
