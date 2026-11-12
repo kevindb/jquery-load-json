@@ -203,6 +203,17 @@ branches removed by the refactors), and the jQuery 1.7.2 / 3.7.1 / 4.0.0 matrix 
 three browsers.
 
 Status: code steps done 2026-11-11 on `release-1.4` (local, not pushed); docs are a separate session.
+
+Docs done 2026-11-11 on `release-1.4`: README is a landing page (npm, CDN without SRI until Phase 5,
+credit and jquery-view-engine link for #25); the four wiki pages are rewritten for 1.4 as
+`docs/{loading-data,elements,forms,arrays}.md`, plus `docs/debugging.md` for `debug` and every
+notice in `src/legacy.js`; `docs/examples/` holds eight working examples on jQuery 4.0.0 (code.jquery.com,
+SRI) and a copy of the classic build that Rollup writes and CI diffs with `dist/`. Bing Maps (needs a
+key) and the jQuery Mobile pages are not ported; DataTables and LINQ are replaced by plain jQuery and
+`Array.prototype.filter`. CONTRIBUTING has the current commands. GitHub Pages is not enabled yet
+(maintainer: Settings, Pages, deploy from `main` `/docs`), so the example links 404 until then.
+`JQUERY_LOAD_JSON_FIREFOX` from the Decisions was never implemented: `npm test` runs Firefox too, and
+CONTRIBUTING says so.
 Mutation score 76.06% before, 96.59% after (Findings). Fixes: select x4, image, link x2 (fragment,
 and the query-only `href` the mutation run found), keys that are not valid selectors, `contains`
 non-enumerable, #28 (Francesco Angi, adapted to read the first item of an array-like element so
