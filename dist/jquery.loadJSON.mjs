@@ -119,7 +119,7 @@ export { default } from 'jquery';
           typeof select.options === "undefined" ||
           select.options === null
         ) {
-          select = element;
+          select = $element[0];
         }
 
         if (select.options.length > 1) {

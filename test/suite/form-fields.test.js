@@ -294,7 +294,7 @@ describe("form fields", function () {
       expect($form.find("select").val()).toEqual(["yes"]);
     });
 
-    it.fails("should select the values in an array", function () {
+    it("should select the values in an array", function () {
       const $form = fixture(
         '<form><select multiple name="m"><option value="x">X</option><option value="y">Y</option><option value="z">Z</option></select></form>'
       );
