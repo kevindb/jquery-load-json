@@ -1,96 +1,93 @@
-# jQuery loadJSON plugin
-This is a jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM. No templating language is required - this plugin matches DOM elements in the HTML page with a JSON object using a DOM element properties.
+# jQuery loadJSON
+
+A jQuery plugin that fills HTML markup you already have, forms included, with values from a JSON
+object. There is no template language: the plugin matches each key of the data to the elements
+whose class, id or name is that key, and sets each value in the way that suits the element. Text
+goes into content elements, form controls get their value or checked state, links and images get
+their `href` and `src`, and arrays repeat an element once per item.
+
+Works with jQuery 1.7 and later, jQuery 4 included.
+
+## Install
+
+With npm:
+
+```sh
+npm install jquery-load-json
+```
+
+```js
+import $ from "jquery";
+import "jquery-load-json";
+```
+
+The package also has a classic build for script tags, AMD and CommonJS
+(`dist/jquery.loadJSON.js`), and a minified one (`dist/jquery.loadJSON.min.js`).
+
+From a CDN, after jQuery:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/jquery-load-json@1.4.0/dist/jquery.loadJSON.min.js"></script>
+```
+
+or
+
+```html
+<script src="https://unpkg.com/jquery-load-json@1.4.0/dist/jquery.loadJSON.min.js"></script>
+```
+
+## Example
+
+```html
+<div id="company">
+  <h1 class="Name"></h1>
+  <p class="Address"></p>
+  <a class="Website">Website</a>
+</div>
+```
+
+```js
+$("#company").loadJSON({
+  Name: "Emkay Entertainments",
+  Address: "Nobel House, Regent Centre",
+  Website: "https://example.com",
+});
+```
+
+```html
+<div id="company">
+  <h1 class="Name">Emkay Entertainments</h1>
+  <p class="Address">Nobel House, Regent Centre</p>
+  <a class="Website" href="https://example.com">Website</a>
+</div>
+```
+
+Values are inserted as HTML in 1.x. Escape data from untrusted sources before loading it.
+
+## Documentation
+
+- [Loading data](docs/loading-data.md): templates, keys, matching, nested objects, arguments and
+  callbacks
+- [Elements](docs/elements.md): text, links and images
+- [Forms](docs/forms.md): inputs, checkboxes, radio buttons, textareas and selects
+- [Arrays and repeats](docs/arrays.md): lists from arrays of objects
+- [Debugging and deprecations](docs/debugging.md): `$.fn.loadJSON.debug` and what 2.0 removes
+- [Live examples](https://kevindb.github.io/jquery-load-json/examples/)
 
 ## Community
-Want to contribute to jQuery loadJSON? Awesome! See [CONTRIBUTING](CONTRIBUTING.md) for more information.
 
-### Code of Conduct
-Please note that this project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md) to ensure that this project is a welcoming place for **everyone** to contribute to. By participating in this project you agree to abide by its terms.
+Want to contribute? See [CONTRIBUTING](CONTRIBUTING.md). Security issues: see
+[SECURITY](SECURITY.md).
 
-## Requirements
-Requires jQuery 1.7+.
+This project is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By participating
+in it you agree to abide by its terms.
 
-## Download
-* **Development:** [src/jquery.loadJSON.js](https://github.com/kevindb/jquery-load-json/blob/main/src/jquery.loadJSON.js)
-* **Production/Minified:** [dist/jquery.loadJSON.min.js](https://github.com/kevindb/jquery-load-json/blob/main/dist/jquery.form.min.js)
+## Credits
 
-### CDN
-```html
-<script src="https://cdn.jsdelivr.net/gh/kevindb/jquery-load-json@1.3.4/dist/jquery.loadJSON.min.js" integrity="sha384-ivtX4sn4dcdfHiO4e0/956wIQSerxsy2QZ6EHzdCVLlyGYYjSb8bqdxKY8IsfDGh" crossorigin="anonymous"></script>
-```
-or
-```html
-<script src="https://cdn.rawgit.com/kevindb/jquery-load-json/v1.3.4/dist/jquery.loadJSON.min.js" integrity="sha384-ivtX4sn4dcdfHiO4e0/956wIQSerxsy2QZ6EHzdCVLlyGYYjSb8bqdxKY8IsfDGh" crossorigin="anonymous"></script>
-```
-
-## Usage
-To use loadJSON plugin two items should be defined:
-  * HTML code that will be used as template
-  * JSON object that will be used to populate template
-
-### HTML template
-Template is plain HTML code. Only requirement is that elements that should be populated must have id, name, class, or rel attributes that have matching properties in the JSON object. Example of HTML template is shown below:
-```
-		<div id="data">
-			<h1 id="Name"></h1>
-			<label for="Address">Address:</label>
-			<span id="Address"></span>	
-			<label for="Contact">Contact by:</label>
-			<span id="Contact"></span>
-		</div>
-```
-
-In the template h1 tag with id Name, and span tags with ids Address and Contact will be populated with JSON properties.
-
-### JSON object
-Once HTML template is defined JSON object that will be used to populate template must be defines. Example of object that can populate template shown above is shown in the following listing:
-```
-		data = {
-					"Name":"Emkay Entertainments",
-					"Address":"Nobel House, Regent Centre",
-					"Contact":"Phone"
-		}  
-```
-Object has three properties (Name, Address, and Contact) that will be injected into the template.
-
-### Binding JSON object to the template
-Once HTML template and JSON object are defined, JSON object can be loaded into the HTML code. This can be achieved using the following line of JavaScript code:
-```
-		$('div#data').loadJSON(data);
-```
-As a result 'data' object will be loaded into the HTML fragment with id data. Resulting HTML is shown in the following listing:
-```
-		<div id="data">
-			<h1 id="Name">Emkay Entertainments</h1>
-			<label for="Address">Address:</label>
-			<span id="Address">Nobel House, Regent Centre</span>	
-			<label for="Contact">Contact by:</label>
-			<span id="Contact">Phone</span>
-		</div>
-```
-
-You can find detailed instructions how the plugin can be used in the following pages:
-  1. [How to load object into the HTML element](https://github.com/kevindb/jquery-load-json/wiki/LoadingHTMLElements) where is explained how the JavaScript objects are loaded in the HTML elements
-  1. [Using loadJSON plugin as a template engine](https://github.com/kevindb/jquery-load-json/wiki/HTMLTemplate) where is explained how this plugin can be used for generating output based on template
-  1. [Working with HTML forms](https://github.com/kevindb/jquery-load-json/wiki/WorkingWithFormElements) where is explained how you can load HTML form with JavaScript object
-
-## Examples
-You can see few live examples where it is shown how loadJSON plugin can be used:
-  1. [Creating list of elements](examples/list.html) - in this example is shown how the array of JSON objects can be bound to the simple HTML template,
-  1. [Showing details of the JSON object](examples/details.html?ID=17) - this example shows how details about the single object can be bound to the HTML template,
-  1. [Populating form with JSON object](examples/edit.html?ID=17) - this example shows how you can populate form elements from the JSON object,
-  1. [Loading complex/hierarchical structure](examples/hierarchy.html) this example show how you can generate complex structures using loadJSON plugin,
-  1. [Generate template for array elements](examples/array.html) in this example is shown how you can define custom templates for different elements in the array,
-  1. [Adding load events](examples/events.html) in this example is shown how you can define on load events,
-  1. [Loading JSON from the external sites](examples/BingMapsSearch.html) - in this example is shown how you can load JSON data that will be loaded from the external sites - in this case from the Bing Maps web service.
-  1. [Populating connected drop-downs  using the Ajax calls](examples/categories-ajax.html) - in this example is shown how you can load subcategories drop-downs when parent category drop-down is changed. Drop-down values are taken from the server-side via Ajax calls.
-  1. [Populating connected dropdowns using LINQ](examples/linq.html) - in this example is shown how you can load subcategories dropdown when parent category dropdown is changed. Values are stored as a local JavaScript arrays and filtered using the LINQ library.
-
-## Contributors
-This project has had several previous homes.
-See [CONTRIBUTORS](CONTRIBUTORS.md) for details.
+jQuery loadJSON was created by Jovan Popovic, building on Alexandre Caprais's notemplate plugin.
+Thank you, Jovan. Jovan's newer [jquery-view-engine](https://github.com/JocaPC/jquery-view-engine)
+takes the same idea further. See [CONTRIBUTORS](CONTRIBUTORS.md) for the project's history.
 
 ## License
 
-This repository is licensed under the GNU Lesser General Public License v2.1.  
-See [LICENSE](LICENSE.md) for details.
+GNU Lesser General Public License v2.1 or later. See [LICENSE](LICENSE.md).
