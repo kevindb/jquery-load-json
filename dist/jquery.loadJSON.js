@@ -298,6 +298,24 @@ function setValue(element, value, name, data) {
   kinds[kindOf(node)](node, value, name, data);
 }
 
+/**
+ * Whether a DOM element's kind takes a value of this shape whole, rather than the walk splitting
+ * it: an option or an image takes an object; a select or a checkbox takes an array.
+ */
+function takesWhole(element, value) {
+  switch (kindOf(element)) {
+    case "option":
+    case "image":
+      return value.constructor == Object;
+    case "select-one":
+    case "select-multiple":
+    case "checkbox":
+      return value.constructor == Array;
+    default:
+      return false;
+  }
+}
+
 // Each step of a match: its selector for the key, and the same test without a selector.
 var steps = [
   {
@@ -387,102 +405,109 @@ function match(key, scope) {
 
 (function ($) {
 
-  function browseJSON(obj, element, name, data) {
-    var $element = $(element);
+  // Whether a DOM element is a select (one or multiple).
+  function isSelect(element) {
+    return element.nodeType === 1 && /^select-/.test(kindOf(element));
+  }
 
-    // no object
-    if (obj === undefined || obj === null) ; else if (obj.constructor == Object) {
-      if (element.length >= 1 && element[0].tagName == "OPTION") {
-        setValue(element[0], obj, name, data);
-      } else if (element.length >= 1 && element[0].tagName == "IMG") {
-        element.each(function () {
-          setValue(this, obj, name, data);
-        });
-      }
-
-      for (var prop in obj) {
-        if (prop === null || typeof prop == "undefined" || prop.length === 0) {
-          continue;
-        } else {
-          var child = match(prop, element);
-
-          if (child.length !== 0) {
-            browseJSON(obj[prop], jQuery(child, element), prop, data);
-          }
-        }
-      }
-
-      // array
-    } else if (obj.constructor == Array) {
-      if (
-        element.length == 1 &&
-        (element.type == "select" ||
-          element.type == "select-one" ||
-          element.type == "select-multiple" ||
-          element[0].type == "select" ||
-          element[0].type == "select-one" ||
-          element[0].type == "select-multiple")
-      ) {
-        ///nova dva reda
-        setValue(element, obj, name, data);
-        return;
-      } else if (element.length > 0 && element[0].type == "checkbox") {
-        element.each(function () {
-          setValue(this, obj, name, data);
-        });
+  // Loads each key of an object into its match within the element.
+  function walkObject(object, element, name, data) {
+    // An option or an image matched by the enclosing key takes the object whole
+    if (element.length >= 1 && takesWhole(element[0], object)) {
+      if (kindOf(element[0]) == "option") {
+        setValue(element[0], object, name, data);
       } else {
-        var arrayElements = $element.children("[rel]");
-        if (arrayElements.length > 0) {
-          notice("relIndex");
-          //if there are rel=[index] elements populate them instead of iteration
-          arrayElements.each(function () {
-            var $this = $(this);
-            var rel = $this.attr("rel");
-            browseJSON(obj[rel], $this, name, data);
-          });
-        } else {
-          //recursive iteration
-          var arr = jQuery.makeArray(element);
-          var arrLen = arr.length;
-          var template = $(arr[arrLen - 1]).clone(true);
-          var nbToCreate = obj.length; //how many duplicate
-          var i = 0;
-
-          if (arr[0] === null || (arr[0] !== null && arr[0].tagName != "OPTION")) {
-            for (var iExist = 0; iExist < arrLen; ++iExist) {
-              if (i < obj.length) {
-                var elem = $element.eq(iExist);
-                browseJSON(obj[i], elem, name, data);
-              }
-              i++;
-            }
-            nbToCreate = obj.length - arrLen;
-          }
-
-          //fill started by last
-          i = obj.length - 1;
-          for (var iCreate = 0; iCreate < nbToCreate; ++iCreate) {
-            //duplicate the last
-            var last = template.clone(true).insertAfter(arr[arrLen - 1]);
-            browseJSON(obj[i], last, name, data);
-            i--;
-          }
-        }
-      }
-
-      // data only
-    } else {
-      var elemLen = element.length;
-
-      if (elemLen > 0) {
-        for (var i = 0; i < elemLen; ++i) {
-          setValue(element[i], obj, name, data);
-        }
-      } else {
-        setValue(element, obj, name, data);
+        element.each(function () {
+          setValue(this, object, name, data);
+        });
       }
     }
-  } //function browseJSON end
+
+    for (var key in object) {
+      if (key.length === 0) {
+        continue;
+      }
+      var $match = match(key, element);
+      if ($match.length !== 0) {
+        walk(object[key], $match, key, data);
+      }
+    }
+  }
+
+  // Loads an array: whole into a select or a checkbox group, item by item into rel index
+  // children, or as a repeat of the element.
+  function walkArray(array, element, name, data) {
+    if (element.length == 1 && (isSelect(element) || isSelect(element[0]))) {
+      setValue(element, array, name, data);
+      return;
+    }
+
+    if (element.length > 0 && kindOf(element[0]) == "checkbox") {
+      element.each(function () {
+        setValue(this, array, name, data);
+      });
+      return;
+    }
+
+    var $element = $(element);
+    var $children = $element.children("[rel]");
+    if ($children.length > 0) {
+      notice("relIndex");
+      $children.each(function () {
+        var $child = $(this);
+        walk(array[$child.attr("rel")], $child, name, data);
+      });
+      return;
+    }
+
+    repeat(array, element, name, data);
+  }
+
+  // Fills the existing elements in order, then appends copies of the last one for the remaining
+  // items. A select's options are not filled; each item gets a copy of the last option.
+  function repeat(array, element, name, data) {
+    var elements = jQuery.makeArray(element);
+    var last = elements[elements.length - 1];
+    var $copySource = $(last).clone(true);
+    var filled = 0;
+
+    if (elements[0].tagName != "OPTION") {
+      filled = Math.min(elements.length, array.length);
+      for (var i = 0; i < filled; i++) {
+        walk(array[i], $(element).eq(i), name, data);
+      }
+    }
+
+    // Each copy goes right after the original last element, so the items are added from the end
+    for (var j = array.length - 1; j >= filled; j--) {
+      walk(array[j], $copySource.clone(true).insertAfter(last), name, data);
+    }
+  }
+
+  // Sets a single value on each element of the set, or on the element itself.
+  function walkValue(value, element, name, data) {
+    if (element.length > 0) {
+      for (var i = 0; i < element.length; i++) {
+        setValue(element[i], value, name, data);
+      }
+    } else {
+      setValue(element, value, name, data);
+    }
+  }
+
+  // Loads a value of any shape into an element (a DOM element or a jQuery set).
+  function walk(value, element, name, data) {
+    if (value === undefined || value === null) {
+      return;
+    }
+    if (value.constructor == Object) {
+      walkObject(value, element, name, data);
+    } else if (value.constructor == Array) {
+      walkArray(value, element, name, data);
+    } else {
+      walkValue(value, element, name, data);
+    }
+  }
 
   function init(placeholder) {
     var template;
@@ -518,7 +543,7 @@ function match(key, scope) {
           var data = $.parseJSON(obj);
           init($this);
           properties.onLoading();
-          browseJSON(data, this, undefined, obj);
+          walk(data, this, undefined, obj);
           properties.onLoaded();
         } else {
           notice("url");
@@ -535,7 +560,7 @@ function match(key, scope) {
       } else {
         init($this);
         properties.onLoading();
-        browseJSON(obj, this, undefined, obj);
+        walk(obj, this, undefined, obj);
         properties.onLoaded();
       }
     });
