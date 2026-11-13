@@ -27,13 +27,13 @@ The package also has a classic build for script tags, AMD and CommonJS
 From a CDN, after jQuery:
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/jquery-load-json@1.4.0/dist/jquery.loadJSON.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-load-json@1.4.0/dist/jquery.loadJSON.min.js" integrity="sha384-wWn1sQhXqh8ywbVmTb/0kOItwvgWfzQP037QrrIQwKWRKzGWEWu6C62FbTuslrf1" crossorigin="anonymous"></script>
 ```
 
 or
 
 ```html
-<script src="https://unpkg.com/jquery-load-json@1.4.0/dist/jquery.loadJSON.min.js"></script>
+<script src="https://unpkg.com/jquery-load-json@1.4.0/dist/jquery.loadJSON.min.js" integrity="sha384-wWn1sQhXqh8ywbVmTb/0kOItwvgWfzQP037QrrIQwKWRKzGWEWu6C62FbTuslrf1" crossorigin="anonymous"></script>
 ```
 
 ## Example
