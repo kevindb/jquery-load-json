@@ -262,13 +262,15 @@ registered the plugin (1.3.3 had the same field). Bundlers now take `module`; Br
 
 Added from jquery-form's 4.4.0–4.6.0 releases, before the merge and tag:
 
-- Exclude `plans/`, `agents/` and `adr/` from the Pages build (`docs/_config.yml`), then check that
+- Done (`083d9f1`): exclude `plans/`, `agents/` and `adr/` from the Pages build (`docs/_config.yml`), then check that
   `/plans/modernization/` is a 404 after the merge.
-- Run the current suite against the npm 1.3.3 file; every difference must be in the release notes.
+- Done: the suite against the npm 1.3.3 file (Findings, Compared with npm 1.3.3).
 - npm: trusted publisher with publish permission only, 2FA required, tokens disallowed, maintainer
   list reviewed. After publishing, hash the jsDelivr and unpkg files against the README SRI; check
   Packagist.
-- Branch protection requires `test` only (matrix check names may change).
+- Branch protection requires `test` only (matrix check names may change). Not yet applied: the `npm`
+  environment and protection mirror jquery-form (reviewer kevindb, `v*` tags, 0 approvals, admins
+  not enforced) and wait for the maintainer, since the agent session may not change repo settings.
 - Give 1.4.0 a few days before 2.0 (no fixed timeline), so a regression can ship as 1.4.x first.
 
 ## Phase 6: 2.0.0 (breaking)
