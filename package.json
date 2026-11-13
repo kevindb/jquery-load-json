@@ -23,7 +23,7 @@
   "main": "dist/jquery.loadJSON.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kevindb/jquery-load-json.git"
+    "url": "git+https://github.com/kevindb/jquery-load-json.git"
   },
   "dependencies": {
     "jquery": ">=1.7"
