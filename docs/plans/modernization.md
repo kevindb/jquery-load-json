@@ -268,9 +268,9 @@ Added from jquery-form's 4.4.0–4.6.0 releases, before the merge and tag:
 - npm: trusted publisher with publish permission only, 2FA required, tokens disallowed, maintainer
   list reviewed. After publishing, hash the jsDelivr and unpkg files against the README SRI; check
   Packagist.
-- Branch protection requires `test` only (matrix check names may change). Not yet applied: the `npm`
-  environment and protection mirror jquery-form (reviewer kevindb, `v*` tags, 0 approvals, admins
-  not enforced) and wait for the maintainer, since the agent session may not change repo settings.
+- Done 2026-11-12 (maintainer ran the commands): `main` requires a PR and the `test` check only
+  (GitHub Actions; matrix check names may change), 0 approvals, admins not enforced. Environment
+  `npm`: reviewer kevindb, self-review allowed, deploys only from `v*` tags, as in jquery-form.
 - Give 1.4.0 a few days before 2.0 (no fixed timeline), so a regression can ship as 1.4.x first.
 
 ## Phase 6: 2.0.0 (breaking)
