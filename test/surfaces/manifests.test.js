@@ -1,7 +1,9 @@
+import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-const read = (file) => readFileSync(new URL(`../../${file}`, import.meta.url), "utf8");
+const fileUrl = (file) => new URL(`../../${file}`, import.meta.url);
+const read = (file) => readFileSync(fileUrl(file), "utf8");
 const pkg = JSON.parse(read("package.json"));
 const bower = JSON.parse(read("bower.json"));
 const composer = JSON.parse(read("composer.json"));
@@ -49,6 +51,21 @@ describe("when the package manifests are read", () => {
   it("should agree on the version with every dist banner", () => {
     for (const file of distFiles) {
       expect(read(file).slice(0, 200)).toContain(`v${pkg.version}`);
+    }
+  });
+
+  it("should give the README's CDN snippets the version and SRI hash of the minified build", () => {
+    const hash = createHash("sha384").update(readFileSync(fileUrl("dist/jquery.loadJSON.min.js")));
+    const integrity = `sha384-${hash.digest("base64")}`;
+
+    const snippets = read("README.md").match(
+      /<script src="https:\/\/[^"]+jquery-load-json@[^>]+>/g
+    );
+
+    expect(snippets.length).toBeGreaterThan(0);
+    for (const snippet of snippets) {
+      expect(snippet).toContain(`jquery-load-json@${pkg.version}/dist/jquery.loadJSON.min.js"`);
+      expect(snippet).toContain(`integrity="${integrity}"`);
     }
   });
 
