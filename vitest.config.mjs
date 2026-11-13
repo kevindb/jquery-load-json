@@ -116,7 +116,11 @@ export default defineConfig({
       {
         test: {
           name: "commonjs",
-          include: ["test/surfaces/commonjs.test.js", "test/surfaces/manifests.test.js"],
+          include: [
+            "test/surfaces/bundlers.test.js",
+            "test/surfaces/commonjs.test.js",
+            "test/surfaces/manifests.test.js",
+          ],
           environment: "node",
         },
       },
