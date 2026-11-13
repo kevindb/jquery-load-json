@@ -20,7 +20,6 @@ describe("when the package manifests are read", () => {
     const entries = [
       pkg.main,
       pkg.module,
-      pkg.browser,
       pkg.jsdelivr,
       pkg.unpkg,
       bower.main,
@@ -38,8 +37,8 @@ describe("when the package manifests are read", () => {
     expect(pkg.module).toBe("dist/jquery.loadJSON.mjs");
   });
 
-  it("should serve the minified classic build to browsers and CDNs", () => {
-    expect(pkg.browser).toBe("dist/jquery.loadJSON.min.js");
+  it("should leave bundlers the module build and serve the minified classic build to CDNs", () => {
+    expect(pkg).not.toHaveProperty("browser");
     expect(pkg.jsdelivr).toBe("dist/jquery.loadJSON.min.js");
     expect(pkg.unpkg).toBe("dist/jquery.loadJSON.min.js");
   });

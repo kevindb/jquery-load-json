@@ -21,7 +21,6 @@
     "Alexandre Caprais"
   ],
   "main": "dist/jquery.loadJSON.js",
-  "browser": "dist/jquery.loadJSON.min.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/kevindb/jquery-load-json.git"

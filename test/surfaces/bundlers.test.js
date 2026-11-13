@@ -27,7 +27,7 @@ afterEach(function () {
 });
 
 describe("when a bundler builds an app that imports the package", function () {
-  it.fails("should register loadJSON on the app's jQuery", async function () {
+  it("should register loadJSON on the app's jQuery", async function () {
     const input = consumerProject(
       'import $ from "jquery";\nimport "jquery-load-json";\nwindow.loadJSONType = typeof $.fn.loadJSON;\n'
     );
