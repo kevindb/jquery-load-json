@@ -307,7 +307,7 @@ Root cause of several bugs: commit 96d1690 ("Minor changes to pass JSHint", 2015
 | Array value for a select by key throws (`type === null` misses `undefined`)                                                                                                | form-fields: select array by key              | Fixed in 1.4 (`fe33dd0`)                                                   |
 | Array of values for a multiple select by key throws (same cause)                                                                                                           | form-fields: multiple select array            | Fixed in 1.4 (`e22bbb7`)                                                   |
 | `loadSelect` reads the outer argument, not its own values, so options are added only when the select itself is loaded; a JSON array string adds one option per character   | arguments: array string into a select         | Fixed in 1.4 (`94cdd6f`)                                                   |
-| Scalar into a multiple select with one option is ignored (`options.length > 1`, from 1.3.4)                                                                                | form-fields: one-option multiple select       | Fixed in 1.4 (`be00bd1`)                                                   |
+| Scalar into a multiple select with one option is ignored (`options.length > 1`, 1.3.3 and 1.3.4)                                                                           | form-fields: one-option multiple select       | Fixed in 1.4 (`be00bd1`)                                                   |
 | String image value is ignored (`obj.constructor == 'String'` is never true)                                                                                                | links-images: src string                      | Fixed in 1.4 (`1643e39`; value as `src` only)                              |
 | Object image value `{src, alt, title}` is ignored; images read the outer argument                                                                                          | links-images: object value                    | Fixed in 1.4 (`1643e39`)                                                   |
 | Link parameter is appended after a `#fragment`                                                                                                                             | links-images: before a fragment               | Fixed in 1.4 (`d96dcbb`)                                                   |
@@ -318,6 +318,22 @@ Root cause of several bugs: commit 96d1690 ("Minor changes to pass JSHint", 2015
 | Link values are not URL-encoded                                                                                                                                            | links-images: encode the value                | 2.0 (encoding changes existing output)                                     |
 | Template is never cached, so a second call loads into the first call's output                                                                                              | template: original markup                     | 2.0 (resetting the DOM drops handlers bound since)                         |
 | `Array.prototype.contains` is enumerable on every array                                                                                                                    | side-effects: enumerable property             | Non-enumerable in 1.4 (`665eecd`); 2.0 removes                             |
+
+### Compared with npm 1.3.3 (Phase 5, 2026-11-12)
+
+The suite at `083d9f1`, run on Chromium against the `src/jquery.loadJSON.js` published as 1.3.3 (the
+version npm users have; `main` pointed at `src/`). jQuery 3.7.1: 94 pass, 31 fail; jQuery 4.0.0: 89
+pass, 36 fail. Every failure is a 1.4 change, so this list is the source for the release notes:
+
+- From the 1.3.4 tag, never on npm (its source differs from 1.3.3 in two lines): a `null` value no
+  longer throws `TypeError`; a scalar into a multiple select with no options no longer throws.
+- The fixes in the Bugs table: JSON strings on jQuery 4 (the 5 extra jQuery 4 failures), #28 (and the
+  pinned repeat of the loaded element that used to throw), select x4, image string and object, link
+  fragment and query-only `href`, keys that are not valid selectors (6), `contains` non-enumerable.
+  The one-option multiple select was ignored in 1.3.3 as well, not only from 1.3.4.
+- New: `$.fn.loadJSON.debug` (off by default) and the nine deprecation notices.
+
+No test passes on 1.3.3 and fails on 1.4.
 
 ### Pinned behavior (tested as is)
 
