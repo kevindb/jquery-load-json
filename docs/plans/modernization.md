@@ -62,7 +62,7 @@ Bugs visible by reading, before tests (the Findings section has the tested resul
 - `src/jquery.loadJSON.js` becomes an ES module; Rollup builds `dist/jquery.loadJSON.js` (classic UMD,
   same CommonJS `(root, jQuery)` factory), `dist/jquery.loadJSON.mjs` and the min file + source map.
   `dist/` stays committed and CI checks it matches a fresh build. `main` moves to `dist/`,
-  `module` added, `browser` kept. No `exports` map in 1.x. bower/composer point at `dist/`.
+  `module` added, `browser` dropped in Phase 5 (see there). No `exports` map in 1.x. bower/composer point at `dist/`.
   Caveat: a deep path to `src/jquery.loadJSON.js` gets ESM in 1.4 (same trade-off jquery-form made).
 - 1.4 deprecation warnings: `$.fn.loadJSON.debug = true` makes each 2.0 removal `console.warn` once
   per page when that code path runs. Off by default, so 1.4 output is unchanged.
@@ -202,7 +202,8 @@ Done when: the only remaining `it.fails` are bugs deferred to 2.0, coverage is b
 branches removed by the refactors), and the jQuery 1.7.2 / 3.7.1 / 4.0.0 matrix is green on all
 three browsers.
 
-Status: code steps done 2026-11-11 on `release-1.4` (local, not pushed); docs are a separate session.
+Status: code steps done 2026-11-11 on `release-1.4` (pushed; PR #39 green on all checks); docs are a
+separate session.
 
 Docs done 2026-11-11 on `release-1.4`: README is a landing page (npm, CDN without SRI until Phase 5,
 credit and jquery-view-engine link for #25); the four wiki pages are rewritten for 1.4 as
@@ -250,6 +251,25 @@ attribute with the key. A dot key is valid CSS, so it still builds a compound se
 
 Done when: `npm view jquery-load-json` shows 1.4.0 with provenance, the release exists, and the
 listed PRs and issues are closed.
+
+Status (2026-11-12): Phase 4 verified (`npm test`, e2e and PR #39 CI green; 100% coverage; only the
+2.0 `it.fails` left). GitHub Pages is on (`main` `/docs`); the wiki is still on. On `release-1.4`:
+version 1.4.0, SRI on the README CDN snippets with a test against the min build's hash, and the
+`browser` field dropped. A bundler that reads `browser` first (rolldown, esbuild) bundled the classic
+min build, whose CommonJS branch only exports the factory, so `import "jquery-load-json"` never
+registered the plugin (1.3.3 had the same field). Bundlers now take `module`; Browserify takes `main`;
+`jsdelivr`/`unpkg` keep the min file. `test/surfaces/bundlers.test.js` bundles with rolldown.
+
+Added from jquery-form's 4.4.0–4.6.0 releases, before the merge and tag:
+
+- Exclude `plans/`, `agents/` and `adr/` from the Pages build (`docs/_config.yml`), then check that
+  `/plans/modernization/` is a 404 after the merge.
+- Run the current suite against the npm 1.3.3 file; every difference must be in the release notes.
+- npm: trusted publisher with publish permission only, 2FA required, tokens disallowed, maintainer
+  list reviewed. After publishing, hash the jsDelivr and unpkg files against the README SRI; check
+  Packagist.
+- Branch protection requires `test` only (matrix check names may change).
+- Give 1.4.0 a few days before 2.0 (no fixed timeline), so a regression can ship as 1.4.x first.
 
 ## Phase 6: 2.0.0 (breaking)
 
