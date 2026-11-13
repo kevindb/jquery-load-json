@@ -1,0 +1,13 @@
+{
+  "ID": 19,
+  "Name": "Asadul Ltd",
+  "Address": "Hophouse",
+  "Town": "Essex",
+  "Contact": "Phone",
+  "IsFeatured": false,
+  "Country": null,
+  "Logo": {
+    "src": "images/logo19.jpg",
+    "alt": "Asadul Ltd logo"
+  }
+}

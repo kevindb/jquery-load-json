@@ -1,0 +1,20 @@
+{
+  "towns": [
+    {
+      "value": 31,
+      "text": "Berlin"
+    },
+    {
+      "value": 32,
+      "text": "Vienna"
+    },
+    {
+      "value": 33,
+      "text": "Budapest"
+    },
+    {
+      "value": 34,
+      "text": "Prague"
+    }
+  ]
+}

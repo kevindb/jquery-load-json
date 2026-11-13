@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Different markup per item · jQuery loadJSON</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
+    <main>
+      <h1>Different markup per item</h1>
+      <p>
+        When a key matches several elements, they are filled in order before any copies are added.
+        Here the first company gets a featured layout with its logo, and the rest repeat the last
+        item.
+      </p>
+      <h2>Result</h2>
+      <div class="result">
+        <div id="directory">
+          <ul>
+            <li class="Companies">
+              <a class="ID" href="details.html"
+                ><img class="Logo" alt="" /> <strong class="Name"></strong></a
+              ><br />
+              <span class="Address"></span>, <span class="Town"></span>
+            </li>
+            <li class="Companies">
+              <a class="ID" href="details.html"><span class="Name"></span></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <h2>Template</h2>
+      <pre data-source="#directory"><code></code></pre>
+      <h2>Script</h2>
+      <pre data-script="#example"><code></code></pre>
+      <p>
+        The array is the value of the <code>Companies</code> key. Loading it into
+        <code>$("#directory li")</code> instead would repeat each <code>li</code> separately,
+        because every element of a jQuery set is loaded with the whole data.
+      </p>
+    </main>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="jquery.loadJSON.js"></script>
+    <script src="show-source.js"></script>
+    <script id="example">
+      $.getJSON("data/list.json")
+        .done(function (companies) {
+          $("#directory").loadJSON({ Companies: companies });
+        })
+        .fail(function () {
+          $("#directory").addClass("error").text("The data could not be loaded.");
+        });
+    </script>
+  </body>
+</html>

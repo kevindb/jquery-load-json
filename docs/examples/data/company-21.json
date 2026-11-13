@@ -1,0 +1,13 @@
+{
+  "ID": 21,
+  "Name": "Ashley Mark Publishing Company",
+  "Address": "1-2 Vance Court",
+  "Town": "London",
+  "Contact": null,
+  "IsFeatured": true,
+  "Country": null,
+  "Logo": {
+    "src": "images/logo21.jpg",
+    "alt": "Ashley Mark Publishing Company logo"
+  }
+}

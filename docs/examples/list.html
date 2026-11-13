@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>A list from an array · jQuery loadJSON</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
+    <main>
+      <h1>A list from an array</h1>
+      <p>
+        An array of objects loaded into one <code>li</code>: the item is filled with the first
+        object and copied for each of the others. The links already have an <code>href</code>, so
+        each gains its company's <code>ID</code>.
+      </p>
+      <h2>Result</h2>
+      <div class="result">
+        <ul id="companies">
+          <li>
+            <a class="ID" href="details.html"><span class="Name"></span></a>,
+            <span class="Address"></span>
+          </li>
+        </ul>
+      </div>
+
+      <h2>Template</h2>
+      <pre data-source="#companies"><code></code></pre>
+      <h2>Script</h2>
+      <pre data-script="#example"><code></code></pre>
+    </main>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="jquery.loadJSON.js"></script>
+    <script src="show-source.js"></script>
+    <script id="example">
+      $.getJSON("data/list.json")
+        .done(function (companies) {
+          $("#companies li").loadJSON(companies);
+        })
+        .fail(function () {
+          $("#companies").addClass("error").text("The data could not be loaded.");
+        });
+    </script>
+  </body>
+</html>

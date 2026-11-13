@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Filling a form · jQuery loadJSON</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
+    <main>
+      <h1>Filling a form</h1>
+      <p>
+        One object loaded into a form. Each control takes its value in the way that suits it: text
+        fields and the textarea take it as text, the checkbox and radio buttons are checked when
+        their value matches, and the selects select matching options. Try another company:
+        <a href="?ID=17">17</a>, <a href="?ID=18">18</a>, <a href="?ID=19">19</a>,
+        <a href="?ID=20">20</a>, <a href="?ID=21">21</a>.
+      </p>
+      <h2>Result</h2>
+      <div class="result">
+        <form id="company" action="details.html" method="get">
+          <input type="hidden" name="ID" />
+
+          <label for="Name">Name</label>
+          <input id="Name" name="Name" type="text" />
+
+          <label for="Address">Address</label>
+          <textarea id="Address" name="Address" rows="3"></textarea>
+
+          <label for="Town">Town</label>
+          <select id="Town" name="Town">
+            <option value="">-</option>
+            <option value="London">London</option>
+            <option value="Liverpool">Liverpool</option>
+            <option value="Lothian">Lothian</option>
+            <option value="Newcastle">Newcastle</option>
+            <option value="Buckinghamshire">Buckinghamshire</option>
+            <option value="Essex">Essex</option>
+          </select>
+
+          <label for="Country">Countries</label>
+          <select id="Country" name="Country" multiple>
+            <option value="UK">United Kingdom</option>
+            <option value="SRB">Serbia</option>
+            <option value="USA">United States of America</option>
+            <option value="FRA">France</option>
+          </select>
+
+          <label
+            ><input id="IsFeatured" name="IsFeatured" type="checkbox" value="1" /> Featured</label
+          >
+
+          <fieldset>
+            <legend>Contact by</legend>
+            <label><input name="Contact" type="radio" value="Email" /> Email</label>
+            <label><input name="Contact" type="radio" value="Phone" /> Phone</label>
+            <label><input name="Contact" type="radio" value="Post" /> Post</label>
+          </fieldset>
+
+          <p><button type="submit">Save</button></p>
+        </form>
+      </div>
+
+      <h2>Template</h2>
+      <pre data-source="#company"><code></code></pre>
+      <h2>Script</h2>
+      <pre data-script="#example"><code></code></pre>
+      <p>
+        <code>IsFeatured</code> is a boolean. The checkbox has <code>value="1"</code>, which
+        <code>true</code> equals in a loose comparison. Saving submits the form to the details page,
+        which loads the company again from its <code>ID</code>.
+      </p>
+    </main>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="jquery.loadJSON.js"></script>
+    <script src="show-source.js"></script>
+    <script id="example">
+      var id = new URLSearchParams(location.search).get("ID") || "17";
+
+      if (/^\d+$/.test(id)) {
+        $.getJSON("data/company-" + id + ".json")
+          .done(function (company) {
+            $("#company").loadJSON(company);
+          })
+          .fail(function () {
+            $("#company").addClass("error").text("The data could not be loaded.");
+          });
+      }
+    </script>
+  </body>
+</html>

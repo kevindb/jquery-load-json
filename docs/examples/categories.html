@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Connected selects from the server · jQuery loadJSON</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav><a href="index.html">All examples</a> · <a href="../">Documentation</a></nav>
+    <main>
+      <h1>Connected selects from the server</h1>
+      <p>
+        The regions are requested when the page loads and added as options. Choosing a region
+        requests its towns and adds them to the second select. Each array is loaded into a classed
+        placeholder option, which is copied once per item.
+      </p>
+      <h2>Result</h2>
+      <div class="result">
+        <form id="locations">
+          <label for="Region">Region</label>
+          <select id="Region" name="Region">
+            <option value="" class="regions">Choose a region</option>
+          </select>
+
+          <label for="Town">Town</label>
+          <select id="Town" name="Town">
+            <option value="" class="towns">Choose a town</option>
+          </select>
+        </form>
+      </div>
+
+      <h2>Template</h2>
+      <pre data-source="#locations"><code></code></pre>
+      <h2>Script</h2>
+      <pre data-script="#example"><code></code></pre>
+      <p>
+        Options added by an earlier load stay in the select, so the script removes the old towns
+        before loading new ones.
+      </p>
+    </main>
+    <script
+      src="https://code.jquery.com/jquery-4.0.0.min.js"
+      integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV"
+      crossorigin="anonymous"
+    ></script>
+    <script src="jquery.loadJSON.js"></script>
+    <script src="show-source.js"></script>
+    <script id="example">
+      $.getJSON("data/regions.json").done(function (data) {
+        $("#locations").loadJSON(data);
+      });
+
+      $("#Region").on("change", function () {
+        var id = $(this).val();
+
+        $("#Town option").slice(1).remove();
+        if (id) {
+          $.getJSON("data/towns-" + id + ".json").done(function (data) {
+            $("#locations").loadJSON(data);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

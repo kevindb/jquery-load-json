@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/kevindb/jquery-load-json/security/advisories/new
+    about: Please report security issues privately, as the security policy (SECURITY.md) describes, not in a public issue.
+  - name: Documentation
+    url: https://github.com/kevindb/jquery-load-json#readme
+    about: Usage, options and examples.
