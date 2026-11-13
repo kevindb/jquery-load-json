@@ -265,7 +265,7 @@ Added from jquery-form's 4.4.0–4.6.0 releases, before the merge and tag:
 - Done (`083d9f1`): exclude `plans/`, `agents/` and `adr/` from the Pages build (`docs/_config.yml`), then check that
   `/plans/modernization/` is a 404 after the merge.
 - Done: the suite against the npm 1.3.3 file (Findings, Compared with npm 1.3.3).
-- npm: trusted publisher with publish permission only, 2FA required, tokens disallowed, maintainer
+- Done 2026-11-12 (maintainer, on npmjs.com; `release.yml` + environment `npm`): trusted publisher with publish permission only, 2FA required, tokens disallowed, maintainer
   list reviewed. After publishing, hash the jsDelivr and unpkg files against the README SRI; check
   Packagist.
 - Done 2026-11-12 (maintainer ran the commands): `main` requires a PR and the `test` check only
