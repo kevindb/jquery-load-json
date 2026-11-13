@@ -273,6 +273,17 @@ Added from jquery-form's 4.4.0–4.6.0 releases, before the merge and tag:
   `npm`: reviewer kevindb, self-review allowed, deploys only from `v*` tags, as in jquery-form.
 - Give 1.4.0 a few days before 2.0 (no fixed timeline), so a regression can ship as 1.4.x first.
 
+Released 2026-11-13. PR #39 merged as `e89f3d8`; the `release.yml` rehearsal on `main` passed
+(verify only, publish skipped). Tag `v1.4.0` (annotated, on `e89f3d8`), publish approved by the
+maintainer: npm `latest` is 1.4.0 with SLSA provenance (`gitHead` `e89f3d8`, Sigstore log index
+3846299961). The tarball's min file, jsDelivr and unpkg all match the README's SRI hash (the CDNs
+cached a 404 for about four minutes after the publish). Packagist has `v1.4.0`. GitHub Pages serves
+`docs/` and the examples; `plans/`, `agents/` and `adr/` return 404. GitHub release `v1.4.0` is
+published from the 1.3.3 comparison. Closed with a comment: Dependabot #34 #35 #36 #38 (#30 was
+already closed), #32, #25 and #28. Dependabot's first grouped PR (#40) merged under the new
+protection. npm normalized `repository.url` on publish; the follow-up PR applies `npm pkg fix`.
+Phase 5 is done; the wiki is still enabled (maintainer's call, its pages now live in `docs/`).
+
 ## Phase 6: 2.0.0 (breaking)
 
 - `jquery` moves from `dependencies` to `peerDependencies` at the chosen floor; `exports` map.
