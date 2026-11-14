@@ -1,5 +1,4 @@
 import jQuery from "jquery";
-import { notice } from "./legacy.js";
 
 // Each step of a match: its selector for the key, and the same test without a selector.
 var steps = [
@@ -28,15 +27,6 @@ var steps = [
     },
   },
 ];
-
-var relStep = {
-  selector: function (key) {
-    return '[rel="' + key + '"]';
-  },
-  test: function (element, key) {
-    return element.getAttribute("rel") === key;
-  },
-};
 
 // Whether the browser accepts a selector as CSS.
 function isValidCss(selector) {
@@ -70,7 +60,6 @@ function query(step, key, scope) {
 
 /**
  * The match of a key: the elements inside `scope` whose class, then id, then name is the key.
- * When none match, the elements anywhere in the document whose rel attribute is the key.
  */
 export function match(key, scope) {
   for (var i = 0; i < steps.length; i++) {
@@ -80,9 +69,5 @@ export function match(key, scope) {
     }
   }
 
-  var $rel = query(relStep, key, document);
-  if ($rel.length > 0) {
-    notice("rel");
-  }
-  return $rel;
+  return jQuery();
 }

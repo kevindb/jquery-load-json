@@ -21,7 +21,7 @@ describe("deprecation notices", function () {
 
   describe("when debug is off", function () {
     it("should be off by default and warn about nothing", function () {
-      const $root = fixture('<div><span rel="a"></span></div>');
+      const $root = fixture('<div><span class="a"></span></div>');
 
       $root.loadJSON({ a: "<b>x</b>" });
 
@@ -48,14 +48,6 @@ describe("deprecation notices", function () {
   describe("when debug is on", function () {
     beforeEach(function () {
       $.fn.loadJSON.debug = true;
-    });
-
-    it("should warn when a key matches by rel", function () {
-      const $root = fixture('<div><span rel="r"></span></div>');
-
-      $root.loadJSON({ r: "x" });
-
-      expect(warnings().join()).toContain("rel attribute");
     });
 
     it("should warn when array items go into rel index children", function () {

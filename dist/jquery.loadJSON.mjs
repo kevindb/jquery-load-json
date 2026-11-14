@@ -25,7 +25,6 @@ var $$1 = jQuery;
 
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  rel: "Matching keys by the rel attribute is deprecated and will be removed in 2.0. Use a class, id or name.",
   relIndex:
     'Loading array items into rel="index" children is deprecated and will be removed in 2.0.',
   url: "Passing a URL to loadJSON is deprecated and will be removed in 2.0. Load the data with $.getJSON and pass it to loadJSON.",
@@ -256,15 +255,6 @@ var steps = [
   },
 ];
 
-var relStep = {
-  selector: function (key) {
-    return '[rel="' + key + '"]';
-  },
-  test: function (element, key) {
-    return element.getAttribute("rel") === key;
-  },
-};
-
 // Whether the browser accepts a selector as CSS.
 function isValidCss(selector) {
   try {
@@ -297,7 +287,6 @@ function query(step, key, scope) {
 
 /**
  * The match of a key: the elements inside `scope` whose class, then id, then name is the key.
- * When none match, the elements anywhere in the document whose rel attribute is the key.
  */
 function match(key, scope) {
   for (var i = 0; i < steps.length; i++) {
@@ -307,11 +296,7 @@ function match(key, scope) {
     }
   }
 
-  var $rel = query(relStep, key, document);
-  if ($rel.length > 0) {
-    notice("rel");
-  }
-  return $rel;
+  return jQuery();
 }
 
 
