@@ -37,17 +37,13 @@ must stay at 100%), Firefox and WebKit, plus the tests of the published files.
 ### jQuery versions
 
 The suite runs against jQuery 3.7.1 by default. CI also runs it, and the end-to-end tests, against
-jQuery 1.7.2 (the oldest supported version), 3.7.1 and 4.0.0, each in Chromium, Firefox and WebKit.
+jQuery 3.5.1 (the oldest supported version), 3.7.1 and 4.0.0, each in Chromium, Firefox and WebKit.
 To run another version locally, set `JQUERY_FILE`:
 
 ```shell
+JQUERY_FILE=node_modules/jquery35/dist/jquery.js npx vitest run --project suite-chromium
 JQUERY_FILE=node_modules/jquery4/dist/jquery.js npx vitest run --project suite-chromium
-scripts/fetch-jquery.sh 1.7.2
-JQUERY_FILE=.jquery/jquery-1.7.2.js npx vitest run --project suite-chromium
 ```
-
-`scripts/fetch-jquery.sh` downloads jQuery 1.7.2, which npm does not ship as a file, and checks
-its hash.
 
 ### Documentation and examples
 

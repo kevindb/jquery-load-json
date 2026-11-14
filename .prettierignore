@@ -1,5 +1,4 @@
 /*.md
-.jquery/
 .vitest/
 coverage/
 dist/

@@ -48,8 +48,8 @@ const rawFiles = {
 
 const jqueryEsm = new URL("./test/jquery-esm.js", import.meta.url);
 
-// JQUERY_FILE picks the classic jQuery build: 1.7.2 comes from scripts/fetch-jquery.sh, 3.7.1 and
-// 4.0.0 from the jquery3 and jquery4 dev dependencies.
+// JQUERY_FILE picks the classic jQuery build: 3.5.1, 3.7.1 and 4.0.0 come from the jquery35, jquery3
+// and jquery4 dev dependencies.
 const jqueryFile = fileURLToPath(
   new URL(
     process.env.JQUERY_FILE || "./node_modules/jquery3/dist/jquery.js",
