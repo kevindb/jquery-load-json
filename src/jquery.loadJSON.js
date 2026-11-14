@@ -53,8 +53,7 @@ import { match } from "./key-match.js";
     }
   }
 
-  // Loads an array: whole into a select or a checkbox group, item by item into rel index
-  // children, or as a repeat of the element.
+  // Loads an array: whole into a select or a checkbox group, otherwise as a repeat of the element.
   function walkArray(array, element, name) {
     if (element.length == 1 && (isSelect(element) || isSelect(element[0]))) {
       setValue(element, array, name);
@@ -64,17 +63,6 @@ import { match } from "./key-match.js";
     if (element.length > 0 && kindOf(element[0]) == "checkbox") {
       element.each(function () {
         setValue(this, array, name);
-      });
-      return;
-    }
-
-    var $element = $(element);
-    var $children = $element.children("[rel]");
-    if ($children.length > 0) {
-      notice("relIndex");
-      $children.each(function () {
-        var $child = $(this);
-        walk(array[$child.attr("rel")], $child, name);
       });
       return;
     }

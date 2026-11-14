@@ -66,14 +66,12 @@ describe("arrays", function () {
   });
 
   describe("when the array's container has rel children", function () {
-    it("should load each child from the item at its rel index", function () {
-      const $root = fixture(
-        '<div><ul class="l"><li rel="1"></li><li rel="0"></li><li rel="5">keep</li></ul></div>'
-      );
+    it("should repeat the container, not fill the children by rel index", function () {
+      const $root = fixture('<div><ul class="l"><li rel="1"></li><li rel="0"></li></ul></div>');
 
       $root.loadJSON({ l: ["zero", "one"] });
 
-      expect(texts($root.find("li"))).toEqual(["one", "zero", "keep"]);
+      expect(texts($root.find(".l"))).toEqual(["zero", "one"]);
     });
   });
 

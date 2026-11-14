@@ -50,14 +50,6 @@ describe("deprecation notices", function () {
       $.fn.loadJSON.debug = true;
     });
 
-    it("should warn when array items go into rel index children", function () {
-      const $root = fixture('<div><ul class="l"><li rel="0"></li></ul></div>');
-
-      $root.loadJSON({ l: ["zero"] });
-
-      expect(warnings().join()).toContain('rel="index"');
-    });
-
     it("should warn when given a URL, once per page", function () {
       const $root = fixture("<div></div>");
 

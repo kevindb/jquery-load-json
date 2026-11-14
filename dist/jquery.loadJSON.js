@@ -54,8 +54,6 @@ var $$1 = jQuery;
 
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  relIndex:
-    'Loading array items into rel="index" children is deprecated and will be removed in 2.0.',
   url: "Passing a URL to loadJSON is deprecated and will be removed in 2.0. Load the data with $.getJSON and pass it to loadJSON.",
   html: "Values are inserted as HTML. From 2.0 they are inserted as text unless the html option is true.",
 };
@@ -360,8 +358,7 @@ function match(key, scope) {
     }
   }
 
-  // Loads an array: whole into a select or a checkbox group, item by item into rel index
-  // children, or as a repeat of the element.
+  // Loads an array: whole into a select or a checkbox group, otherwise as a repeat of the element.
   function walkArray(array, element, name) {
     if (element.length == 1 && (isSelect(element) || isSelect(element[0]))) {
       setValue(element, array, name);
@@ -371,17 +368,6 @@ function match(key, scope) {
     if (element.length > 0 && kindOf(element[0]) == "checkbox") {
       element.each(function () {
         setValue(this, array, name);
-      });
-      return;
-    }
-
-    var $element = $(element);
-    var $children = $element.children("[rel]");
-    if ($children.length > 0) {
-      notice("relIndex");
-      $children.each(function () {
-        var $child = $(this);
-        walk(array[$child.attr("rel")], $child, name);
       });
       return;
     }

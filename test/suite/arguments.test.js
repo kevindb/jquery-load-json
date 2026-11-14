@@ -75,11 +75,11 @@ describe("loadJSON arguments", function () {
     });
 
     it("should parse an array string and load it", function () {
-      const $list = fixture('<ul><li rel="1"></li><li rel="0"></li></ul>');
+      const $root = fixture("<div><p></p></div>");
 
-      $list.loadJSON('["zero","one"]');
+      $root.find("p").loadJSON('["zero","one"]');
 
-      expect(texts($list.find("li"))).toEqual(["one", "zero"]);
+      expect(texts($root.find("p"))).toEqual(["zero", "one"]);
     });
 
     it("should add one option per item of an array string loaded into a select", function () {
