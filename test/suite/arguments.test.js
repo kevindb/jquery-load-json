@@ -214,12 +214,4 @@ describe("loadJSON callbacks", function () {
     expect(seen[0].onLoaded).toBe(options.onLoaded);
     expect(seen[1]).toBe(0);
   });
-
-  it("should accept and ignore the mobile option", function () {
-    const $root = fixture('<div><span class="a"></span></div>');
-
-    $root.loadJSON({ a: 1 }, { mobile: true });
-
-    expect($root.find(".a").text()).toBe("1");
-  });
 });

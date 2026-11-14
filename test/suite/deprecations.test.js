@@ -66,16 +66,6 @@ describe("deprecation notices", function () {
       $.fn.loadJSON.debug = true;
     });
 
-    it("should warn about the mobile option once per page", function () {
-      const $root = fixture("<div></div>");
-
-      $root.loadJSON({}, { mobile: false });
-      $root.loadJSON({}, { mobile: false });
-
-      expect(warnings()[0]).toMatch(/^jQuery loadJSON: /);
-      expect(warnings().filter((text) => text.includes("mobile option"))).toHaveLength(1);
-    });
-
     it('should warn about an image value in the "src$alt" format', function () {
       const $root = fixture('<div><img class="p"></div>');
 
@@ -108,12 +98,14 @@ describe("deprecation notices", function () {
       expect(warnings().join()).toContain('rel="index"');
     });
 
-    it("should warn when given a URL", function () {
+    it("should warn when given a URL, once per page", function () {
       const $root = fixture("<div></div>");
 
       $root.loadJSON("/fixtures/missing.json");
+      $root.loadJSON("/fixtures/missing.json");
 
-      expect(warnings().join()).toContain("Passing a URL");
+      expect(warnings()[0]).toMatch(/^jQuery loadJSON: /);
+      expect(warnings().filter((text) => text.includes("Passing a URL"))).toHaveLength(1);
     });
 
     it("should warn when a string that looks like markup is inserted as HTML", function () {

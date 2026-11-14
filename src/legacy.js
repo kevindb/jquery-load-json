@@ -6,7 +6,6 @@ var $ = jQuery;
 
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  mobileOption: "The mobile option has no effect and will be removed in 2.0.",
   srcAlt:
     'An image value is used as the whole src: the "src$alt" format is not supported. Pass {src, alt} instead.',
   imageFallback:

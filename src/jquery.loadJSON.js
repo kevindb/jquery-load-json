@@ -168,14 +168,9 @@ import { match } from "./key-match.js";
   }
 
   $.fn.loadJSON = function (data, options) {
-    if (options && "mobile" in options) {
-      notice("mobileOption");
-    }
-
     var defaults = {
       onLoading: function () {},
       onLoaded: function () {},
-      mobile: false,
     };
     var properties = $.extend(defaults, options);
 
