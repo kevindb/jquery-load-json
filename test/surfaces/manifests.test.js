@@ -56,6 +56,9 @@ describe("when the package manifests are read", () => {
   it("should give the README's CDN snippets the version and SRI hash of the minified build", () => {
     const hash = createHash("sha384").update(readFileSync(fileUrl("dist/jquery.loadJSON.min.js")));
     const integrity = `sha384-${hash.digest("base64")}`;
+    // Between releases the version is a prerelease and the README keeps the last published one,
+    // whose hash only the published file can confirm.
+    const prerelease = pkg.version.includes("-");
 
     const snippets = read("README.md").match(
       /<script src="https:\/\/[^"]+jquery-load-json@[^>]+>/g
@@ -63,8 +66,14 @@ describe("when the package manifests are read", () => {
 
     expect(snippets.length).toBeGreaterThan(0);
     for (const snippet of snippets) {
-      expect(snippet).toContain(`jquery-load-json@${pkg.version}/dist/jquery.loadJSON.min.js"`);
-      expect(snippet).toContain(`integrity="${integrity}"`);
+      const version = snippet.match(/jquery-load-json@([^/]+)\//)[1];
+      expect(snippet).toContain(`jquery-load-json@${version}/dist/jquery.loadJSON.min.js"`);
+      if (prerelease) {
+        expect(version).toMatch(/^\d+\.\d+\.\d+$/);
+      } else {
+        expect(version).toBe(pkg.version);
+        expect(snippet).toContain(`integrity="${integrity}"`);
+      }
     }
   });
 

@@ -1,6 +1,6 @@
 {
   "name": "jquery-load-json",
-  "version": "1.4.0",
+  "version": "2.0.0-dev",
   "description": "jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM.",
   "keywords": [
     "javascript",
