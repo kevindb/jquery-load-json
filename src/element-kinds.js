@@ -127,9 +127,14 @@ function image(element, value) {
   }
 }
 
-function content(element, value) {
+// Sets the contents as text, or as HTML when the html option is true.
+function content(element, value, name, options) {
   try {
-    $(element).html(value.toString());
+    if (options.html) {
+      $(element).html(value.toString());
+    } else {
+      $(element).text(value.toString());
+    }
   } catch (exc) {}
 }
 
@@ -167,12 +172,12 @@ export function kindOf(element) {
 
 /**
  * Sets a value on an element by its kind. `element` is a DOM element or a jQuery set of one;
- * `name` is the key the value was loaded from.
+ * `name` is the key the value was loaded from and `options` the options passed to loadJSON.
  */
-export function setValue(element, value, name) {
+export function setValue(element, value, name, options) {
   var node = $(element)[0];
 
-  kinds[kindOf(node)](node, value, name);
+  kinds[kindOf(node)](node, value, name, options);
 }
 
 // Whether a DOM element's kind takes an object whole (an option or an image), rather than the walk

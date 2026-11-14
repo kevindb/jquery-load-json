@@ -29,14 +29,14 @@ import { match } from "./key-match.js";
   }
 
   // Loads each key of an object into its match within the element.
-  function walkObject(object, element, name) {
+  function walkObject(object, element, name, options) {
     // An option or an image matched by the enclosing key takes the object whole
     if (element.length >= 1 && takesObject(element[0])) {
       if (kindOf(element[0]) == "option") {
-        setValue(element[0], object, name);
+        setValue(element[0], object, name, options);
       } else {
         element.each(function () {
-          setValue(this, object, name);
+          setValue(this, object, name, options);
         });
       }
     }
@@ -47,31 +47,31 @@ import { match } from "./key-match.js";
       }
       var $match = match(key, element);
       if ($match.length !== 0) {
-        walk(object[key], $match, key);
+        walk(object[key], $match, key, options);
       }
     }
   }
 
   // Loads an array: whole into a select or a checkbox group, otherwise as a repeat of the element.
-  function walkArray(array, element, name) {
+  function walkArray(array, element, name, options) {
     if (element.length == 1 && (isSelect(element) || isSelect(element[0]))) {
-      setValue(element, array, name);
+      setValue(element, array, name, options);
       return;
     }
 
     if (element.length > 0 && kindOf(element[0]) == "checkbox") {
       element.each(function () {
-        setValue(this, array, name);
+        setValue(this, array, name, options);
       });
       return;
     }
 
-    repeat(array, element, name);
+    repeat(array, element, name, options);
   }
 
   // Fills the existing elements in order, then appends copies of the last one for the remaining
   // items. A select's options are not filled; each item gets a copy of the last option.
-  function repeat(array, element, name) {
+  function repeat(array, element, name, options) {
     var elements = jQuery.makeArray(element);
     var last = elements[elements.length - 1];
     var $copySource = $(last).clone(true);
@@ -80,38 +80,38 @@ import { match } from "./key-match.js";
     if (elements[0].tagName != "OPTION") {
       filled = Math.min(elements.length, array.length);
       for (var i = 0; i < filled; i++) {
-        walk(array[i], $(element).eq(i), name);
+        walk(array[i], $(element).eq(i), name, options);
       }
     }
 
     // Each copy goes right after the original last element, so the items are added from the end
     for (var j = array.length - 1; j >= filled; j--) {
-      walk(array[j], $copySource.clone(true).insertAfter(last), name);
+      walk(array[j], $copySource.clone(true).insertAfter(last), name, options);
     }
   }
 
   // Sets a single value on each element of the set, or on the element itself.
-  function walkValue(value, element, name) {
+  function walkValue(value, element, name, options) {
     if (element.length > 0) {
       for (var i = 0; i < element.length; i++) {
-        setValue(element[i], value, name);
+        setValue(element[i], value, name, options);
       }
     } else {
-      setValue(element, value, name);
+      setValue(element, value, name, options);
     }
   }
 
   // Loads a value of any shape into an element (a DOM element or a jQuery set).
-  function walk(value, element, name) {
+  function walk(value, element, name, options) {
     if (value === undefined || value === null) {
       return;
     }
     if (value.constructor == Object) {
-      walkObject(value, element, name);
+      walkObject(value, element, name, options);
     } else if (value.constructor == Array) {
-      walkArray(value, element, name);
+      walkArray(value, element, name, options);
     } else {
-      walkValue(value, element, name);
+      walkValue(value, element, name, options);
     }
   }
 
@@ -130,7 +130,7 @@ import { match } from "./key-match.js";
   function load(element, data, properties) {
     useSavedTemplate($(element));
     properties.onLoading();
-    walk(data, element);
+    walk(data, element, undefined, properties);
     properties.onLoaded();
   }
 
@@ -143,6 +143,7 @@ import { match } from "./key-match.js";
     var defaults = {
       onLoading: function () {},
       onLoaded: function () {},
+      html: false,
     };
     var properties = $.extend(defaults, options);
 
