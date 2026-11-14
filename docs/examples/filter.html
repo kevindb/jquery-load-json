@@ -19,12 +19,12 @@
         <form id="locations">
           <label for="Region">Region</label>
           <select id="Region" name="Region">
-            <option value="" class="regions">Choose a region</option>
+            <option value="">Choose a region</option>
           </select>
 
           <label for="Town">Town</label>
           <select id="Town" name="Town">
-            <option value="" class="towns">Choose a town</option>
+            <option value="">Choose a town</option>
           </select>
         </form>
       </div>
@@ -61,7 +61,7 @@
         { value: 34, text: "Prague", region: 3 },
       ];
 
-      $("#locations").loadJSON({ regions: regions });
+      $("#Region").loadJSON(regions);
 
       $("#Region").on("change", function () {
         var region = Number($(this).val());
@@ -72,9 +72,7 @@
           .sort(function (a, b) {
             return a.text.localeCompare(b.text);
           });
-
-        $("#Town option").slice(1).remove();
-        $("#locations").loadJSON({ towns: inRegion });
+        $("#Town").loadJSON(inRegion);
       });
     </script>
   </body>
