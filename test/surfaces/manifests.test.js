@@ -5,7 +5,6 @@ import { describe, expect, it } from "vitest";
 const fileUrl = (file) => new URL(`../../${file}`, import.meta.url);
 const read = (file) => readFileSync(fileUrl(file), "utf8");
 const pkg = JSON.parse(read("package.json"));
-const bower = JSON.parse(read("bower.json"));
 const composer = JSON.parse(read("composer.json"));
 
 const distFiles = [
@@ -22,7 +21,6 @@ describe("when the package manifests are read", () => {
       pkg.module,
       pkg.jsdelivr,
       pkg.unpkg,
-      bower.main,
       ...composer.extra.component.scripts,
     ];
 
@@ -92,16 +90,18 @@ describe("when the package manifests are read", () => {
     }
   });
 
+  it("should leave Bower out of the package", () => {
+    expect(existsSync(fileUrl("bower.json"))).toBe(false);
+  });
+
   it("should agree on the license", () => {
     expect(pkg.license).toBe(license);
-    expect(bower.license).toBe(license);
     expect(composer.license).toBe(license);
   });
 
   it("should require jQuery 3.5 or later as a peer dependency", () => {
     expect(pkg).not.toHaveProperty("dependencies");
     expect(pkg.peerDependencies.jquery).toBe(">=3.5");
-    expect(bower.dependencies.jquery).toBe(">=3.5");
     expect(composer.require["components/jquery"]).toBe(">=3.5");
   });
 });
