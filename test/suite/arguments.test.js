@@ -120,53 +120,27 @@ describe("loadJSON arguments", function () {
     });
   });
 
-  describe("when given a URL string", function () {
-    it("should request it as JSON without caching and load the response", async function () {
-      const $root = fixture('<div><span class="name"></span><span class="city"></span></div>');
-      const sent = [];
-      $(document).on("ajaxSend.test", function (event, xhr, settings) {
-        sent.push(settings);
-      });
-
-      await new Promise(function (resolve) {
-        $root.loadJSON("/fixtures/person.json", { onLoaded: resolve });
-      });
-      $(document).off("ajaxSend.test");
-
-      expect($root.find(".name").text()).toBe("Ada Lovelace");
-      expect($root.find(".city").text()).toBe("London");
-      expect(sent[0].dataType).toBe("json");
-      expect(sent[0].url).toMatch(/^\/fixtures\/person\.json\?_=\d+$/);
-    });
-
-    it("should treat a JSON string with leading whitespace as a URL", function () {
+  describe("when given a string that is not JSON", function () {
+    it("should throw a SyntaxError for a URL, without requesting it", function () {
       const $root = fixture("<div></div>");
       const sent = [];
       $(document).on("ajaxSend.test", function (event, xhr, settings) {
         sent.push(settings.url);
-        xhr.abort();
       });
 
-      $root.loadJSON(' {"a":1}');
-      $(document).off("ajaxSend.test");
+      const load = () => $root.loadJSON("/data/person.json");
 
-      expect(sent[0]).toMatch(/^ \{"a":1\}\?_=\d+$/);
+      expect(load).toThrow(SyntaxError);
+      $(document).off("ajaxSend.test");
+      expect(sent).toEqual([]);
     });
 
-    it("should leave the element unchanged and call no callback when the request fails", async function () {
-      const $root = fixture('<div><span class="name">before</span></div>');
-      const calls = [];
+    it("should parse JSON with leading whitespace", function () {
+      const $root = fixture('<div><span class="a"></span></div>');
 
-      await new Promise(function (resolve) {
-        $(document).one("ajaxComplete", () => setTimeout(resolve));
-        $root.loadJSON("/fixtures/missing.json", {
-          onLoading: () => calls.push("loading"),
-          onLoaded: () => calls.push("loaded"),
-        });
-      });
+      $root.loadJSON(' {"a":1}');
 
-      expect($root.find(".name").text()).toBe("before");
-      expect(calls).toEqual([]);
+      expect($root.find(".a").text()).toBe("1");
     });
   });
 

@@ -3,28 +3,6 @@ import { fileURLToPath } from "node:url";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 
-// The URL-argument tests request JSON fixtures from /fixtures/<file>.json, served as a real server
-// would (application/json), without Vite turning them into modules.
-const jsonFixtures = {
-  name: "json-fixtures",
-  configureServer(server) {
-    server.middlewares.use(async (req, res, next) => {
-      const match = req.url.match(/^\/fixtures\/([\w.-]+\.json)(\?.*)?$/);
-      if (!match) {
-        return next();
-      }
-      try {
-        const body = await readFile(new URL(`./test/fixtures/${match[1]}`, import.meta.url));
-        res.setHeader("Content-Type", "application/json");
-        res.end(body);
-      } catch {
-        res.statusCode = 404;
-        res.end("not found");
-      }
-    });
-  },
-};
-
 // Surface pages load files as consumers would, without Vite rewriting bare imports.
 const rawFiles = {
   name: "raw-files",
@@ -83,7 +61,7 @@ export default defineConfig({
     },
     projects: [
       {
-        plugins: [jqueryAsModule, jsonFixtures],
+        plugins: [jqueryAsModule],
         test: {
           name: "suite",
           alias: [

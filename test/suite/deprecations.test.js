@@ -50,22 +50,14 @@ describe("deprecation notices", function () {
       $.fn.loadJSON.debug = true;
     });
 
-    it("should warn when given a URL, once per page", function () {
-      const $root = fixture("<div></div>");
-
-      $root.loadJSON("/fixtures/missing.json");
-      $root.loadJSON("/fixtures/missing.json");
-
-      expect(warnings()[0]).toMatch(/^jQuery loadJSON: /);
-      expect(warnings().filter((text) => text.includes("Passing a URL"))).toHaveLength(1);
-    });
-
-    it("should warn when a string that looks like markup is inserted as HTML", function () {
+    it("should warn once per page when a string that looks like markup is inserted as HTML", function () {
       const $root = fixture('<div><span class="a"></span></div>');
 
       $root.loadJSON({ a: "<b>x</b>" });
+      $root.loadJSON({ a: "<b>y</b>" });
 
-      expect(warnings().join()).toContain("inserted as HTML");
+      expect(warnings()[0]).toMatch(/^jQuery loadJSON: /);
+      expect(warnings().filter((text) => text.includes("inserted as HTML"))).toHaveLength(1);
     });
   });
 });

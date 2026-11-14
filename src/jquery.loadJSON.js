@@ -18,7 +18,6 @@
 
 import jQuery from "jquery";
 import { kindOf, setValue, takesObject } from "./element-kinds.js";
-import { notice } from "./legacy.js";
 import { match } from "./key-match.js";
 
 (function ($) {
@@ -135,24 +134,9 @@ import { match } from "./key-match.js";
     properties.onLoaded();
   }
 
-  // Loads the loadJSON argument into one element. A string starting with { or [ is JSON; any
-  // other string is a URL, requested once per element, whose response is loaded the same way.
+  // Loads the loadJSON argument into one element. A string is JSON.
   function loadArgument(element, argument, properties) {
-    if (argument.constructor != String) {
-      load(element, argument, properties);
-    } else if (argument.charAt(0) == "{" || argument.charAt(0) == "[") {
-      load(element, JSON.parse(argument), properties);
-    } else {
-      notice("url");
-      $.ajax({
-        url: argument,
-        success: function (response) {
-          loadArgument(element, response, properties);
-        },
-        cache: false,
-        dataType: "json",
-      });
-    }
+    load(element, argument.constructor == String ? JSON.parse(argument) : argument, properties);
   }
 
   $.fn.loadJSON = function (data, options) {

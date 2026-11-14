@@ -54,7 +54,6 @@ var $$1 = jQuery;
 
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  url: "Passing a URL to loadJSON is deprecated and will be removed in 2.0. Load the data with $.getJSON and pass it to loadJSON.",
   html: "Values are inserted as HTML. From 2.0 they are inserted as text unless the html option is true.",
 };
 
@@ -440,24 +439,9 @@ function match(key, scope) {
     properties.onLoaded();
   }
 
-  // Loads the loadJSON argument into one element. A string starting with { or [ is JSON; any
-  // other string is a URL, requested once per element, whose response is loaded the same way.
+  // Loads the loadJSON argument into one element. A string is JSON.
   function loadArgument(element, argument, properties) {
-    if (argument.constructor != String) {
-      load(element, argument, properties);
-    } else if (argument.charAt(0) == "{" || argument.charAt(0) == "[") {
-      load(element, JSON.parse(argument), properties);
-    } else {
-      notice("url");
-      $.ajax({
-        url: argument,
-        success: function (response) {
-          loadArgument(element, response, properties);
-        },
-        cache: false,
-        dataType: "json",
-      });
-    }
+    load(element, argument.constructor == String ? JSON.parse(argument) : argument, properties);
   }
 
   $.fn.loadJSON = function (data, options) {
