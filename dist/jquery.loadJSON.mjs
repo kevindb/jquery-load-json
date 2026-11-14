@@ -23,20 +23,8 @@ export { default } from 'jquery';
 
 var $$1 = jQuery;
 
-// Refreshes a jQuery Mobile widget (selectmenu or checkboxradio) when the element has one.
-function refreshMobile($element, widget) {
-  try {
-    if ($$1.isFunction($element[widget])) {
-      notice("mobile");
-      $element[widget]("refresh");
-    }
-  } catch (ex) {}
-}
-
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  mobile:
-    "Refreshing jQuery Mobile selectmenu and checkboxradio widgets is deprecated and will be removed in 2.0. Refresh them in onLoaded instead.",
   mobileOption: "The mobile option has no effect and will be removed in 2.0.",
   srcAlt:
     'An image value is used as the whole src: the "src$alt" format is not supported. Pass {src, alt} instead.',
@@ -82,8 +70,6 @@ function addOptions(select, items) {
       $option.attr("selected", true);
     }
   }
-
-  refreshMobile($(select), "selectmenu");
 }
 
 // Whether an array holds a value, comparing with ==.
@@ -108,14 +94,12 @@ function checkbox(element, value) {
     "checked",
     (value.constructor == Array && containsLoosely(value, elementValue)) || value == elementValue
   );
-  refreshMobile($element, "checkboxradio");
 }
 
 function radio(element, value) {
   var $element = $(element);
 
   $element.prop("checked", value.toString().toLowerCase() == element.value.toLowerCase());
-  refreshMobile($element, "checkboxradio");
 }
 
 function option(element, value) {
@@ -133,7 +117,6 @@ function selectOne(element, value) {
     addOptions(element, value);
   } else {
     $(element).val(value);
-    refreshMobile($(element), "selectmenu");
   }
 }
 
@@ -152,7 +135,6 @@ function selectMultiple(element, value) {
       options[i].selected |= options[i].value == values[j];
     }
   }
-  refreshMobile($(element), "selectmenu");
 }
 
 function link(element, value, name) {

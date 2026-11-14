@@ -4,20 +4,8 @@ import jQuery from "jquery";
 
 var $ = jQuery;
 
-// Refreshes a jQuery Mobile widget (selectmenu or checkboxradio) when the element has one.
-export function refreshMobile($element, widget) {
-  try {
-    if ($.isFunction($element[widget])) {
-      notice("mobile");
-      $element[widget]("refresh");
-    }
-  } catch (ex) {}
-}
-
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  mobile:
-    "Refreshing jQuery Mobile selectmenu and checkboxradio widgets is deprecated and will be removed in 2.0. Refresh them in onLoaded instead.",
   mobileOption: "The mobile option has no effect and will be removed in 2.0.",
   srcAlt:
     'An image value is used as the whole src: the "src$alt" format is not supported. Pass {src, alt} instead.',

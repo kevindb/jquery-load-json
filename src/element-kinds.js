@@ -1,5 +1,5 @@
 import jQuery from "jquery";
-import { notice, refreshMobile } from "./legacy.js";
+import { notice } from "./legacy.js";
 
 // Element kinds: how a value is set on each kind of element.
 
@@ -24,8 +24,6 @@ function addOptions(select, items) {
       $option.attr("selected", true);
     }
   }
-
-  refreshMobile($(select), "selectmenu");
 }
 
 // Whether an array holds a value, comparing with ==.
@@ -50,14 +48,12 @@ function checkbox(element, value) {
     "checked",
     (value.constructor == Array && containsLoosely(value, elementValue)) || value == elementValue
   );
-  refreshMobile($element, "checkboxradio");
 }
 
 function radio(element, value) {
   var $element = $(element);
 
   $element.prop("checked", value.toString().toLowerCase() == element.value.toLowerCase());
-  refreshMobile($element, "checkboxradio");
 }
 
 function option(element, value) {
@@ -75,7 +71,6 @@ function selectOne(element, value) {
     addOptions(element, value);
   } else {
     $(element).val(value);
-    refreshMobile($(element), "selectmenu");
   }
 }
 
@@ -94,7 +89,6 @@ function selectMultiple(element, value) {
       options[i].selected |= options[i].value == values[j];
     }
   }
-  refreshMobile($(element), "selectmenu");
 }
 
 function link(element, value, name) {

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fixture, itBeforeJQuery4, stubPlugin } from "./helpers.js";
+import { fixture } from "./helpers.js";
 
 // Notices show once per page, and each test file runs in its own page, so every test below
 // triggers a different notice.
@@ -36,14 +36,6 @@ describe("deprecation notices", function () {
       $.fn.loadJSON.debug = true;
     });
 
-    it("should not warn about jQuery Mobile when the element has no widget", function () {
-      const $form = fixture('<form><input type="checkbox" name="c" value="a"></form>');
-
-      $form.loadJSON({ c: "a" });
-
-      expect(warnings().join()).not.toContain("jQuery Mobile");
-    });
-
     it('should not warn about "src$alt" for a string without $', function () {
       const $root = fixture('<div><img class="p"></div>');
 
@@ -72,15 +64,6 @@ describe("deprecation notices", function () {
   describe("when debug is on", function () {
     beforeEach(function () {
       $.fn.loadJSON.debug = true;
-    });
-
-    itBeforeJQuery4("should warn when refreshing a jQuery Mobile widget", function () {
-      stubPlugin("checkboxradio", function () {});
-      const $form = fixture('<form><input type="checkbox" name="c" value="a"></form>');
-
-      $form.loadJSON({ c: "a" });
-
-      expect(warnings().join()).toContain("jQuery Mobile");
     });
 
     it("should warn about the mobile option once per page", function () {
