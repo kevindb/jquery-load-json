@@ -27,12 +27,12 @@ describe("element matching", function () {
       expect($root.find("input").val()).toBe("a@b.c");
     });
 
-    it("should match by rel", function () {
+    it("should not match by rel", function () {
       const $root = fixture('<div><span rel="a"></span></div>');
 
       $root.loadJSON({ a: "rel" });
 
-      expect($root.find("span").text()).toBe("rel");
+      expect($root.find("span").text()).toBe("");
     });
 
     it("should load every element with the matching class", function () {
@@ -45,9 +45,9 @@ describe("element matching", function () {
   });
 
   describe("when several attributes could match", function () {
-    it("should prefer class over id, name and rel", function () {
+    it("should prefer class over id and name", function () {
       const $root = fixture(
-        '<div><span class="a"></span><span id="a"></span><input name="a"><b rel="a"></b></div>'
+        '<div><span class="a"></span><span id="a"></span><input name="a"></div>'
       );
 
       $root.loadJSON({ a: "x" });
@@ -55,7 +55,6 @@ describe("element matching", function () {
       expect($root.find(".a").text()).toBe("x");
       expect($root.find("#a").text()).toBe("");
       expect($root.find("input").val()).toBe("");
-      expect($root.find("b").text()).toBe("");
     });
 
     it("should prefer id over name", function () {
@@ -118,16 +117,7 @@ describe("element matching", function () {
   });
 
   describe("when the matching element is outside the loaded element", function () {
-    it("should still load a rel match anywhere in the document", function () {
-      const $outside = fixture('<p rel="leaky"></p>');
-      const $root = fixture("<div></div>");
-
-      $root.loadJSON({ leaky: "x" });
-
-      expect($outside.text()).toBe("x");
-    });
-
-    it.fails("should not load a rel match outside the loaded element", function () {
+    it("should not load a rel match outside the loaded element", function () {
       const $outside = fixture('<p rel="leaky"></p>');
       const $root = fixture("<div></div>");
 
@@ -147,7 +137,7 @@ describe("element matching", function () {
   });
 
   describe("when a key contains selector characters", function () {
-    it.fails("should match a class containing a dot", function () {
+    it("should match a class containing a dot", function () {
       const $root = fixture('<div><span class="a.b"></span></div>');
 
       $root.loadJSON({ "a.b": "x" });
@@ -163,7 +153,7 @@ describe("element matching", function () {
       expect($root.find("span").text()).toBe("x");
     });
 
-    it("should match a class that is a jQuery-only selector when it finds nothing as one", function () {
+    it("should match a class that looks like a jQuery selector", function () {
       const $root = fixture('<div><span class="a:first"></span></div>');
 
       $root.loadJSON({ "a:first": "x" });
@@ -188,20 +178,28 @@ describe("element matching", function () {
       expect($form.find("input").eq(1).val()).toBe("");
     });
 
-    it("should match a rel containing a quote", function () {
-      const $root = fixture("<div><span rel='a\"b'></span></div>");
-
-      $root.loadJSON({ 'a"b': "x" });
-
-      expect($root.find("span").text()).toBe("x");
-    });
-
     it("should leave the element unchanged when nothing matches a key that is not a valid selector", function () {
       const $root = fixture('<div><span class="a">keep</span></div>');
 
       $root.loadJSON({ "a:b(": "x" });
 
       expect($root.text()).toBe("keep");
+    });
+
+    it("should match an id containing a dot or a space", function () {
+      const $root = fixture('<div><span id="a.b"></span><span id="c d"></span></div>');
+
+      $root.loadJSON({ "a.b": "x", "c d": "y" });
+
+      expect($root.find("span").text()).toBe("xy");
+    });
+
+    it("should not treat a key as a selector list or combinator", function () {
+      const $root = fixture('<div><span class="a"></span><span class="b"></span></div>');
+
+      $root.loadJSON({ "a,b": "x", "div .a": "y" });
+
+      expect($root.text()).toBe("");
     });
 
     it("should match a class that starts with a digit", function () {

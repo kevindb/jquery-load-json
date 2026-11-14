@@ -1,4 +1,4 @@
-import { afterEach, it } from "vitest";
+import { afterEach } from "vitest";
 
 const roots = [];
 
@@ -35,11 +35,6 @@ export function checked($controls) {
     })
     .get();
 }
-
-export const jQueryMajor = Number($.fn.jquery.split(".")[0]);
-
-// For behavior that relies on an API jQuery 4 removed: a plain test before 4, a known failure on 4.
-export const itBeforeJQuery4 = jQueryMajor >= 4 ? it.fails : it;
 
 // Temporarily defines $.fn[name] for one test.
 export function stubPlugin(name, implementation) {

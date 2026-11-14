@@ -1,6 +1,6 @@
 /*!
  * jQuery loadJSON plugin
- * v1.4.0
+ * v2.0.0-dev
  * https://github.com/kevindb/jquery-load-json
  *
  * This is a jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM.
@@ -18,7 +18,6 @@
 
 import jQuery from "jquery";
 import { kindOf, setValue, takesObject } from "./element-kinds.js";
-import { installContains, notice } from "./legacy.js";
 import { match } from "./key-match.js";
 
 (function ($) {
@@ -30,14 +29,14 @@ import { match } from "./key-match.js";
   }
 
   // Loads each key of an object into its match within the element.
-  function walkObject(object, element, name, data) {
+  function walkObject(object, element, name, options) {
     // An option or an image matched by the enclosing key takes the object whole
     if (element.length >= 1 && takesObject(element[0])) {
       if (kindOf(element[0]) == "option") {
-        setValue(element[0], object, name, data);
+        setValue(element[0], object, name, options);
       } else {
         element.each(function () {
-          setValue(this, object, name, data);
+          setValue(this, object, name, options);
         });
       }
     }
@@ -48,43 +47,31 @@ import { match } from "./key-match.js";
       }
       var $match = match(key, element);
       if ($match.length !== 0) {
-        walk(object[key], $match, key, data);
+        walk(object[key], $match, key, options);
       }
     }
   }
 
-  // Loads an array: whole into a select or a checkbox group, item by item into rel index
-  // children, or as a repeat of the element.
-  function walkArray(array, element, name, data) {
+  // Loads an array: whole into a select or a checkbox group, otherwise as a repeat of the element.
+  function walkArray(array, element, name, options) {
     if (element.length == 1 && (isSelect(element) || isSelect(element[0]))) {
-      setValue(element, array, name, data);
+      setValue(element, array, name, options);
       return;
     }
 
     if (element.length > 0 && kindOf(element[0]) == "checkbox") {
       element.each(function () {
-        setValue(this, array, name, data);
+        setValue(this, array, name, options);
       });
       return;
     }
 
-    var $element = $(element);
-    var $children = $element.children("[rel]");
-    if ($children.length > 0) {
-      notice("relIndex");
-      $children.each(function () {
-        var $child = $(this);
-        walk(array[$child.attr("rel")], $child, name, data);
-      });
-      return;
-    }
-
-    repeat(array, element, name, data);
+    repeat(array, element, name, options);
   }
 
   // Fills the existing elements in order, then appends copies of the last one for the remaining
   // items. A select's options are not filled; each item gets a copy of the last option.
-  function repeat(array, element, name, data) {
+  function repeat(array, element, name, options) {
     var elements = jQuery.makeArray(element);
     var last = elements[elements.length - 1];
     var $copySource = $(last).clone(true);
@@ -93,38 +80,38 @@ import { match } from "./key-match.js";
     if (elements[0].tagName != "OPTION") {
       filled = Math.min(elements.length, array.length);
       for (var i = 0; i < filled; i++) {
-        walk(array[i], $(element).eq(i), name, data);
+        walk(array[i], $(element).eq(i), name, options);
       }
     }
 
     // Each copy goes right after the original last element, so the items are added from the end
     for (var j = array.length - 1; j >= filled; j--) {
-      walk(array[j], $copySource.clone(true).insertAfter(last), name, data);
+      walk(array[j], $copySource.clone(true).insertAfter(last), name, options);
     }
   }
 
   // Sets a single value on each element of the set, or on the element itself.
-  function walkValue(value, element, name, data) {
+  function walkValue(value, element, name, options) {
     if (element.length > 0) {
       for (var i = 0; i < element.length; i++) {
-        setValue(element[i], value, name, data);
+        setValue(element[i], value, name, options);
       }
     } else {
-      setValue(element, value, name, data);
+      setValue(element, value, name, options);
     }
   }
 
   // Loads a value of any shape into an element (a DOM element or a jQuery set).
-  function walk(value, element, name, data) {
+  function walk(value, element, name, options) {
     if (value === undefined || value === null) {
       return;
     }
     if (value.constructor == Object) {
-      walkObject(value, element, name, data);
+      walkObject(value, element, name, options);
     } else if (value.constructor == Array) {
-      walkArray(value, element, name, data);
+      walkArray(value, element, name, options);
     } else {
-      walkValue(value, element, name, data);
+      walkValue(value, element, name, options);
     }
   }
 
@@ -132,61 +119,36 @@ import { match } from "./key-match.js";
   function useSavedTemplate($element) {
     var saved = $element.data("loadJSON-template");
 
-    if (saved !== null && saved != "") {
+    if (typeof saved == "string" && saved !== "") {
       $element.html(saved);
     } else {
       $element.data("loadJSON-template", $element.html());
     }
   }
 
-  // Loads data into one element: the saved template, the callbacks and the walk.
-  function load(element, data, argument, properties) {
+  // Loads the loadJSON argument into one element: the saved template, the callbacks and the walk.
+  // A string argument is JSON.
+  function load(element, argument, properties) {
+    var data = argument.constructor == String ? JSON.parse(argument) : argument;
+
     useSavedTemplate($(element));
     properties.onLoading();
-    walk(data, element, undefined, argument);
+    walk(data, element, undefined, properties);
     properties.onLoaded();
   }
 
-  // Loads the loadJSON argument into one element. A string starting with { or [ is JSON; any
-  // other string is a URL, requested once per element, whose response is loaded the same way.
-  function loadArgument(element, argument, properties) {
-    if (argument.constructor != String) {
-      load(element, argument, argument, properties);
-    } else if (argument.charAt(0) == "{" || argument.charAt(0) == "[") {
-      load(element, JSON.parse(argument), argument, properties);
-    } else {
-      notice("url");
-      $.ajax({
-        url: argument,
-        success: function (response) {
-          loadArgument(element, response, properties);
-        },
-        cache: false,
-        dataType: "json",
-      });
-    }
-  }
-
   $.fn.loadJSON = function (data, options) {
-    installContains();
-    if (options && "mobile" in options) {
-      notice("mobileOption");
-    }
-
     var defaults = {
       onLoading: function () {},
       onLoaded: function () {},
-      mobile: false,
+      html: false,
     };
     var properties = $.extend(defaults, options);
 
     return this.each(function () {
-      loadArgument(this, data, properties);
+      load(this, data, properties);
     });
   };
-
-  // Set to true to show a console warning, once per page, for each behavior removed in 2.0.
-  $.fn.loadJSON.debug = false;
 })(jQuery);
 
 export default jQuery;

@@ -1,6 +1,6 @@
 /*!
  * jQuery loadJSON plugin
- * v1.4.0
+ * v2.0.0-dev
  * https://github.com/kevindb/jquery-load-json
  *
  * This is a jQuery plugin that enables developers to load JSON data from the server and load JSON object into the DOM.
@@ -48,66 +48,6 @@
 
 }(function (jQuery) {
 	'use strict';
-// Behavior kept for compatibility with earlier versions and removed in 2.0.
-
-var $$1 = jQuery;
-
-// Adds Array.prototype.contains (loose equality), which earlier versions defined on every call.
-function installContains() {
-  notice("contains");
-  Object.defineProperty(Array.prototype, "contains", {
-    configurable: true,
-    writable: true,
-    value: function (obj) {
-      var i = this.length;
-      while (i--) {
-        if (this[i] == obj) {
-          return true;
-        }
-      }
-      return false;
-    },
-  });
-}
-
-// Refreshes a jQuery Mobile widget (selectmenu or checkboxradio) when the element has one.
-function refreshMobile($element, widget) {
-  try {
-    if ($$1.isFunction($element[widget])) {
-      notice("mobile");
-      $element[widget]("refresh");
-    }
-  } catch (ex) {}
-}
-
-// Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
-var messages = {
-  contains:
-    "Array.prototype.contains is deprecated and will be removed in 2.0. Use Array.prototype.indexOf instead.",
-  mobile:
-    "Refreshing jQuery Mobile selectmenu and checkboxradio widgets is deprecated and will be removed in 2.0. Refresh them in onLoaded instead.",
-  mobileOption: "The mobile option has no effect and will be removed in 2.0.",
-  srcAlt:
-    'An image value is used as the whole src: the "src$alt" format is not supported. Pass {src, alt} instead.',
-  imageFallback:
-    "Setting images from the top-level src, alt and title is deprecated and will be removed in 2.0. Give each image its own value.",
-  rel: "Matching keys by the rel attribute is deprecated and will be removed in 2.0. Use a class, id or name.",
-  relIndex:
-    'Loading array items into rel="index" children is deprecated and will be removed in 2.0.',
-  url: "Passing a URL to loadJSON is deprecated and will be removed in 2.0. Load the data with $.getJSON and pass it to loadJSON.",
-  html: "Values are inserted as HTML. From 2.0 they are inserted as text unless the html option is true.",
-};
-
-var shown = {};
-
-function notice(id) {
-  if (!$$1.fn.loadJSON.debug || shown[id]) {
-    return;
-  }
-  shown[id] = true;
-  console.warn("jQuery loadJSON: " + messages[id]);
-}
-
 // Element kinds: how a value is set on each kind of element.
 
 var $ = jQuery;
@@ -131,8 +71,6 @@ function addOptions(select, items) {
       $option.attr("selected", true);
     }
   }
-
-  refreshMobile($(select), "selectmenu");
 }
 
 // Whether an array holds a value, comparing with ==.
@@ -157,14 +95,12 @@ function checkbox(element, value) {
     "checked",
     (value.constructor == Array && containsLoosely(value, elementValue)) || value == elementValue
   );
-  refreshMobile($element, "checkboxradio");
 }
 
 function radio(element, value) {
   var $element = $(element);
 
   $element.prop("checked", value.toString().toLowerCase() == element.value.toLowerCase());
-  refreshMobile($element, "checkboxradio");
 }
 
 function option(element, value) {
@@ -182,7 +118,6 @@ function selectOne(element, value) {
     addOptions(element, value);
   } else {
     $(element).val(value);
-    refreshMobile($(element), "selectmenu");
   }
 }
 
@@ -201,7 +136,6 @@ function selectMultiple(element, value) {
       options[i].selected |= options[i].value == values[j];
     }
   }
-  refreshMobile($(element), "selectmenu");
 }
 
 function link(element, value, name) {
@@ -209,7 +143,7 @@ function link(element, value, name) {
   var href = $element.attr("href");
 
   if (href) {
-    // If a href value exists, add the pair to its query, before any fragment
+    // If a href value exists, add the encoded pair to its query, before any fragment
     var iFragment = href.indexOf("#");
     var fragment = "";
 
@@ -218,7 +152,12 @@ function link(element, value, name) {
       href = href.substring(0, iFragment);
     }
 
-    href += (href.indexOf("?") >= 0 ? "&" : "?") + name + "=" + value + fragment;
+    href +=
+      (href.indexOf("?") >= 0 ? "&" : "?") +
+      encodeURIComponent(name) +
+      "=" +
+      encodeURIComponent(value) +
+      fragment;
   } else {
     // If no href exists, set href to value
     href = value;
@@ -227,37 +166,28 @@ function link(element, value, name) {
   $element.attr("href", href);
 }
 
-function image(element, value, name, data) {
+function image(element, value) {
   var $element = $(element);
 
-  if (typeof value == "string") {
-    // A string is the image address
-    if (value.indexOf("$") >= 0) {
-      notice("srcAlt");
-    }
-    $element.attr("src", value);
-  } else if (value.constructor == Object) {
+  if (value.constructor == Object) {
     // An object sets the image's own src, alt and title
     $element.attr("src", value.src);
     $element.attr("alt", value.alt);
     $element.attr("title", value.title);
   } else {
-    // Otherwise the top-level src, alt and title apply to every matched image
-    if (data.src !== undefined || data.alt !== undefined || data.title !== undefined) {
-      notice("imageFallback");
-    }
-    $element.attr("src", data.src);
-    $element.attr("alt", data.alt);
-    $element.attr("title", data.title);
+    // Any other value is the image address
+    $element.attr("src", value);
   }
 }
 
-function content(element, value) {
-  if (typeof value == "string" && /<[a-z!/?]/i.test(value)) {
-    notice("html");
-  }
+// Sets the contents as text, or as HTML when the html option is true.
+function content(element, value, name, options) {
   try {
-    $(element).html(value.toString());
+    if (options.html) {
+      $(element).html(value.toString());
+    } else {
+      $(element).text(value.toString());
+    }
   } catch (exc) {}
 }
 
@@ -295,12 +225,12 @@ function kindOf(element) {
 
 /**
  * Sets a value on an element by its kind. `element` is a DOM element or a jQuery set of one;
- * `name` is the key the value was loaded from and `data` the data passed to loadJSON.
+ * `name` is the key the value was loaded from and `options` the options passed to loadJSON.
  */
-function setValue(element, value, name, data) {
+function setValue(element, value, name, options) {
   var node = $(element)[0];
 
-  kinds[kindOf(node)](node, value, name, data);
+  kinds[kindOf(node)](node, value, name, options);
 }
 
 // Whether a DOM element's kind takes an object whole (an option or an image), rather than the walk
@@ -311,90 +241,32 @@ function takesObject(element) {
   return kind == "option" || kind == "image";
 }
 
-// Each step of a match: its selector for the key, and the same test without a selector.
+// The selector of each step of a match, by class, then id, then name. The key is escaped, so it
+// matches literally whatever characters it holds.
 var steps = [
-  {
-    selector: function (key) {
-      return "." + key;
-    },
-    test: function (element, key) {
-      return jQuery(element).hasClass(key);
-    },
+  function (key) {
+    return "." + jQuery.escapeSelector(key);
   },
-  {
-    selector: function (key) {
-      return "#" + key;
-    },
-    test: function (element, key) {
-      return element.id === key;
-    },
+  function (key) {
+    return "#" + jQuery.escapeSelector(key);
   },
-  {
-    selector: function (key) {
-      return '[name="' + key + '"]';
-    },
-    test: function (element, key) {
-      return element.getAttribute("name") === key;
-    },
+  function (key) {
+    return '[name="' + jQuery.escapeSelector(key) + '"]';
   },
 ];
 
-var relStep = {
-  selector: function (key) {
-    return '[rel="' + key + '"]';
-  },
-  test: function (element, key) {
-    return element.getAttribute("rel") === key;
-  },
-};
-
-// Whether the browser accepts a selector as CSS.
-function isValidCss(selector) {
-  try {
-    document.createDocumentFragment().querySelector(selector);
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-// Runs a step's selector inside scope. When the key makes the selector invalid (jQuery throws, or,
-// before jQuery 3, finds nothing for a selector the browser rejects), it compares each element's
-// attribute with the key instead.
-function query(step, key, scope) {
-  var selector = step.selector(key);
-
-  try {
-    var $matches = jQuery(selector, scope);
-    if ($matches.length > 0 || isValidCss(selector)) {
-      return $matches;
-    }
-  } catch (error) {}
-
-  return jQuery(scope)
-    .find("*")
-    .filter(function () {
-      return step.test(this, key);
-    });
-}
-
 /**
  * The match of a key: the elements inside `scope` whose class, then id, then name is the key.
- * When none match, the elements anywhere in the document whose rel attribute is the key.
  */
 function match(key, scope) {
   for (var i = 0; i < steps.length; i++) {
-    var $matches = query(steps[i], key, scope);
+    var $matches = jQuery(steps[i](key), scope);
     if ($matches.length > 0) {
       return $matches;
     }
   }
 
-  var $rel = query(relStep, key, document);
-  if ($rel.length > 0) {
-    notice("rel");
-  }
-  return $rel;
+  return jQuery();
 }
 
 
@@ -406,14 +278,14 @@ function match(key, scope) {
   }
 
   // Loads each key of an object into its match within the element.
-  function walkObject(object, element, name, data) {
+  function walkObject(object, element, name, options) {
     // An option or an image matched by the enclosing key takes the object whole
     if (element.length >= 1 && takesObject(element[0])) {
       if (kindOf(element[0]) == "option") {
-        setValue(element[0], object, name, data);
+        setValue(element[0], object, name, options);
       } else {
         element.each(function () {
-          setValue(this, object, name, data);
+          setValue(this, object, name, options);
         });
       }
     }
@@ -424,43 +296,31 @@ function match(key, scope) {
       }
       var $match = match(key, element);
       if ($match.length !== 0) {
-        walk(object[key], $match, key, data);
+        walk(object[key], $match, key, options);
       }
     }
   }
 
-  // Loads an array: whole into a select or a checkbox group, item by item into rel index
-  // children, or as a repeat of the element.
-  function walkArray(array, element, name, data) {
+  // Loads an array: whole into a select or a checkbox group, otherwise as a repeat of the element.
+  function walkArray(array, element, name, options) {
     if (element.length == 1 && (isSelect(element) || isSelect(element[0]))) {
-      setValue(element, array, name, data);
+      setValue(element, array, name, options);
       return;
     }
 
     if (element.length > 0 && kindOf(element[0]) == "checkbox") {
       element.each(function () {
-        setValue(this, array, name, data);
+        setValue(this, array, name, options);
       });
       return;
     }
 
-    var $element = $(element);
-    var $children = $element.children("[rel]");
-    if ($children.length > 0) {
-      notice("relIndex");
-      $children.each(function () {
-        var $child = $(this);
-        walk(array[$child.attr("rel")], $child, name, data);
-      });
-      return;
-    }
-
-    repeat(array, element, name, data);
+    repeat(array, element, name, options);
   }
 
   // Fills the existing elements in order, then appends copies of the last one for the remaining
   // items. A select's options are not filled; each item gets a copy of the last option.
-  function repeat(array, element, name, data) {
+  function repeat(array, element, name, options) {
     var elements = jQuery.makeArray(element);
     var last = elements[elements.length - 1];
     var $copySource = $(last).clone(true);
@@ -469,38 +329,38 @@ function match(key, scope) {
     if (elements[0].tagName != "OPTION") {
       filled = Math.min(elements.length, array.length);
       for (var i = 0; i < filled; i++) {
-        walk(array[i], $(element).eq(i), name, data);
+        walk(array[i], $(element).eq(i), name, options);
       }
     }
 
     // Each copy goes right after the original last element, so the items are added from the end
     for (var j = array.length - 1; j >= filled; j--) {
-      walk(array[j], $copySource.clone(true).insertAfter(last), name, data);
+      walk(array[j], $copySource.clone(true).insertAfter(last), name, options);
     }
   }
 
   // Sets a single value on each element of the set, or on the element itself.
-  function walkValue(value, element, name, data) {
+  function walkValue(value, element, name, options) {
     if (element.length > 0) {
       for (var i = 0; i < element.length; i++) {
-        setValue(element[i], value, name, data);
+        setValue(element[i], value, name, options);
       }
     } else {
-      setValue(element, value, name, data);
+      setValue(element, value, name, options);
     }
   }
 
   // Loads a value of any shape into an element (a DOM element or a jQuery set).
-  function walk(value, element, name, data) {
+  function walk(value, element, name, options) {
     if (value === undefined || value === null) {
       return;
     }
     if (value.constructor == Object) {
-      walkObject(value, element, name, data);
+      walkObject(value, element, name, options);
     } else if (value.constructor == Array) {
-      walkArray(value, element, name, data);
+      walkArray(value, element, name, options);
     } else {
-      walkValue(value, element, name, data);
+      walkValue(value, element, name, options);
     }
   }
 
@@ -508,60 +368,35 @@ function match(key, scope) {
   function useSavedTemplate($element) {
     var saved = $element.data("loadJSON-template");
 
-    if (saved !== null && saved != "") {
+    if (typeof saved == "string" && saved !== "") {
       $element.html(saved);
     } else {
       $element.data("loadJSON-template", $element.html());
     }
   }
 
-  // Loads data into one element: the saved template, the callbacks and the walk.
-  function load(element, data, argument, properties) {
+  // Loads the loadJSON argument into one element: the saved template, the callbacks and the walk.
+  // A string argument is JSON.
+  function load(element, argument, properties) {
+    var data = argument.constructor == String ? JSON.parse(argument) : argument;
+
     useSavedTemplate($(element));
     properties.onLoading();
-    walk(data, element, undefined, argument);
+    walk(data, element, undefined, properties);
     properties.onLoaded();
   }
 
-  // Loads the loadJSON argument into one element. A string starting with { or [ is JSON; any
-  // other string is a URL, requested once per element, whose response is loaded the same way.
-  function loadArgument(element, argument, properties) {
-    if (argument.constructor != String) {
-      load(element, argument, argument, properties);
-    } else if (argument.charAt(0) == "{" || argument.charAt(0) == "[") {
-      load(element, JSON.parse(argument), argument, properties);
-    } else {
-      notice("url");
-      $.ajax({
-        url: argument,
-        success: function (response) {
-          loadArgument(element, response, properties);
-        },
-        cache: false,
-        dataType: "json",
-      });
-    }
-  }
-
   $.fn.loadJSON = function (data, options) {
-    installContains();
-    if (options && "mobile" in options) {
-      notice("mobileOption");
-    }
-
     var defaults = {
       onLoading: function () {},
       onLoaded: function () {},
-      mobile: false,
+      html: false,
     };
     var properties = $.extend(defaults, options);
 
     return this.each(function () {
-      loadArgument(this, data, properties);
+      load(this, data, properties);
     });
   };
-
-  // Set to true to show a console warning, once per page, for each behavior removed in 2.0.
-  $.fn.loadJSON.debug = false;
 })(jQuery);
 }));

@@ -5,7 +5,6 @@ import { describe, expect, it } from "vitest";
 const fileUrl = (file) => new URL(`../../${file}`, import.meta.url);
 const read = (file) => readFileSync(fileUrl(file), "utf8");
 const pkg = JSON.parse(read("package.json"));
-const bower = JSON.parse(read("bower.json"));
 const composer = JSON.parse(read("composer.json"));
 
 const distFiles = [
@@ -22,7 +21,6 @@ describe("when the package manifests are read", () => {
       pkg.module,
       pkg.jsdelivr,
       pkg.unpkg,
-      bower.main,
       ...composer.extra.component.scripts,
     ];
 
@@ -30,6 +28,21 @@ describe("when the package manifests are read", () => {
       expect(distFiles).toContain(entry);
       expect(existsSync(new URL(`../../${entry}`, import.meta.url))).toBe(true);
     }
+  });
+
+  it("should export only the package name, the built files and package.json", () => {
+    const targets = Object.values(pkg.exports)
+      .flatMap((target) => (typeof target === "string" ? [target] : Object.values(target)))
+      .filter((target) => target !== "./package.json");
+
+    for (const target of targets) {
+      expect(distFiles).toContain(target.slice(2));
+    }
+    expect(Object.keys(pkg.exports)).toEqual([
+      ".",
+      ...distFiles.map((file) => `./${file}`),
+      "./package.json",
+    ]);
   });
 
   it("should keep the classic build as main and the module build as module", () => {
@@ -56,6 +69,9 @@ describe("when the package manifests are read", () => {
   it("should give the README's CDN snippets the version and SRI hash of the minified build", () => {
     const hash = createHash("sha384").update(readFileSync(fileUrl("dist/jquery.loadJSON.min.js")));
     const integrity = `sha384-${hash.digest("base64")}`;
+    // Between releases the version is a prerelease and the README keeps the last published one,
+    // whose hash only the published file can confirm.
+    const prerelease = pkg.version.includes("-");
 
     const snippets = read("README.md").match(
       /<script src="https:\/\/[^"]+jquery-load-json@[^>]+>/g
@@ -63,20 +79,29 @@ describe("when the package manifests are read", () => {
 
     expect(snippets.length).toBeGreaterThan(0);
     for (const snippet of snippets) {
-      expect(snippet).toContain(`jquery-load-json@${pkg.version}/dist/jquery.loadJSON.min.js"`);
-      expect(snippet).toContain(`integrity="${integrity}"`);
+      const version = snippet.match(/jquery-load-json@([^/]+)\//)[1];
+      expect(snippet).toContain(`jquery-load-json@${version}/dist/jquery.loadJSON.min.js"`);
+      if (prerelease) {
+        expect(version).toMatch(/^\d+\.\d+\.\d+$/);
+      } else {
+        expect(version).toBe(pkg.version);
+        expect(snippet).toContain(`integrity="${integrity}"`);
+      }
     }
+  });
+
+  it("should leave Bower out of the package", () => {
+    expect(existsSync(fileUrl("bower.json"))).toBe(false);
   });
 
   it("should agree on the license", () => {
     expect(pkg.license).toBe(license);
-    expect(bower.license).toBe(license);
     expect(composer.license).toBe(license);
   });
 
-  it("should agree on the jQuery dependency range", () => {
-    expect(pkg.dependencies.jquery).toBe(">=1.7");
-    expect(bower.dependencies.jquery).toBe(">=1.7");
-    expect(composer.require["components/jquery"]).toBe(">=1.7");
+  it("should require jQuery 3.5 or later as a peer dependency", () => {
+    expect(pkg).not.toHaveProperty("dependencies");
+    expect(pkg.peerDependencies.jquery).toBe(">=3.5");
+    expect(composer.require["components/jquery"]).toBe(">=3.5");
   });
 });

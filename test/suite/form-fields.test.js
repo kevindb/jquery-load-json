@@ -66,10 +66,18 @@ describe("form fields", function () {
   });
 
   describe("when loading buttons", function () {
-    it("should set a button element's content as HTML", function () {
+    it("should set a button element's content as text", function () {
       const $form = fixture('<form><button name="b">old</button></form>');
 
       $form.loadJSON({ b: "<i>new</i>" });
+
+      expect($form.find("button").text()).toBe("<i>new</i>");
+    });
+
+    it("should set a button element's content as HTML when the html option is true", function () {
+      const $form = fixture('<form><button name="b">old</button></form>');
+
+      $form.loadJSON({ b: "<i>new</i>" }, { html: true });
 
       expect($form.find("button i").text()).toBe("new");
     });

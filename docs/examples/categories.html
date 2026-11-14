@@ -12,20 +12,20 @@
       <h1>Connected selects from the server</h1>
       <p>
         The regions are requested when the page loads and added as options. Choosing a region
-        requests its towns and adds them to the second select. Each array is loaded into a classed
-        placeholder option, which is copied once per item.
+        requests its towns and adds them to the second select. Each array is loaded into its select,
+        whose placeholder option is copied once per item.
       </p>
       <h2>Result</h2>
       <div class="result">
         <form id="locations">
           <label for="Region">Region</label>
           <select id="Region" name="Region">
-            <option value="" class="regions">Choose a region</option>
+            <option value="">Choose a region</option>
           </select>
 
           <label for="Town">Town</label>
           <select id="Town" name="Town">
-            <option value="" class="towns">Choose a town</option>
+            <option value="">Choose a town</option>
           </select>
         </form>
       </div>
@@ -35,8 +35,8 @@
       <h2>Script</h2>
       <pre data-script="#example"><code></code></pre>
       <p>
-        Options added by an earlier load stay in the select, so the script removes the old towns
-        before loading new ones.
+        Each load into a select starts again from its original markup, so the towns of the previous
+        region are replaced, not added to.
       </p>
     </main>
     <script
@@ -48,17 +48,18 @@
     <script src="show-source.js"></script>
     <script id="example">
       $.getJSON("data/regions.json").done(function (data) {
-        $("#locations").loadJSON(data);
+        $("#Region").loadJSON(data.regions);
       });
 
       $("#Region").on("change", function () {
         var id = $(this).val();
 
-        $("#Town option").slice(1).remove();
         if (id) {
           $.getJSON("data/towns-" + id + ".json").done(function (data) {
-            $("#locations").loadJSON(data);
+            $("#Town").loadJSON(data.towns);
           });
+        } else {
+          $("#Town").loadJSON([]);
         }
       });
     </script>

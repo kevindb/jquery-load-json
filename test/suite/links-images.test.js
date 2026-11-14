@@ -30,20 +30,20 @@ describe("links", function () {
       expect($root.find("a").attr("href")).toBe("/page?x=1&l=5");
     });
 
-    it("should append the value without encoding it", function () {
-      const $root = fixture('<div><a class="l" href="/page">text</a></div>');
-
-      $root.loadJSON({ l: "a b&c" });
-
-      expect($root.find("a").attr("href")).toBe("/page?l=a b&c");
-    });
-
-    it.fails("should encode the value", function () {
+    it("should encode the value", function () {
       const $root = fixture('<div><a class="l" href="/page">text</a></div>');
 
       $root.loadJSON({ l: "a b&c" });
 
       expect($root.find("a").attr("href")).toBe("/page?l=a%20b%26c");
+    });
+
+    it("should encode the key", function () {
+      const $root = fixture('<form><a name="a&b" href="/page">text</a></form>');
+
+      $root.loadJSON({ "a&b": "c" });
+
+      expect($root.find("a").attr("href")).toBe("/page?a%26b=c");
     });
 
     it("should append with & when the href is only a query", function () {
@@ -89,6 +89,15 @@ describe("images", function () {
 
       expect($root.find("img").attr("src")).toBe("photo.png");
     });
+
+    it('should use a string in the old "src$alt" format whole, as the src', function () {
+      const $root = fixture('<div><img class="p" alt="keep"></div>');
+
+      $root.loadJSON({ p: "photo.png$Photo" });
+
+      expect($root.find("img").attr("src")).toBe("photo.png$Photo");
+      expect($root.find("img").attr("alt")).toBe("keep");
+    });
   });
 
   describe("when the value is an object with src, alt and title", function () {
@@ -117,17 +126,17 @@ describe("images", function () {
     });
   });
 
-  describe("when the top-level data has src, alt and title", function () {
-    it("should set them on every matched image, when the image's own value is neither a string nor an object", function () {
+  describe("when the value is neither a string nor an object", function () {
+    it("should set src to the value and ignore the top-level src, alt and title", function () {
       const $root = fixture('<div><img class="p" src="data:,old"></div>');
 
       $root.loadJSON({ p: 7, src: "data:,top", alt: "Top", title: "T" });
 
       const $img = $root.find("img");
       expect([$img.attr("src"), $img.attr("alt"), $img.attr("title")]).toEqual([
-        "data:,top",
-        "Top",
-        "T",
+        "7",
+        undefined,
+        undefined,
       ]);
     });
   });

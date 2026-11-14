@@ -3,28 +3,6 @@ import { fileURLToPath } from "node:url";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 
-// The URL-argument tests request JSON fixtures from /fixtures/<file>.json, served as a real server
-// would (application/json), without Vite turning them into modules.
-const jsonFixtures = {
-  name: "json-fixtures",
-  configureServer(server) {
-    server.middlewares.use(async (req, res, next) => {
-      const match = req.url.match(/^\/fixtures\/([\w.-]+\.json)(\?.*)?$/);
-      if (!match) {
-        return next();
-      }
-      try {
-        const body = await readFile(new URL(`./test/fixtures/${match[1]}`, import.meta.url));
-        res.setHeader("Content-Type", "application/json");
-        res.end(body);
-      } catch {
-        res.statusCode = 404;
-        res.end("not found");
-      }
-    });
-  },
-};
-
 // Surface pages load files as consumers would, without Vite rewriting bare imports.
 const rawFiles = {
   name: "raw-files",
@@ -48,8 +26,8 @@ const rawFiles = {
 
 const jqueryEsm = new URL("./test/jquery-esm.js", import.meta.url);
 
-// JQUERY_FILE picks the classic jQuery build: 1.7.2 comes from scripts/fetch-jquery.sh, 3.7.1 and
-// 4.0.0 from the jquery3 and jquery4 dev dependencies.
+// JQUERY_FILE picks the classic jQuery build: 3.5.1, 3.7.1 and 4.0.0 come from the jquery35, jquery3
+// and jquery4 dev dependencies.
 const jqueryFile = fileURLToPath(
   new URL(
     process.env.JQUERY_FILE || "./node_modules/jquery3/dist/jquery.js",
@@ -83,7 +61,7 @@ export default defineConfig({
     },
     projects: [
       {
-        plugins: [jqueryAsModule, jsonFixtures],
+        plugins: [jqueryAsModule],
         test: {
           name: "suite",
           alias: [
@@ -119,6 +97,7 @@ export default defineConfig({
           include: [
             "test/surfaces/bundlers.test.js",
             "test/surfaces/commonjs.test.js",
+            "test/surfaces/exports.test.js",
             "test/surfaces/manifests.test.js",
           ],
           environment: "node",

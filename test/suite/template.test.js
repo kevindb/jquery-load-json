@@ -3,16 +3,7 @@ import { fixture, texts } from "./helpers.js";
 
 describe("template reuse", function () {
   describe("when the same element is loaded twice", function () {
-    it("should load into the output of the first call", function () {
-      const $root = fixture('<div><ul><li class="i"></li></ul></div>');
-      $root.loadJSON({ i: ["a", "b"] });
-
-      $root.loadJSON({ i: ["c"] });
-
-      expect(texts($root.find(".i"))).toEqual(["c", "b"]);
-    });
-
-    it.fails("should start again from the original markup", function () {
+    it("should start again from the original markup", function () {
       const $root = fixture('<div><ul><li class="i"></li></ul></div>');
       $root.loadJSON({ i: ["a", "b"] });
 

@@ -253,7 +253,7 @@ Done when: `npm view jquery-load-json` shows 1.4.0 with provenance, the release 
 listed PRs and issues are closed.
 
 Status (2026-11-12): Phase 4 verified (`npm test`, e2e and PR #39 CI green; 100% coverage; only the
-2.0 `it.fails` left). GitHub Pages is on (`main` `/docs`); the wiki is still on. On `release-1.4`:
+2.0 `it.fails` left). GitHub Pages is on (`main` `/docs`); the wiki was still on then (disabled 2026-11-13). On `release-1.4`:
 version 1.4.0, SRI on the README CDN snippets with a test against the min build's hash, and the
 `browser` field dropped. A bundler that reads `browser` first (rolldown, esbuild) bundled the classic
 min build, whose CommonJS branch only exports the factory, so `import "jquery-load-json"` never
@@ -282,7 +282,7 @@ cached a 404 for about four minutes after the publish). Packagist has `v1.4.0`. 
 published from the 1.3.3 comparison. Closed with a comment: Dependabot #34 #35 #36 #38 (#30 was
 already closed), #32, #25 and #28. Dependabot's first grouped PR (#40) merged under the new
 protection. npm normalized `repository.url` on publish; the follow-up PR applies `npm pkg fix`.
-Phase 5 is done; the wiki is still enabled (maintainer's call, its pages now live in `docs/`).
+Phase 5 is done. The wiki was disabled on 2026-11-13; its pages live in `docs/`.
 
 ## Phase 6: 2.0.0 (breaking)
 
@@ -299,6 +299,37 @@ Phase 5 is done; the wiki is still enabled (maintainer's call, its pages now liv
 
 Done when: 2.0.0 is on npm with provenance, the migration guide is linked from the README, and every
 1.4 debug warning maps to a guide entry.
+
+Status (2026-11-14): Phase 5 verified (npm `latest` 1.4.0 with SLSA provenance, release `v1.4.0`,
+#25 #28 #30 #32 #34–#38 closed, wiki off). Work on `release-2.0`, one draft PR until the release.
+Baseline: the suite at `5dafd01`, run on Chromium against the `src/` published as 1.4.0 (identical
+to the trunk's), passes 125 of 125 on jQuery 3.7.1 and 4.0.0 (`it.fails` count as passing). The
+final suite is compared with 1.4.0 the same way before the release (see Compared with npm 1.4.0).
+
+Code and docs done 2026-11-14 on `release-2.0` (draft PR, not yet released):
+
+- `jquery` is a peer dependency `>=3.5` (Composer `components/jquery` too); `bower.json` is gone.
+  `exports`: `.` (`import` the `.mjs`, otherwise the classic build), the three dist files and
+  `package.json`; everything else, `src/` included, is `ERR_PACKAGE_PATH_NOT_EXPORTED`
+  (`test/surfaces/exports.test.js` resolves each path with Node, as an import and a require).
+  `src/` still ships for CDN readers; the source map carries `sourcesContent`.
+- Matrix 3.5.1 (`jquery35` dev dependency; `scripts/fetch-jquery.sh` deleted), 3.7.1, 4.0.0.
+- Removed, each its own commit with its 1.4 notice: `contains`, Mobile refresh, `mobile`, the
+  `src$alt` notice, the image fallback (any non-object value is now the `src`), rel matching, rel
+  index children, the URL arm (every string is JSON; a URL throws `SyntaxError`), then
+  `$.fn.loadJSON.debug` and `src/legacy.js`. Changed: content `.text()` unless `html: true` (options
+  now reach the kinds). Fixed: saved template (any non-string data saves), link key and value
+  encoded, keys escaped with `$.escapeSelector` (the invalid-selector attribute fallback is gone).
+  No `it.fails` left; coverage 100%.
+- The README SRI test needed a rule for the time between releases: the trunk is `2.0.0-dev`, and
+  while the version is a prerelease the README keeps the last published version and the hash is not
+  compared. The release bump to 2.0.0 turns the full check back on.
+- The two connected-select examples load each select directly: under 2.0 a second load into the
+  whole form restored its markup, dropping the region options and `#Region`'s handler.
+- `docs/migrating-to-2.md` quotes all nine 1.4 notices verbatim (checked against `v1.4.0`'s
+  `src/legacy.js`); `docs/debugging.md` is deleted and the guides describe 2.0.
+- Not changed: `SECURITY.md` still lists "1.x (latest release)" as supported (maintainer's call at
+  the release).
 
 ## Findings
 
@@ -347,6 +378,22 @@ pass, 36 fail. Every failure is a 1.4 change, so this list is the source for the
 - New: `$.fn.loadJSON.debug` (off by default) and the nine deprecation notices.
 
 No test passes on 1.3.3 and fails on 1.4.
+
+### Compared with npm 1.4.0 (Phase 6, 2026-11-14)
+
+Baseline: the suite at `5dafd01` against the `src/` published as 1.4.0, Chromium: 125 of 125 on
+jQuery 3.7.1 and 4.0.0. Final: the `release-2.0` suite at `76ff970` (unchanged since), same setup: jQuery 3.7.1 92
+pass, 19 fail; jQuery 4.0.0 93 pass, 18 fail (the Mobile refresh test passes on 1.4.0 with jQuery 4,
+where 1.4 already skipped the refresh). Every failure is a 2.0 change with a guide entry:
+
+- Removals: `contains` (1), Mobile refresh (1, jQuery 3 only), image fallback (1), rel matching (2),
+  rel index children (1), URL argument (2: a URL throws; leading-whitespace JSON parses), `debug` (2).
+- Change: text by default (3: content, `html: false`, button).
+- Fixes: saved template (1), link encoding (2: value, key), literal keys (3: dot class, dot/space id,
+  selector list).
+
+The surface changes (peer dependency, `exports`, no `bower.json`) are outside the suite; the guide
+covers them under Requirements.
 
 ### Pinned behavior (tested as is)
 

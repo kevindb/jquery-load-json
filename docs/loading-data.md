@@ -69,13 +69,8 @@ The first step that finds anything wins, and every element it finds takes the va
 
 - A key that matches nothing is skipped, as is an empty key.
 - A `null` or `undefined` value leaves its elements unchanged.
-- Keys that are not valid CSS selectors (with spaces, colons or quotes, for example) are compared
-  with each element's class, id or name directly.
-- A key containing a dot, such as `"a.b"`, is read as the selector `.a.b` (class `a` and class
-  `b`), not as a class named `a.b`. Avoid dots in keys you match by class.
-
-If no class, id or name matches, elements anywhere in the page whose `rel` attribute is the key are
-loaded. This is deprecated and removed in 2.0; see [Debugging and deprecations](debugging.md).
+- Keys match literally: a key with a dot, space, colon or quote, such as `"a.b"`, matches only the
+  class, id or name that is exactly the key.
 
 ## Nested objects
 
@@ -108,7 +103,7 @@ What a match does with its value depends on its **element kind**:
 
 | Element kind                       | Takes the value as                                    | Details                 |
 | ---------------------------------- | ----------------------------------------------------- | ----------------------- |
-| Content (`div`, `span`, `p`, ...)  | its contents, inserted as HTML                        | [Elements](elements.md) |
+| Content (`div`, `span`, `p`, ...)  | its contents, as text (or HTML with `html: true`)     | [Elements](elements.md) |
 | Link (`a`)                         | its `href`, or a query parameter added to the `href`  | [Elements](elements.md) |
 | Image (`img`)                      | its `src`, or `src`, `alt` and `title` from an object | [Elements](elements.md) |
 | Field (text, number, hidden, ...)  | its value                                             | [Forms](forms.md)       |
@@ -121,12 +116,11 @@ What a match does with its value depends on its **element kind**:
 `loadJSON(data, options)` accepts:
 
 - **An object or an array**: loaded as described above.
-- **A single value** (a string, number or boolean): set on the template element itself, or on each
-  control when the template is a form.
-- **A JSON string** that starts with `{` or `[`: parsed with `JSON.parse`, then loaded. Invalid JSON
-  throws.
-- **Any other string** is requested as a URL and the JSON response is loaded. This is deprecated and
-  removed in 2.0. Request the data yourself and pass it in:
+- **A single number or boolean**: set on the template element itself, or on each control when
+  the template is a form.
+- **A string**, which is always JSON: parsed with `JSON.parse`, then loaded. Invalid JSON throws a
+  `SyntaxError`. To load a single string, pass `JSON.stringify(text)`. loadJSON does not request
+  URLs: request the data yourself and pass it in:
 
   ```js
   $.getJSON("company.json").done(function (data) {
@@ -138,11 +132,11 @@ Calling `loadJSON()` with nothing or with `null` throws a `TypeError`.
 
 ## Options
 
-| Option      | Default    | Description                             |
-| ----------- | ---------- | --------------------------------------- |
-| `onLoading` | do nothing | Called before each element is loaded.   |
-| `onLoaded`  | do nothing | Called after each element is loaded.    |
-| `mobile`    | `false`    | Ignored. Deprecated and removed in 2.0. |
+| Option      | Default    | Description                                                     |
+| ----------- | ---------- | --------------------------------------------------------------- |
+| `onLoading` | do nothing | Called before each element is loaded.                           |
+| `onLoaded`  | do nothing | Called after each element is loaded.                            |
+| `html`      | `false`    | Insert values into content elements as HTML instead of as text. |
 
 The callbacks run once per element in the jQuery set, with no arguments:
 
@@ -159,21 +153,29 @@ $("#company").loadJSON(data, {
 
 ## Loading the same template again
 
-loadJSON does not reset a template between calls: a second call loads into the output of the first,
-including any copies a [repeat](arrays.md) added. To start each call from the original markup, set
-the element's `loadJSON-template` data to an empty string before the first call:
+On its first call on an element, loadJSON saves the element's markup, and each later call restores
+it before loading. So every call starts from the original markup, and copies that an earlier
+[repeat](arrays.md) added are gone:
 
 ```js
-$("#list").data("loadJSON-template", "");
 $("#list").loadJSON(firstPage); // saves the original markup, then loads
 $("#list").loadJSON(secondPage); // restores the original markup, then loads
 ```
 
-Restoring the saved markup replaces the template's content, so event handlers bound inside it after
-the first call are lost. Bind them on the template element itself (delegated events) instead.
+Restoring the saved markup replaces the element's content, so event handlers bound inside it after
+the first call are lost. Bind them on the loaded element itself (delegated events) instead:
+
+```js
+$("#list").on("click", ".Items", function () {
+  // ...
+});
+```
+
+To load into different markup, set the element's `loadJSON-template` data to that markup before the
+call: it replaces the element's content first.
 
 ## Untrusted data
 
-Values loaded into content elements, `<button>` included, are inserted as HTML. Escape
-data from users or other untrusted sources before loading it, or the markup in it will run in the
-page. With [`$.fn.loadJSON.debug`](debugging.md) on, loadJSON warns when a value looks like markup.
+Values are inserted into content elements, `<button>` included, as text, so markup in them shows as
+text and does not run. With the `html: true` option they are inserted as HTML: use it only for data
+you trust, or escape the data first.

@@ -1,5 +1,4 @@
 import jQuery from "jquery";
-import { notice, refreshMobile } from "./legacy.js";
 
 // Element kinds: how a value is set on each kind of element.
 
@@ -24,8 +23,6 @@ function addOptions(select, items) {
       $option.attr("selected", true);
     }
   }
-
-  refreshMobile($(select), "selectmenu");
 }
 
 // Whether an array holds a value, comparing with ==.
@@ -50,14 +47,12 @@ function checkbox(element, value) {
     "checked",
     (value.constructor == Array && containsLoosely(value, elementValue)) || value == elementValue
   );
-  refreshMobile($element, "checkboxradio");
 }
 
 function radio(element, value) {
   var $element = $(element);
 
   $element.prop("checked", value.toString().toLowerCase() == element.value.toLowerCase());
-  refreshMobile($element, "checkboxradio");
 }
 
 function option(element, value) {
@@ -75,7 +70,6 @@ function selectOne(element, value) {
     addOptions(element, value);
   } else {
     $(element).val(value);
-    refreshMobile($(element), "selectmenu");
   }
 }
 
@@ -94,7 +88,6 @@ function selectMultiple(element, value) {
       options[i].selected |= options[i].value == values[j];
     }
   }
-  refreshMobile($(element), "selectmenu");
 }
 
 function link(element, value, name) {
@@ -102,7 +95,7 @@ function link(element, value, name) {
   var href = $element.attr("href");
 
   if (href) {
-    // If a href value exists, add the pair to its query, before any fragment
+    // If a href value exists, add the encoded pair to its query, before any fragment
     var iFragment = href.indexOf("#");
     var fragment = "";
 
@@ -111,7 +104,12 @@ function link(element, value, name) {
       href = href.substring(0, iFragment);
     }
 
-    href += (href.indexOf("?") >= 0 ? "&" : "?") + name + "=" + value + fragment;
+    href +=
+      (href.indexOf("?") >= 0 ? "&" : "?") +
+      encodeURIComponent(name) +
+      "=" +
+      encodeURIComponent(value) +
+      fragment;
   } else {
     // If no href exists, set href to value
     href = value;
@@ -120,37 +118,28 @@ function link(element, value, name) {
   $element.attr("href", href);
 }
 
-function image(element, value, name, data) {
+function image(element, value) {
   var $element = $(element);
 
-  if (typeof value == "string") {
-    // A string is the image address
-    if (value.indexOf("$") >= 0) {
-      notice("srcAlt");
-    }
-    $element.attr("src", value);
-  } else if (value.constructor == Object) {
+  if (value.constructor == Object) {
     // An object sets the image's own src, alt and title
     $element.attr("src", value.src);
     $element.attr("alt", value.alt);
     $element.attr("title", value.title);
   } else {
-    // Otherwise the top-level src, alt and title apply to every matched image
-    if (data.src !== undefined || data.alt !== undefined || data.title !== undefined) {
-      notice("imageFallback");
-    }
-    $element.attr("src", data.src);
-    $element.attr("alt", data.alt);
-    $element.attr("title", data.title);
+    // Any other value is the image address
+    $element.attr("src", value);
   }
 }
 
-function content(element, value) {
-  if (typeof value == "string" && /<[a-z!/?]/i.test(value)) {
-    notice("html");
-  }
+// Sets the contents as text, or as HTML when the html option is true.
+function content(element, value, name, options) {
   try {
-    $(element).html(value.toString());
+    if (options.html) {
+      $(element).html(value.toString());
+    } else {
+      $(element).text(value.toString());
+    }
   } catch (exc) {}
 }
 
@@ -188,12 +177,12 @@ export function kindOf(element) {
 
 /**
  * Sets a value on an element by its kind. `element` is a DOM element or a jQuery set of one;
- * `name` is the key the value was loaded from and `data` the data passed to loadJSON.
+ * `name` is the key the value was loaded from and `options` the options passed to loadJSON.
  */
-export function setValue(element, value, name, data) {
+export function setValue(element, value, name, options) {
   var node = $(element)[0];
 
-  kinds[kindOf(node)](node, value, name, data);
+  kinds[kindOf(node)](node, value, name, options);
 }
 
 // Whether a DOM element's kind takes an object whole (an option or an image), rather than the walk
