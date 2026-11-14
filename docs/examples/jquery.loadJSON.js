@@ -143,7 +143,7 @@ function link(element, value, name) {
   var href = $element.attr("href");
 
   if (href) {
-    // If a href value exists, add the pair to its query, before any fragment
+    // If a href value exists, add the encoded pair to its query, before any fragment
     var iFragment = href.indexOf("#");
     var fragment = "";
 
@@ -152,7 +152,12 @@ function link(element, value, name) {
       href = href.substring(0, iFragment);
     }
 
-    href += (href.indexOf("?") >= 0 ? "&" : "?") + name + "=" + value + fragment;
+    href +=
+      (href.indexOf("?") >= 0 ? "&" : "?") +
+      encodeURIComponent(name) +
+      "=" +
+      encodeURIComponent(value) +
+      fragment;
   } else {
     // If no href exists, set href to value
     href = value;

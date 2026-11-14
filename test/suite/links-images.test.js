@@ -30,20 +30,20 @@ describe("links", function () {
       expect($root.find("a").attr("href")).toBe("/page?x=1&l=5");
     });
 
-    it("should append the value without encoding it", function () {
-      const $root = fixture('<div><a class="l" href="/page">text</a></div>');
-
-      $root.loadJSON({ l: "a b&c" });
-
-      expect($root.find("a").attr("href")).toBe("/page?l=a b&c");
-    });
-
-    it.fails("should encode the value", function () {
+    it("should encode the value", function () {
       const $root = fixture('<div><a class="l" href="/page">text</a></div>');
 
       $root.loadJSON({ l: "a b&c" });
 
       expect($root.find("a").attr("href")).toBe("/page?l=a%20b%26c");
+    });
+
+    it("should encode the key", function () {
+      const $root = fixture('<form><a name="a&b" href="/page">text</a></form>');
+
+      $root.loadJSON({ "a&b": "c" });
+
+      expect($root.find("a").attr("href")).toBe("/page?a%26b=c");
     });
 
     it("should append with & when the href is only a query", function () {
