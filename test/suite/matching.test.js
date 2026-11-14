@@ -137,7 +137,7 @@ describe("element matching", function () {
   });
 
   describe("when a key contains selector characters", function () {
-    it.fails("should match a class containing a dot", function () {
+    it("should match a class containing a dot", function () {
       const $root = fixture('<div><span class="a.b"></span></div>');
 
       $root.loadJSON({ "a.b": "x" });
@@ -153,7 +153,7 @@ describe("element matching", function () {
       expect($root.find("span").text()).toBe("x");
     });
 
-    it("should match a class that is a jQuery-only selector when it finds nothing as one", function () {
+    it("should match a class that looks like a jQuery selector", function () {
       const $root = fixture('<div><span class="a:first"></span></div>');
 
       $root.loadJSON({ "a:first": "x" });
@@ -184,6 +184,22 @@ describe("element matching", function () {
       $root.loadJSON({ "a:b(": "x" });
 
       expect($root.text()).toBe("keep");
+    });
+
+    it("should match an id containing a dot or a space", function () {
+      const $root = fixture('<div><span id="a.b"></span><span id="c d"></span></div>');
+
+      $root.loadJSON({ "a.b": "x", "c d": "y" });
+
+      expect($root.find("span").text()).toBe("xy");
+    });
+
+    it("should not treat a key as a selector list or combinator", function () {
+      const $root = fixture('<div><span class="a"></span><span class="b"></span></div>');
+
+      $root.loadJSON({ "a,b": "x", "div .a": "y" });
+
+      expect($root.text()).toBe("");
     });
 
     it("should match a class that starts with a digit", function () {
