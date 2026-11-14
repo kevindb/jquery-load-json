@@ -253,7 +253,7 @@ Done when: `npm view jquery-load-json` shows 1.4.0 with provenance, the release 
 listed PRs and issues are closed.
 
 Status (2026-11-12): Phase 4 verified (`npm test`, e2e and PR #39 CI green; 100% coverage; only the
-2.0 `it.fails` left). GitHub Pages is on (`main` `/docs`); the wiki is still on. On `release-1.4`:
+2.0 `it.fails` left). GitHub Pages is on (`main` `/docs`); the wiki was still on then (disabled 2026-11-13). On `release-1.4`:
 version 1.4.0, SRI on the README CDN snippets with a test against the min build's hash, and the
 `browser` field dropped. A bundler that reads `browser` first (rolldown, esbuild) bundled the classic
 min build, whose CommonJS branch only exports the factory, so `import "jquery-load-json"` never
@@ -282,7 +282,7 @@ cached a 404 for about four minutes after the publish). Packagist has `v1.4.0`. 
 published from the 1.3.3 comparison. Closed with a comment: Dependabot #34 #35 #36 #38 (#30 was
 already closed), #32, #25 and #28. Dependabot's first grouped PR (#40) merged under the new
 protection. npm normalized `repository.url` on publish; the follow-up PR applies `npm pkg fix`.
-Phase 5 is done; the wiki is still enabled (maintainer's call, its pages now live in `docs/`).
+Phase 5 is done. The wiki was disabled on 2026-11-13; its pages live in `docs/`.
 
 ## Phase 6: 2.0.0 (breaking)
 
