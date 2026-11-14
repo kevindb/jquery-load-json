@@ -89,6 +89,15 @@ describe("images", function () {
 
       expect($root.find("img").attr("src")).toBe("photo.png");
     });
+
+    it('should use a string in the old "src$alt" format whole, as the src', function () {
+      const $root = fixture('<div><img class="p" alt="keep"></div>');
+
+      $root.loadJSON({ p: "photo.png$Photo" });
+
+      expect($root.find("img").attr("src")).toBe("photo.png$Photo");
+      expect($root.find("img").attr("alt")).toBe("keep");
+    });
   });
 
   describe("when the value is an object with src, alt and title", function () {

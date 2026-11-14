@@ -36,14 +36,6 @@ describe("deprecation notices", function () {
       $.fn.loadJSON.debug = true;
     });
 
-    it('should not warn about "src$alt" for a string without $', function () {
-      const $root = fixture('<div><img class="p"></div>');
-
-      $root.loadJSON({ p: "data:,a" });
-
-      expect(warnings().join()).not.toContain("src$alt");
-    });
-
     it("should not warn about the top-level fallback when there is none", function () {
       const $root = fixture('<div><img class="p"></div>');
 
@@ -64,14 +56,6 @@ describe("deprecation notices", function () {
   describe("when debug is on", function () {
     beforeEach(function () {
       $.fn.loadJSON.debug = true;
-    });
-
-    it('should warn about an image value in the "src$alt" format', function () {
-      const $root = fixture('<div><img class="p"></div>');
-
-      $root.loadJSON({ p: "data:,a$Alt" });
-
-      expect(warnings().join()).toContain("src$alt");
     });
 
     it("should warn when an image takes the top-level src, alt and title", function () {

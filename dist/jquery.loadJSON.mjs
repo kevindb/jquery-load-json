@@ -25,8 +25,6 @@ var $$1 = jQuery;
 
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  srcAlt:
-    'An image value is used as the whole src: the "src$alt" format is not supported. Pass {src, alt} instead.',
   imageFallback:
     "Setting images from the top-level src, alt and title is deprecated and will be removed in 2.0. Give each image its own value.",
   rel: "Matching keys by the rel attribute is deprecated and will be removed in 2.0. Use a class, id or name.",
@@ -164,9 +162,6 @@ function image(element, value, name, data) {
 
   if (typeof value == "string") {
     // A string is the image address
-    if (value.indexOf("$") >= 0) {
-      notice("srcAlt");
-    }
     $element.attr("src", value);
   } else if (value.constructor == Object) {
     // An object sets the image's own src, alt and title

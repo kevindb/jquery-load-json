@@ -119,9 +119,6 @@ function image(element, value, name, data) {
 
   if (typeof value == "string") {
     // A string is the image address
-    if (value.indexOf("$") >= 0) {
-      notice("srcAlt");
-    }
     $element.attr("src", value);
   } else if (value.constructor == Object) {
     // An object sets the image's own src, alt and title
