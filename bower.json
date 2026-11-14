@@ -38,6 +38,6 @@
     "url": "https://github.com/kevindb/jquery-load-json.git"
   },
   "dependencies": {
-    "jquery": ">=1.7"
+    "jquery": ">=3.5"
   }
 }

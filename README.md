@@ -6,7 +6,7 @@ whose class, id or name is that key, and sets each value in the way that suits t
 goes into content elements, form controls get their value or checked state, links and images get
 their `href` and `src`, and arrays repeat an element once per item.
 
-Works with jQuery 1.7 and later, jQuery 4 included.
+Works with jQuery 3.5 and later, jQuery 4 included. Install jQuery alongside it.
 
 ## Install
 

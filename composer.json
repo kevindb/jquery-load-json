@@ -24,7 +24,7 @@
     "issues": "https://github.com/kevindb/jquery-load-json/issues"
   },
   "require": {
-    "components/jquery": ">=1.7"
+    "components/jquery": ">=3.5"
   },
   "extra": {
     "component": {

@@ -74,9 +74,10 @@ describe("when the package manifests are read", () => {
     expect(composer.license).toBe(license);
   });
 
-  it("should agree on the jQuery dependency range", () => {
-    expect(pkg.dependencies.jquery).toBe(">=1.7");
-    expect(bower.dependencies.jquery).toBe(">=1.7");
-    expect(composer.require["components/jquery"]).toBe(">=1.7");
+  it("should require jQuery 3.5 or later as a peer dependency", () => {
+    expect(pkg).not.toHaveProperty("dependencies");
+    expect(pkg.peerDependencies.jquery).toBe(">=3.5");
+    expect(bower.dependencies.jquery).toBe(">=3.5");
+    expect(composer.require["components/jquery"]).toBe(">=3.5");
   });
 });

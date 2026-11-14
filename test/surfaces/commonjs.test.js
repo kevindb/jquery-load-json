@@ -69,7 +69,7 @@ for (const [version, buildJQuery] of Object.entries(jQueryBuilds)) {
   });
 }
 
-// These paths require the installed jquery package, which `>=1.7` resolves to jQuery 4.
+// These paths require the installed jquery package: the peer dependency `>=3.5` resolves to jQuery 4.
 describe("the classic build required from CommonJS without a jQuery", function () {
   it("should require jQuery directly when a global window exists", function () {
     globalThis.window = newWindow();
