@@ -1,5 +1,4 @@
 import jQuery from "jquery";
-import { notice } from "./legacy.js";
 
 // Element kinds: how a value is set on each kind of element.
 
@@ -129,9 +128,6 @@ function image(element, value) {
 }
 
 function content(element, value) {
-  if (typeof value == "string" && /<[a-z!/?]/i.test(value)) {
-    notice("html");
-  }
   try {
     $(element).html(value.toString());
   } catch (exc) {}

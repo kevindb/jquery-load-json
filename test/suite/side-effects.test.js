@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { fixture, stubPlugin } from "./helpers.js";
 
 describe("global side effects", function () {
@@ -8,6 +8,27 @@ describe("global side effects", function () {
     $root.loadJSON({});
 
     expect("contains" in Array.prototype).toBe(false);
+  });
+});
+
+describe("console output", function () {
+  afterEach(function () {
+    delete $.fn.loadJSON.debug;
+    vi.restoreAllMocks();
+  });
+
+  it("should not define $.fn.loadJSON.debug", function () {
+    expect($.fn.loadJSON).not.toHaveProperty("debug");
+  });
+
+  it("should write no warnings, even when $.fn.loadJSON.debug is set", function () {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const $root = fixture('<div><span class="a"></span><img class="p"></div>');
+    $.fn.loadJSON.debug = true;
+
+    $root.loadJSON({ a: "<b>x</b>", p: 1, src: "top" }, { mobile: true });
+
+    expect(warn).not.toHaveBeenCalled();
   });
 });
 

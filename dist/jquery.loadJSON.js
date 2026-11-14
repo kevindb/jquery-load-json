@@ -48,25 +48,6 @@
 
 }(function (jQuery) {
 	'use strict';
-// Behavior kept for compatibility with earlier versions and removed in 2.0.
-
-var $$1 = jQuery;
-
-// Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
-var messages = {
-  html: "Values are inserted as HTML. From 2.0 they are inserted as text unless the html option is true.",
-};
-
-var shown = {};
-
-function notice(id) {
-  if (!$$1.fn.loadJSON.debug || shown[id]) {
-    return;
-  }
-  shown[id] = true;
-  console.warn("jQuery loadJSON: " + messages[id]);
-}
-
 // Element kinds: how a value is set on each kind of element.
 
 var $ = jQuery;
@@ -195,9 +176,6 @@ function image(element, value) {
 }
 
 function content(element, value) {
-  if (typeof value == "string" && /<[a-z!/?]/i.test(value)) {
-    notice("html");
-  }
   try {
     $(element).html(value.toString());
   } catch (exc) {}
@@ -455,8 +433,5 @@ function match(key, scope) {
       loadArgument(this, data, properties);
     });
   };
-
-  // Set to true to show a console warning, once per page, for each behavior removed in 2.0.
-  $.fn.loadJSON.debug = false;
 })(jQuery);
 }));

@@ -150,9 +150,6 @@ import { match } from "./key-match.js";
       loadArgument(this, data, properties);
     });
   };
-
-  // Set to true to show a console warning, once per page, for each behavior removed in 2.0.
-  $.fn.loadJSON.debug = false;
 })(jQuery);
 
 export default jQuery;
