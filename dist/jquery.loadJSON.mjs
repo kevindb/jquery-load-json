@@ -23,24 +23,6 @@ export { default } from 'jquery';
 
 var $$1 = jQuery;
 
-// Adds Array.prototype.contains (loose equality), which earlier versions defined on every call.
-function installContains() {
-  notice("contains");
-  Object.defineProperty(Array.prototype, "contains", {
-    configurable: true,
-    writable: true,
-    value: function (obj) {
-      var i = this.length;
-      while (i--) {
-        if (this[i] == obj) {
-          return true;
-        }
-      }
-      return false;
-    },
-  });
-}
-
 // Refreshes a jQuery Mobile widget (selectmenu or checkboxradio) when the element has one.
 function refreshMobile($element, widget) {
   try {
@@ -53,8 +35,6 @@ function refreshMobile($element, widget) {
 
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  contains:
-    "Array.prototype.contains is deprecated and will be removed in 2.0. Use Array.prototype.indexOf instead.",
   mobile:
     "Refreshing jQuery Mobile selectmenu and checkboxradio widgets is deprecated and will be removed in 2.0. Refresh them in onLoaded instead.",
   mobileOption: "The mobile option has no effect and will be removed in 2.0.",
@@ -515,7 +495,6 @@ function match(key, scope) {
   }
 
   $.fn.loadJSON = function (data, options) {
-    installContains();
     if (options && "mobile" in options) {
       notice("mobileOption");
     }

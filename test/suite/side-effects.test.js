@@ -1,37 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { fixture, itBeforeJQuery4, stubPlugin } from "./helpers.js";
 
-describe("Array.prototype.contains", function () {
-  it("should be defined after a call, with loose equality", function () {
+describe("global side effects", function () {
+  it("should not add Array.prototype.contains", function () {
     const $root = fixture("<div></div>");
 
     $root.loadJSON({});
 
-    expect([1, "2"].contains("1")).toBe(true);
-    expect([1, "2"].contains(3)).toBe(false);
-  });
-
-  it("should stay writable and configurable, so a page can replace or remove it", function () {
-    const $root = fixture("<div></div>");
-
-    $root.loadJSON({});
-
-    expect(Object.getOwnPropertyDescriptor(Array.prototype, "contains")).toMatchObject({
-      writable: true,
-      configurable: true,
-    });
-  });
-
-  it("should not add an enumerable property to every array", function () {
-    const $root = fixture("<div></div>");
-    $root.loadJSON({});
-
-    const keys = [];
-    for (const key in ["a"]) {
-      keys.push(key);
-    }
-
-    expect(keys).toEqual(["0"]);
+    expect("contains" in Array.prototype).toBe(false);
   });
 });
 

@@ -18,7 +18,7 @@
 
 import jQuery from "jquery";
 import { kindOf, setValue, takesObject } from "./element-kinds.js";
-import { installContains, notice } from "./legacy.js";
+import { notice } from "./legacy.js";
 import { match } from "./key-match.js";
 
 (function ($) {
@@ -168,7 +168,6 @@ import { match } from "./key-match.js";
   }
 
   $.fn.loadJSON = function (data, options) {
-    installContains();
     if (options && "mobile" in options) {
       notice("mobileOption");
     }

@@ -30,23 +30,10 @@ describe("deprecation notices", function () {
     });
   });
 
-  // These run before the tests below: each notice shows once per page, and every load installs
-  // the contains patch.
+  // These run before the tests below, so that each notice they rule out has not been shown yet.
   describe("when debug is on, first in the page", function () {
     beforeEach(function () {
       $.fn.loadJSON.debug = true;
-    });
-
-    it("should warn about Array.prototype.contains once per page", function () {
-      const $root = fixture("<div></div>");
-
-      $root.loadJSON({});
-      $root.loadJSON({});
-
-      expect(warnings()[0]).toMatch(/^jQuery loadJSON: /);
-      expect(warnings().filter((text) => text.includes("Array.prototype.contains"))).toHaveLength(
-        1
-      );
     });
 
     it("should not warn about jQuery Mobile when the element has no widget", function () {
@@ -96,12 +83,14 @@ describe("deprecation notices", function () {
       expect(warnings().join()).toContain("jQuery Mobile");
     });
 
-    it("should warn about the mobile option", function () {
+    it("should warn about the mobile option once per page", function () {
       const $root = fixture("<div></div>");
 
       $root.loadJSON({}, { mobile: false });
+      $root.loadJSON({}, { mobile: false });
 
-      expect(warnings().join()).toContain("mobile option");
+      expect(warnings()[0]).toMatch(/^jQuery loadJSON: /);
+      expect(warnings().filter((text) => text.includes("mobile option"))).toHaveLength(1);
     });
 
     it('should warn about an image value in the "src$alt" format', function () {
