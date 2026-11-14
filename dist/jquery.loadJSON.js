@@ -375,17 +375,15 @@ function match(key, scope) {
     }
   }
 
-  // Loads data into one element: the saved template, the callbacks and the walk.
-  function load(element, data, properties) {
+  // Loads the loadJSON argument into one element: the saved template, the callbacks and the walk.
+  // A string argument is JSON.
+  function load(element, argument, properties) {
+    var data = argument.constructor == String ? JSON.parse(argument) : argument;
+
     useSavedTemplate($(element));
     properties.onLoading();
     walk(data, element, undefined, properties);
     properties.onLoaded();
-  }
-
-  // Loads the loadJSON argument into one element. A string is JSON.
-  function loadArgument(element, argument, properties) {
-    load(element, argument.constructor == String ? JSON.parse(argument) : argument, properties);
   }
 
   $.fn.loadJSON = function (data, options) {
@@ -397,7 +395,7 @@ function match(key, scope) {
     var properties = $.extend(defaults, options);
 
     return this.each(function () {
-      loadArgument(this, data, properties);
+      load(this, data, properties);
     });
   };
 })(jQuery);
