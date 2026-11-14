@@ -13,6 +13,7 @@ key of the data and sets each one's value in the way that suits the element.
 - [Arrays and repeats](arrays.md): generating lists from an array of objects.
 - [Debugging and deprecations](debugging.md): `$.fn.loadJSON.debug` and the behavior that 2.0
   removes.
+- [Migrating from 1.x to 2.0](migrating-to-2.md): every change in 2.0 and what to do about it.
 
 ## Examples
 
