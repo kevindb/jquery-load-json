@@ -378,7 +378,7 @@ function match(key, scope) {
   function useSavedTemplate($element) {
     var saved = $element.data("loadJSON-template");
 
-    if (saved !== null && saved != "") {
+    if (typeof saved == "string" && saved !== "") {
       $element.html(saved);
     } else {
       $element.data("loadJSON-template", $element.html());

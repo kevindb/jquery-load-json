@@ -119,7 +119,7 @@ import { match } from "./key-match.js";
   function useSavedTemplate($element) {
     var saved = $element.data("loadJSON-template");
 
-    if (saved !== null && saved != "") {
+    if (typeof saved == "string" && saved !== "") {
       $element.html(saved);
     } else {
       $element.data("loadJSON-template", $element.html());
