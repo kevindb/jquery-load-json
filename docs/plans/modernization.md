@@ -300,6 +300,12 @@ Phase 5 is done. The wiki was disabled on 2026-11-13; its pages live in `docs/`.
 Done when: 2.0.0 is on npm with provenance, the migration guide is linked from the README, and every
 1.4 debug warning maps to a guide entry.
 
+Status (2026-11-14): Phase 5 verified (npm `latest` 1.4.0 with SLSA provenance, release `v1.4.0`,
+#25 #28 #30 #32 #34–#38 closed, wiki off). Work on `release-2.0`, one draft PR until the release.
+Baseline: the suite at `5dafd01`, run on Chromium against the `src/` published as 1.4.0 (identical
+to the trunk's), passes 125 of 125 on jQuery 3.7.1 and 4.0.0 (`it.fails` count as passing). The
+final suite is compared with 1.4.0 the same way before the release (see Compared with npm 1.4.0).
+
 ## Findings
 
 Phase 1 results (2026-11-11): 79 tests + 14 `it.fails` per run; the suite is green on jQuery 1.7.2,
