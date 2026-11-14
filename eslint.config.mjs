@@ -48,6 +48,7 @@ export default [
       "scripts/**/*.mjs",
       "test/surfaces/bundlers.test.js",
       "test/surfaces/commonjs.test.js",
+      "test/surfaces/exports.test.js",
       "test/surfaces/manifests.test.js",
       "test/e2e/**/*.mjs",
     ],

@@ -32,6 +32,21 @@ describe("when the package manifests are read", () => {
     }
   });
 
+  it("should export only the package name, the built files and package.json", () => {
+    const targets = Object.values(pkg.exports)
+      .flatMap((target) => (typeof target === "string" ? [target] : Object.values(target)))
+      .filter((target) => target !== "./package.json");
+
+    for (const target of targets) {
+      expect(distFiles).toContain(target.slice(2));
+    }
+    expect(Object.keys(pkg.exports)).toEqual([
+      ".",
+      ...distFiles.map((file) => `./${file}`),
+      "./package.json",
+    ]);
+  });
+
   it("should keep the classic build as main and the module build as module", () => {
     expect(pkg.main).toBe("dist/jquery.loadJSON.js");
     expect(pkg.module).toBe("dist/jquery.loadJSON.mjs");

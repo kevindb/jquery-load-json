@@ -58,6 +58,16 @@
     "test:e2e": "playwright test"
   },
   "module": "dist/jquery.loadJSON.mjs",
+  "exports": {
+    ".": {
+      "import": "./dist/jquery.loadJSON.mjs",
+      "default": "./dist/jquery.loadJSON.js"
+    },
+    "./dist/jquery.loadJSON.js": "./dist/jquery.loadJSON.js",
+    "./dist/jquery.loadJSON.mjs": "./dist/jquery.loadJSON.mjs",
+    "./dist/jquery.loadJSON.min.js": "./dist/jquery.loadJSON.min.js",
+    "./package.json": "./package.json"
+  },
   "jsdelivr": "dist/jquery.loadJSON.min.js",
   "unpkg": "dist/jquery.loadJSON.min.js",
   "files": [
