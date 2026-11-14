@@ -114,25 +114,17 @@ function link(element, value, name) {
   $element.attr("href", href);
 }
 
-function image(element, value, name, data) {
+function image(element, value) {
   var $element = $(element);
 
-  if (typeof value == "string") {
-    // A string is the image address
-    $element.attr("src", value);
-  } else if (value.constructor == Object) {
+  if (value.constructor == Object) {
     // An object sets the image's own src, alt and title
     $element.attr("src", value.src);
     $element.attr("alt", value.alt);
     $element.attr("title", value.title);
   } else {
-    // Otherwise the top-level src, alt and title apply to every matched image
-    if (data.src !== undefined || data.alt !== undefined || data.title !== undefined) {
-      notice("imageFallback");
-    }
-    $element.attr("src", data.src);
-    $element.attr("alt", data.alt);
-    $element.attr("title", data.title);
+    // Any other value is the image address
+    $element.attr("src", value);
   }
 }
 
@@ -179,12 +171,12 @@ export function kindOf(element) {
 
 /**
  * Sets a value on an element by its kind. `element` is a DOM element or a jQuery set of one;
- * `name` is the key the value was loaded from and `data` the data passed to loadJSON.
+ * `name` is the key the value was loaded from.
  */
-export function setValue(element, value, name, data) {
+export function setValue(element, value, name) {
   var node = $(element)[0];
 
-  kinds[kindOf(node)](node, value, name, data);
+  kinds[kindOf(node)](node, value, name);
 }
 
 // Whether a DOM element's kind takes an object whole (an option or an image), rather than the walk

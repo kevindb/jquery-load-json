@@ -25,8 +25,6 @@ var $$1 = jQuery;
 
 // Deprecation notices: shown once per page with console.warn when $.fn.loadJSON.debug is true.
 var messages = {
-  imageFallback:
-    "Setting images from the top-level src, alt and title is deprecated and will be removed in 2.0. Give each image its own value.",
   rel: "Matching keys by the rel attribute is deprecated and will be removed in 2.0. Use a class, id or name.",
   relIndex:
     'Loading array items into rel="index" children is deprecated and will be removed in 2.0.',
@@ -157,25 +155,17 @@ function link(element, value, name) {
   $element.attr("href", href);
 }
 
-function image(element, value, name, data) {
+function image(element, value) {
   var $element = $(element);
 
-  if (typeof value == "string") {
-    // A string is the image address
-    $element.attr("src", value);
-  } else if (value.constructor == Object) {
+  if (value.constructor == Object) {
     // An object sets the image's own src, alt and title
     $element.attr("src", value.src);
     $element.attr("alt", value.alt);
     $element.attr("title", value.title);
   } else {
-    // Otherwise the top-level src, alt and title apply to every matched image
-    if (data.src !== undefined || data.alt !== undefined || data.title !== undefined) {
-      notice("imageFallback");
-    }
-    $element.attr("src", data.src);
-    $element.attr("alt", data.alt);
-    $element.attr("title", data.title);
+    // Any other value is the image address
+    $element.attr("src", value);
   }
 }
 
@@ -222,12 +212,12 @@ function kindOf(element) {
 
 /**
  * Sets a value on an element by its kind. `element` is a DOM element or a jQuery set of one;
- * `name` is the key the value was loaded from and `data` the data passed to loadJSON.
+ * `name` is the key the value was loaded from.
  */
-function setValue(element, value, name, data) {
+function setValue(element, value, name) {
   var node = $(element)[0];
 
-  kinds[kindOf(node)](node, value, name, data);
+  kinds[kindOf(node)](node, value, name);
 }
 
 // Whether a DOM element's kind takes an object whole (an option or an image), rather than the walk
@@ -333,14 +323,14 @@ function match(key, scope) {
   }
 
   // Loads each key of an object into its match within the element.
-  function walkObject(object, element, name, data) {
+  function walkObject(object, element, name) {
     // An option or an image matched by the enclosing key takes the object whole
     if (element.length >= 1 && takesObject(element[0])) {
       if (kindOf(element[0]) == "option") {
-        setValue(element[0], object, name, data);
+        setValue(element[0], object, name);
       } else {
         element.each(function () {
-          setValue(this, object, name, data);
+          setValue(this, object, name);
         });
       }
     }
@@ -351,22 +341,22 @@ function match(key, scope) {
       }
       var $match = match(key, element);
       if ($match.length !== 0) {
-        walk(object[key], $match, key, data);
+        walk(object[key], $match, key);
       }
     }
   }
 
   // Loads an array: whole into a select or a checkbox group, item by item into rel index
   // children, or as a repeat of the element.
-  function walkArray(array, element, name, data) {
+  function walkArray(array, element, name) {
     if (element.length == 1 && (isSelect(element) || isSelect(element[0]))) {
-      setValue(element, array, name, data);
+      setValue(element, array, name);
       return;
     }
 
     if (element.length > 0 && kindOf(element[0]) == "checkbox") {
       element.each(function () {
-        setValue(this, array, name, data);
+        setValue(this, array, name);
       });
       return;
     }
@@ -377,17 +367,17 @@ function match(key, scope) {
       notice("relIndex");
       $children.each(function () {
         var $child = $(this);
-        walk(array[$child.attr("rel")], $child, name, data);
+        walk(array[$child.attr("rel")], $child, name);
       });
       return;
     }
 
-    repeat(array, element, name, data);
+    repeat(array, element, name);
   }
 
   // Fills the existing elements in order, then appends copies of the last one for the remaining
   // items. A select's options are not filled; each item gets a copy of the last option.
-  function repeat(array, element, name, data) {
+  function repeat(array, element, name) {
     var elements = jQuery.makeArray(element);
     var last = elements[elements.length - 1];
     var $copySource = $(last).clone(true);
@@ -396,38 +386,38 @@ function match(key, scope) {
     if (elements[0].tagName != "OPTION") {
       filled = Math.min(elements.length, array.length);
       for (var i = 0; i < filled; i++) {
-        walk(array[i], $(element).eq(i), name, data);
+        walk(array[i], $(element).eq(i), name);
       }
     }
 
     // Each copy goes right after the original last element, so the items are added from the end
     for (var j = array.length - 1; j >= filled; j--) {
-      walk(array[j], $copySource.clone(true).insertAfter(last), name, data);
+      walk(array[j], $copySource.clone(true).insertAfter(last), name);
     }
   }
 
   // Sets a single value on each element of the set, or on the element itself.
-  function walkValue(value, element, name, data) {
+  function walkValue(value, element, name) {
     if (element.length > 0) {
       for (var i = 0; i < element.length; i++) {
-        setValue(element[i], value, name, data);
+        setValue(element[i], value, name);
       }
     } else {
-      setValue(element, value, name, data);
+      setValue(element, value, name);
     }
   }
 
   // Loads a value of any shape into an element (a DOM element or a jQuery set).
-  function walk(value, element, name, data) {
+  function walk(value, element, name) {
     if (value === undefined || value === null) {
       return;
     }
     if (value.constructor == Object) {
-      walkObject(value, element, name, data);
+      walkObject(value, element, name);
     } else if (value.constructor == Array) {
-      walkArray(value, element, name, data);
+      walkArray(value, element, name);
     } else {
-      walkValue(value, element, name, data);
+      walkValue(value, element, name);
     }
   }
 
@@ -443,10 +433,10 @@ function match(key, scope) {
   }
 
   // Loads data into one element: the saved template, the callbacks and the walk.
-  function load(element, data, argument, properties) {
+  function load(element, data, properties) {
     useSavedTemplate($(element));
     properties.onLoading();
-    walk(data, element, undefined, argument);
+    walk(data, element);
     properties.onLoaded();
   }
 
@@ -454,9 +444,9 @@ function match(key, scope) {
   // other string is a URL, requested once per element, whose response is loaded the same way.
   function loadArgument(element, argument, properties) {
     if (argument.constructor != String) {
-      load(element, argument, argument, properties);
+      load(element, argument, properties);
     } else if (argument.charAt(0) == "{" || argument.charAt(0) == "[") {
-      load(element, JSON.parse(argument), argument, properties);
+      load(element, JSON.parse(argument), properties);
     } else {
       notice("url");
       $.ajax({

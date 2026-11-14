@@ -36,14 +36,6 @@ describe("deprecation notices", function () {
       $.fn.loadJSON.debug = true;
     });
 
-    it("should not warn about the top-level fallback when there is none", function () {
-      const $root = fixture('<div><img class="p"></div>');
-
-      $root.loadJSON({ p: 1 });
-
-      expect(warnings().join()).not.toContain("top-level");
-    });
-
     it("should not warn about HTML for plain text", function () {
       const $root = fixture('<div><span class="a"></span></div>');
 
@@ -56,14 +48,6 @@ describe("deprecation notices", function () {
   describe("when debug is on", function () {
     beforeEach(function () {
       $.fn.loadJSON.debug = true;
-    });
-
-    it("should warn when an image takes the top-level src, alt and title", function () {
-      const $root = fixture('<div><img class="p"></div>');
-
-      $root.loadJSON({ p: 1, title: "Top" });
-
-      expect(warnings().join()).toContain("top-level src, alt and title");
     });
 
     it("should warn when a key matches by rel", function () {

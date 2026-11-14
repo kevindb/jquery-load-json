@@ -126,17 +126,17 @@ describe("images", function () {
     });
   });
 
-  describe("when the top-level data has src, alt and title", function () {
-    it("should set them on every matched image, when the image's own value is neither a string nor an object", function () {
+  describe("when the value is neither a string nor an object", function () {
+    it("should set src to the value and ignore the top-level src, alt and title", function () {
       const $root = fixture('<div><img class="p" src="data:,old"></div>');
 
       $root.loadJSON({ p: 7, src: "data:,top", alt: "Top", title: "T" });
 
       const $img = $root.find("img");
       expect([$img.attr("src"), $img.attr("alt"), $img.attr("title")]).toEqual([
-        "data:,top",
-        "Top",
-        "T",
+        "7",
+        undefined,
+        undefined,
       ]);
     });
   });
