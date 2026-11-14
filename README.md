@@ -62,7 +62,7 @@ $("#company").loadJSON({
 </div>
 ```
 
-Values are inserted as HTML in 1.x. Escape data from untrusted sources before loading it.
+Values are inserted as text. To insert trusted HTML, pass `{ html: true }` as the second argument.
 
 ## Documentation
 
@@ -71,7 +71,6 @@ Values are inserted as HTML in 1.x. Escape data from untrusted sources before lo
 - [Elements](docs/elements.md): text, links and images
 - [Forms](docs/forms.md): inputs, checkboxes, radio buttons, textareas and selects
 - [Arrays and repeats](docs/arrays.md): lists from arrays of objects
-- [Debugging and deprecations](docs/debugging.md): `$.fn.loadJSON.debug` and what 2.0 removes
 - [Migrating from 1.x to 2.0](docs/migrating-to-2.md): every change in 2.0 and what to do about it
 - [Live examples](https://kevindb.github.io/jquery-load-json/examples/)
 

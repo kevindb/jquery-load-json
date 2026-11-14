@@ -117,13 +117,11 @@ See the [array example](https://kevindb.github.io/jquery-load-json/examples/arra
 - A select takes an array as a list of options to add, or of values to select (see
   [Selects](forms.md#selects)).
 - A group of checkboxes takes an array as the values to check (see [Checkboxes](forms.md#checkboxes)).
-- An element with children that have a `rel` attribute loads the item at each child's `rel` index
-  into that child (`rel="0"` takes the first item). This is deprecated and removed in 2.0; see
-  [Debugging and deprecations](debugging.md).
 
 ## Loading again
 
-Copies added by a repeat stay in the page, and a second call finds them. Through a key, they are
-filled in order before more copies are added. Loaded directly, as with `$("ul li")`, the set now
-holds every copy, and each one is repeated again. To load a new array, start each call from the
-original markup as described in [Loading the same template again](loading-data.md#loading-the-same-template-again).
+Through a key, each call restores the template's original markup before loading (see
+[Loading the same template again](loading-data.md#loading-the-same-template-again)), so the copies
+an earlier call added are gone. Loaded directly, as with `$("ul li")`, the copies are outside the
+loaded elements: they stay, and the set now holds every copy, so each one is repeated again. To load
+a new array, load it through a key on the container.
